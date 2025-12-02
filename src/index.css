@@ -1,0 +1,740 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Removed unsupported Tailwind @theme at-rule to avoid build errors.
+   Theme variables are defined below using CSS custom properties. */
+
+
+:root {
+  /* Main site theme: Red & White with black text as requested. */
+  --bg-main: #ffffff; /* page background */
+  --bg-alt: #ffffff;  /* alt panels */
+  --text-main: #000000; /* primary text color */
+  --mx: 0; /* -0.5 .. 0.5 */
+  --my: 0; /* -0.5 .. 0.5 */
+  --muted: #6b7280; /* muted text */
+  --panel: #ffffff; /* panel background */
+  --accent: #dc2626; /* red */
+}
+
+/* Set a sensible page default: dark background + readable text color. Components may override. */
+body { background: var(--bg-main); color: var(--text-main); }
+
+/* Animated underline for nav links */
+.nav-underline {
+  position: relative;
+}
+.nav-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  height: 2px;
+  width: 0%;
+  background: #dc2626;
+  transition: width 180ms ease;
+}
+.nav-underline:hover::after {
+  width: 100%;
+}
+
+/* Logo subtle drop-shadow to anchor visually */
+.logo-shadow { filter: drop-shadow(0 2px 6px rgba(0,0,0,0.15)); }
+
+/* Admin float animation for 3D blobs */
+@keyframes adminFloat {
+  0% { transform: translate3d(0,0,0) scale(1) rotate(0deg); }
+  25% { transform: translate3d(6px,-4px,0) scale(1.03) rotate(2deg); }
+  50% { transform: translate3d(-3px,5px,0) scale(0.99) rotate(-1deg); }
+  75% { transform: translate3d(4px,-2px,0) scale(1.02) rotate(1deg); }
+  100% { transform: translate3d(0,0,0) scale(1) rotate(0deg); }
+}
+
+.admin-float {
+  animation: adminFloat 10s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* Stronger admin headings */
+.admin-heading {
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+/* Map a few common utility classes used across components so they adapt to the red/white theme
+  without editing every component file. This keeps the code changes minimal while updating
+  the site's overall appearance. */
+/* Treat elements with explicit 'bg-black' as white panels in the main theme */
+body .bg-black { background: var(--bg-main) !important; }
+/* Treat explicit 'text-white' as main text color (black) */
+/* Do not override explicit white text globally; keep admin/sidebar white. */
+/* Removed global remap of .text-white to black to preserve intended styles. */
+/* Ensure neutral dark backgrounds used as panels become our panel color */
+body [class*="bg-neutral-900"] { background: var(--panel) !important; }
+body .bg-neutral-900 { background: var(--panel) !important; }
+
+.card-surface { background: var(--panel); }
+.accent-text { color: var(--accent); }
+.accent-bg { background: var(--accent); }
+
+/* Soft global overrides to prefer black text (removed strict !important rules)
+   to avoid forcing dark text on dark backgrounds. Individual utilities and
+   component styles should control color so dark headers/buttons remain readable. */
+
+/* Smooth transitions */
+.smooth { transition: all 220ms cubic-bezier(.2,.9,.2,1); }
+
+/* Modal animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.animate-fadeIn { animation: fadeIn 200ms ease-out; }
+.animate-scaleIn { animation: scaleIn 200ms ease-out; }
+
+/* 3D Wishlist animations */
+@keyframes heartBeat3D {
+  0%, 100% { transform: scale(1) rotateY(0deg); }
+  50% { transform: scale(1.3) rotateY(10deg); }
+}
+
+/* 3D Typing Effect */
+@keyframes type3D {
+  0% { transform: translateZ(0px) scale(1); }
+  50% { transform: translateZ(20px) scale(1.02); }
+  100% { transform: translateZ(0px) scale(1); }
+}
+
+@keyframes letterPop {
+  0% { transform: translateY(0px) translateZ(0px); opacity: 1; }
+  50% { transform: translateY(-3px) translateZ(15px); opacity: 0.9; }
+  100% { transform: translateY(0px) translateZ(0px); opacity: 1; }
+}
+
+input:focus, textarea:focus, select:focus {
+  animation: type3D 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform-style: preserve-3d;
+}
+
+input.typing, textarea.typing {
+  animation: letterPop 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform-style: preserve-3d;
+}
+
+/* 3D input container */
+.input-3d {
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+.input-3d input,
+.input-3d textarea,
+.input-3d select {
+  transform-style: preserve-3d;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+}
+
+.input-3d input:focus,
+.input-3d textarea:focus,
+.input-3d select:focus {
+  transform: translateZ(8px);
+  box-shadow: 0 8px 16px rgba(220, 38, 38, 0.15), 0 0 0 3px rgba(220, 38, 38, 0.1);
+}
+
+/* Card Pack Opening Animation */
+@keyframes cardPackOpen {
+  0% {
+    transform: scale(1) rotateY(0deg) translateZ(0px);
+    filter: brightness(1);
+  }
+  20% {
+    transform: scale(1.1) rotateY(180deg) translateZ(100px);
+    filter: brightness(1.3);
+  }
+  40% {
+    transform: scale(1.3) rotateY(360deg) translateZ(200px);
+    filter: brightness(1.5) saturate(1.3);
+  }
+  60% {
+    transform: scale(1.5) rotateY(540deg) translateZ(250px);
+    filter: brightness(1.8) saturate(1.5);
+  }
+  80% {
+    transform: scale(1.4) rotateY(720deg) translateZ(200px);
+    filter: brightness(1.5) saturate(1.3);
+  }
+  100% {
+    transform: scale(1) rotateY(900deg) translateZ(0px);
+    filter: brightness(1);
+    opacity: 0;
+  }
+}
+
+@keyframes shine {
+  0% { left: -100%; }
+  100% { left: 200%; }
+}
+
+/* Wishlist Remove Animation */
+@keyframes wishlistRemove {
+  0% {
+    transform: scale(1) rotateZ(0deg);
+    opacity: 1;
+  }
+  30% {
+    transform: scale(1.1) rotateZ(5deg);
+  }
+  60% {
+    transform: scale(0.8) rotateZ(-5deg);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(0) rotateZ(180deg);
+    opacity: 0;
+  }
+}
+
+/* Cart Journey Animations */
+@keyframes cartBounce {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes cardBounceHorizontal {
+  0%, 100% { transform: translateX(0px); }
+  25% { transform: translateX(-20px); }
+  75% { transform: translateX(20px); }
+}
+
+@keyframes productRain {
+  0% {
+    transform: translateY(-100px) scale(0.3) rotateZ(0deg) rotateY(0deg);
+    opacity: 0;
+  }
+  50% {
+    transform: translateY(calc(50vh - 50px)) scale(1.1) rotateZ(180deg) rotateY(360deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(calc(100vh + 100px)) scale(0.8) rotateZ(360deg) rotateY(720deg);
+    opacity: 0.3;
+  }
+}
+
+@keyframes itemScatter {
+  0% {
+    transform: scale(0) rotate(0deg);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.15) rotate(15deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes itemPopIn {
+  0% {
+    transform: scale(0) rotate(-180deg);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.1) rotate(10deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes heartBeat3D {
+  0% {
+    transform: scale(1) rotateY(0deg);
+  }
+  15% {
+    transform: scale(1.3) rotateY(180deg);
+  }
+  30% {
+    transform: scale(1.1) rotateY(360deg);
+  }
+  45% {
+    transform: scale(1.25) rotateY(180deg);
+  }
+  60% {
+    transform: scale(1.15) rotateY(0deg);
+  }
+  75% {
+    transform: scale(1.2) rotateY(-180deg);
+  }
+  100% {
+    transform: scale(1) rotateY(0deg);
+  }
+}
+
+@keyframes floatToWishlist {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: translate(var(--float-x, 100px), var(--float-y, -100px)) scale(0.5) rotate(360deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--float-x, 150px), var(--float-y, -150px)) scale(0.2) rotate(720deg);
+  }
+}
+
+/* Payment Celebration Animation */
+@keyframes creditCardCelebrate {
+  0% { transform: scale(1) rotate(0deg) translateY(0px); }
+  15% { transform: scale(1.3) rotate(-15deg) translateY(-20px); }
+  30% { transform: scale(1.2) rotate(15deg) translateY(-10px); }
+  45% { transform: scale(1.4) rotate(-20deg) translateY(-30px); }
+  60% { transform: scale(1.3) rotate(20deg) translateY(-15px); }
+  75% { transform: scale(1.5) rotate(-25deg) translateY(-40px); }
+  90% { transform: scale(1.4) rotate(10deg) translateY(-20px); }
+  100% { transform: scale(1) rotate(0deg) translateY(0px); }
+}
+
+@keyframes moneyDrop {
+  0% { transform: translateY(-30px) rotate(0deg) scale(0); opacity: 1; }
+  50% { opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg) scale(1); opacity: 0; }
+}
+
+/* Star Smash Animations */
+@keyframes starSmash {
+  0% { 
+    transform: scale(3) rotate(0deg) translateZ(100px); 
+    opacity: 0;
+    filter: brightness(3);
+  }
+  30% { 
+    transform: scale(1.5) rotate(180deg) translateZ(50px); 
+    opacity: 1;
+    filter: brightness(2);
+  }
+  70% { 
+    transform: scale(1.1) rotate(340deg) translateZ(10px); 
+    opacity: 1;
+    filter: brightness(1.5);
+  }
+  100% { 
+    transform: scale(1) rotate(360deg) translateZ(0px); 
+    opacity: 1;
+    filter: brightness(1);
+  }
+}
+
+@keyframes starSmashZoom {
+  0% { 
+    transform: scale(5) rotate(-720deg) translateZ(200px); 
+    opacity: 0;
+    filter: brightness(5) blur(4px);
+  }
+  40% { 
+    transform: scale(2) rotate(-360deg) translateZ(100px); 
+    opacity: 1;
+    filter: brightness(3) blur(2px);
+  }
+  70% { 
+    transform: scale(1.2) rotate(-45deg) translateZ(20px); 
+    opacity: 1;
+    filter: brightness(1.5) blur(0px);
+  }
+  100% { 
+    transform: scale(1) rotate(0deg) translateZ(0px); 
+    opacity: 1;
+    filter: brightness(1) blur(0px);
+  }
+}
+
+@keyframes starRain {
+  0% { 
+    transform: translateY(-50px) translateX(var(--x-offset, 0)) scale(1) rotate(0deg); 
+    opacity: 1; 
+  }
+  100% { 
+    transform: translateY(calc(100vh + 50px)) translateX(calc(var(--x-offset, 0) + 50px)) scale(0.5) rotate(720deg); 
+    opacity: 0; 
+  }
+}
+
+.animate-heartBeat3D {
+  animation: heartBeat3D 0.8s ease-in-out;
+}
+
+.animate-floatToWishlist {
+  animation: floatToWishlist 1s ease-out forwards;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* image hover pop */
+.img-pop { transition: transform 300ms cubic-bezier(.22,.9,.25,1); transform-origin: center; }
+.img-pop:hover { transform: scale(1.06); }
+
+/* subtle floating animation for featured images */
+@keyframes floaty {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+  100% { transform: translateY(0px); }
+}
+.floaty { animation: floaty 6s ease-in-out infinite; }
+
+/* rating bar animation */
+.rating-bar { height: 8px; background: rgba(255,255,255,0.05); border-radius: 999px; overflow: hidden; }
+.rating-bar > .fill { height: 100%; background: linear-gradient(90deg, #ef4444, #f97316); width: 0%; transition: width 600ms cubic-bezier(.2,.9,.2,1); }
+.rating-bar[data-animate="true"] > .fill { width: var(--fill, 0%); }
+
+/* small hover lift */
+.hover-lift { transition: transform 220ms cubic-bezier(.2,.9,.2,1), box-shadow 220ms; }
+.hover-lift:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0,0,0,0.6); }
+
+/* button subtle glow */
+.glow-btn { box-shadow: 0 0 0 rgba(0,0,0,0); transition: box-shadow 300ms; }
+.glow-btn:hover { box-shadow: 0 6px 30px rgba(220,38,38,0.18); }
+
+/* Primary CTA button used across the site */
+.btn-primary {
+  background: var(--accent);
+  color: #ffffff;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
+}
+.btn-primary:hover { transform: translateY(-3px); filter: brightness(0.95); box-shadow: 0 10px 30px rgba(220,38,38,0.18); }
+.btn-primary:active { transform: translateY(-1px); }
+
+/* 3D cube loader */
+
+/* Netflix-like 'N' loader */
+.netflix-loader { width: 160px; height: 160px; display:flex; align-items:center; justify-content:center; }
+.netflix-N { width: 96px; height: 96px; position: relative; display:block; }
+.netflix-N .n-part { position: absolute; display:block; background: linear-gradient(180deg, #e11d2b 0%, #8f1014 100%); }
+.netflix-N .n-part.left {
+  left: 10px;
+  top: 8px;
+  width: 18px;
+  height: 80px;
+  transform: rotate(12deg);
+  transform-origin: center center;
+}
+/* Netflix N Loader */
+.n-loader-overlay { position: fixed; inset:0; display:flex; align-items:center; justify-content:center; background:#000; z-index:9999; }
+.n-loader-overlay.entering { animation:n-overlay-in 300ms ease-out forwards; }
+.n-loader-overlay.leaving { animation:n-overlay-out 400ms ease-in forwards; }
+.n-loader-wrapper { display:flex; align-items:center; justify-content:center; }
+
+.netflix-n { width:120px; height:auto; filter:drop-shadow(0 8px 20px rgba(229,9,20,0.4)); }
+.netflix-n { filter: drop-shadow(0 10px 28px rgba(0,0,0,0.35)); }
+/* stroke draw animation: set large dasharray and animate dashoffset to 0 */
+.n-stroke { stroke-dasharray: 400; stroke-dashoffset: 400; opacity: 1; }
+.n-left { animation: n-draw 700ms cubic-bezier(.2,.9,.2,1) 0ms forwards; }
+.n-diag { animation: n-draw 700ms cubic-bezier(.2,.9,.2,1) 220ms forwards; }
+.n-right { animation: n-draw 700ms cubic-bezier(.2,.9,.2,1) 440ms forwards; }
+
+@keyframes n-draw {
+  0% { stroke-dashoffset: 400; opacity: 0.95; transform: translateY(6px); }
+  60% { opacity: 1; transform: translateY(-2px); }
+  100% { stroke-dashoffset: 0; opacity: 1; transform: translateY(0); }
+}
+@keyframes n-overlay-in { 0% { opacity:0; } 100% { opacity:1; } }
+@keyframes n-overlay-out { 0% { opacity:1; } 100% { opacity:0; } }
+
+/* Simple hover for clickable elements */
+.auto-3d { position:relative; display:inline-flex; align-items:center; justify-content:center; transition: transform 420ms cubic-bezier(.15,.85,.25,1), box-shadow 420ms; }
+.auto-3d:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 18px 40px -10px rgba(0,0,0,0.35), 0 8px 18px -6px rgba(220,38,38,0.35); }
+.auto-3d:active { transform: translateY(-1px) scale(1.01); }
+
+/* Subtle depth for anchors & buttons without explicit class (auto attachment) */
+a:not(.no-3d), button:not(.no-3d), [role="button"]:not(.no-3d) { transition: transform 380ms cubic-bezier(.22,.75,.25,1), box-shadow 380ms; will-change:transform; }
+a:not(.no-3d):hover, button:not(.no-3d):hover, [role="button"]:not(.no-3d):hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 10px 28px -8px rgba(0,0,0,0.35); }
+a:not(.no-3d):active, button:not(.no-3d):active, [role="button"]:not(.no-3d):active { transform: translateY(-1px) scale(1.01); }
+
+/* Elevated cards treat as clickable if data-clickable */
+[data-clickable] { cursor:pointer; transition: transform 460ms cubic-bezier(.22,.85,.28,1), box-shadow 460ms; }
+[data-clickable]:hover { transform: translateY(-6px) scale(1.03); box-shadow: 0 28px 50px -18px rgba(0,0,0,0.45); }
+[data-clickable]:active { transform: translateY(-2px) scale(1.01); }
+
+@keyframes brand-shimmer {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(250%); }
+}
+
+@keyframes brand-line {
+  0% { transform: translateX(0%); opacity: 1; }
+  100% { transform: translateX(250%); opacity: 1; }
+}
+
+@keyframes cube-rotate {
+  0%   { transform: rotateX(0deg) rotateY(0deg); }
+  25%  { transform: rotateX(-90deg) rotateY(0deg); }
+  50%  { transform: rotateX(-90deg) rotateY(-90deg); }
+  75%  { transform: rotateX(-180deg) rotateY(-90deg); }
+  100% { transform: rotateX(-180deg) rotateY(-180deg); }
+}
+
+@keyframes cube-path {
+  0%   { transform: translate(0px, 0px); }
+  25%  { transform: translate(36px, 0px); }
+  50%  { transform: translate(36px, 36px); }
+  75%  { transform: translate(0px, 36px); }
+  100% { transform: translate(0px, 0px); }
+}
+
+@keyframes shadow-scale {
+  0%   { transform: scale(1); opacity: 0.26; }
+  25%  { transform: scale(0.9); opacity: 0.22; }
+  50%  { transform: scale(0.7); opacity: 0.18; }
+  75%  { transform: scale(0.9); opacity: 0.22; }
+  100% { transform: scale(1); opacity: 0.26; }
+}
+
+/* Theme overrides: map common dark Tailwind utilities to the light theme
+   This avoids editing every component; overrides are applied with high specificity
+   and use !important to ensure they take effect. */
+body [class*="bg-neutral-"] { background: var(--panel) !important; }
+body .bg-black { background: var(--bg-main) !important; }
+/* Removed aggressive mappings that forced utility classes to change color.
+  Keep background mappings if needed, but avoid overriding text color utilities. */
+
+/* Specific fixes for semi-transparent classes (like bg-neutral-900/60) */
+[class*="bg-neutral-900/"], [class*="bg-neutral-800/"] { background: rgba(15,23,42,0.06) !important; }
+
+/* Ensure red accents and other explicit color utilities remain unchanged */
+/* If needed, add more specific mappings here */
+
+/* --- Netflix N: multi-streak polish --- */
+.netflix-n { width:160px; height:auto; filter: drop-shadow(0 12px 30px rgba(229,9,20,0.35)); }
+
+/* diagonal stroke draw (kept as fallback) */
+.n-stroke { stroke-dasharray: 400; stroke-dashoffset: 400; opacity: 1; }
+.n-diag { animation: n-draw 880ms cubic-bezier(.2,.9,.2,1) 0ms forwards; }
+
+/* Three vertical bars loader: left, middle (taller), right */
+.n-bar { opacity: 0; transform: translateY(10px); animation: bar-appear 420ms cubic-bezier(.2,.9,.2,1) forwards; }
+.n-bar-left { animation-delay: 40ms; }
+.n-bar-mid { animation-delay: 80ms; filter: drop-shadow(0 12px 24px rgba(229,9,20,0.22)); }
+.n-bar-right { animation-delay: 120ms; }
+
+@keyframes bar-appear {
+  0% { opacity: 0; transform: translateY(18px); }
+  60% { opacity: 1; transform: translateY(-4px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* 3D typing animation styles */
+.typer-3d { display: inline-block; line-height: 1; font-family: inherit; color: inherit; }
+.typer-3d .typer-char { display: inline-block; transform-style: preserve-3d; backface-visibility: hidden; opacity: 0; transform: translateZ(var(--depth, 36px)) rotateX(18deg) translateY(6px); animation: type3d-in 420ms cubic-bezier(.2,.9,.2,1) forwards; }
+.typer-3d .typer-char:nth-child(1) { animation-delay: 0ms; }
+@keyframes type3d-in {
+  0% { opacity: 0; transform: translateZ(var(--depth,36px)) rotateX(18deg) translateY(10px); }
+  60% { opacity: 1; transform: translateZ(calc(var(--depth,36px) * 0.2)) rotateX(6deg) translateY(-4px); }
+  100% { opacity: 1; transform: translateZ(0) rotateX(0) translateY(0); }
+}
+
+/* blinking caret */
+.typer-caret { display:inline-block; width: 10px; height: 1.05em; margin-left: 6px; background: linear-gradient(180deg,#ff2a2a,#b20710); vertical-align: middle; animation: caret-blink 1s steps(2,end) infinite; opacity: 0.95; }
+@keyframes caret-blink { 0% { opacity:0.95 } 50% { opacity:0 } 100% { opacity:0.95 } }
+
+/* Reduce heavy motion on small screens */
+@media (max-width: 760px) {
+  .auto-3d { transform: translateY(0) scale(1) !important; transition: none; }
+}
+
+/* keep the draw keyframe for diagonal (already defined above), but make sure duration is pleasing */
+@keyframes n-draw {
+  0% { stroke-dashoffset: 400; opacity: 0.95; transform: translateY(6px); }
+  60% { opacity: 1; transform: translateY(-2px); }
+  100% { stroke-dashoffset: 0; opacity: 1; transform: translateY(0); }
+}
+
+/* subtle shimmer overlay for the diagonal once drawn */
+.netflix-n path, .netflix-n rect { mix-blend-mode: normal; }
+
+/* Strong final overrides to enforce the light red/white theme. Placed at the end
+   so they win over utility classes generated earlier. Only target common dark
+   utilities to avoid touching intentional color utilities like .bg-red-600. */
+html body .bg-black,
+html body .bg-neutral-900,
+html body .bg-neutral-800,
+html body [class*="bg-neutral-900/"],
+html body [class*="bg-neutral-800/"] {
+  background: var(--panel) !important;
+}
+
+html body .text-white:not(.text-white-keep),
+html body [class*="text-white/"]:not(.text-white-keep) {
+  color: var(--text-main) !important;
+}
+
+/* Ensure panels and cards default to light panel bg and readable text */
+.card-surface, .panel, .bg-panel { background: var(--panel) !important; color: var(--text-main) !important; }
+
+/* Enforce light-only typography colors: primary text black, accents (links/emphasis) red */
+body { color: var(--text-main) !important; background: var(--bg-main) !important; }
+h1,h2,h3,h4,h5,h6 { color: var(--text-main) !important; }
+
+/* Keep red accents but don't override all links to red */
+.text-accent, .accent-text { color: var(--accent) !important; }
+
+/* Global input and textarea styling with red borders */
+input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+textarea,
+select {
+  background: white !important;
+  color: black !important;
+  border: 2px solid #dc2626 !important;
+}
+
+input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):focus,
+textarea:focus,
+select:focus {
+  border-color: #b91c1c !important;
+  box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.2) !important;
+  outline: none !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #9ca3af !important;
+}
+
+/* Typing animation for input fields - letters bounce in as user types */
+input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+textarea {
+  animation: input-glow 0.3s ease-out;
+}
+
+@keyframes input-glow {
+  0% { box-shadow: 0 0 0 2px rgba(220, 38, 38, 0); }
+  50% { box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.3); }
+  100% { box-shadow: 0 0 0 2px rgba(220, 38, 38, 0); }
+}
+
+/* Character animation - adds subtle bounce to each character as it's typed */
+input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):focus,
+textarea:focus {
+  animation: type-pulse 0.15s ease-out;
+}
+
+@keyframes type-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.01); }
+  100% { transform: scale(1); }
+}
+
+/* Admin Panel Dark Mode Override */
+.admin-dark input,
+.admin-dark textarea,
+.admin-dark select {
+  background-color: rgba(127, 29, 29, 0.3);
+  border-color: rgba(220, 38, 38, 0.5);
+  color: white;
+}
+
+.admin-dark input::placeholder,
+.admin-dark textarea::placeholder {
+  color: rgba(156, 163, 175, 1);
+}
+
+.admin-dark input:focus,
+.admin-dark textarea:focus,
+.admin-dark select:focus {
+  border-color: rgba(239, 68, 68, 1);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.3);
+}
+
+.admin-dark button {
+  color: white !important;
+}
+
+.admin-dark .bg-white {
+  background-color: rgba(127, 29, 29, 0.3) !important;
+  border-color: rgba(220, 38, 38, 0.3);
+}
+
+.admin-dark .text-black {
+  color: white !important;
+}
+
+.admin-dark .border-gray-200,
+.admin-dark .border-gray-300 {
+  border-color: rgba(220, 38, 38, 0.3);
+}
+
+/* Admin 3D Spin Animation */
+@keyframes spin3d {
+  0% {
+    transform: perspective(1000px) rotateY(0deg) rotateX(0deg);
+  }
+  25% {
+    transform: perspective(1000px) rotateY(90deg) rotateX(15deg);
+  }
+  50% {
+    transform: perspective(1000px) rotateY(180deg) rotateX(0deg);
+  }
+  75% {
+    transform: perspective(1000px) rotateY(270deg) rotateX(-15deg);
+  }
+  100% {
+    transform: perspective(1000px) rotateY(360deg) rotateX(0deg);
+  }
+}
+
+.admin-icon-3d {
+  transform-style: preserve-3d;
+  animation: spin3d 2s linear infinite;
+}
+
+.admin-dark .bg-gray-50,
+.admin-dark .bg-gray-100 {
+  background-color: rgba(127, 29, 29, 0.2);
+}
+
+.admin-dark table {
+  border-color: rgba(220, 38, 38, 0.3);
+}
+
+.admin-dark thead {
+  background-color: rgba(127, 29, 29, 0.4);
+  color: white;
+}
+
+.admin-dark thead th {
+  color: white !important;
+}
+
+.admin-dark tbody {
+  background-color: rgba(127, 29, 29, 0.2);
+}
+
+.admin-dark tbody tr {
+  border-color: rgba(220, 38, 38, 0.2);
+}
+
+.admin-dark td,
+.admin-dark th {
+  color: white !important;
+  border-color: rgba(220, 38, 38, 0.2);
+}
+
