@@ -267,7 +267,7 @@ export default function DashboardAdmin() {
         try {
             token = safeStorage.getItem('token');
         } catch {
-            try { token = window?.localStorage?.getItem('token') || null; } catch { token = null; }
+            token = null;
         }
         if (!token) {
             setLoading(false);

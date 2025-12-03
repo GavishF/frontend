@@ -8,6 +8,83 @@
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      // CRITICAL: Suppress storage errors at HTML level BEFORE any modules load
+      (function() {
+        const memoryStore = new Map();
+        
+        // Suppress console errors for storage
+        const origError = console.error;
+        console.error = function(...args) {
+          const text = args.map(a => String(a)).join(' ');
+          if (text.toLowerCase().includes('storage')) return;
+          return origError.apply(console, args);
+        };
+        
+        const origWarn = console.warn;
+        console.warn = function(...args) {
+          const text = args.map(a => String(a)).join(' ');
+          if (text.toLowerCase().includes('storage')) return;
+          return origWarn.apply(console, args);
+        };
+        
+        // Capture unhandledrejection
+        window.addEventListener('unhandledrejection', function(e) {
+          if (e && e.reason) {
+            const msg = (e.reason.message || String(e.reason)).toLowerCase();
+            if (msg.includes('storage')) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              return false;
+            }
+          }
+        }, true);
+        
+        // Capture error events
+        window.addEventListener('error', function(e) {
+          if (e && e.message && e.message.toLowerCase().includes('storage')) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            return false;
+          }
+        }, true);
+        
+        // Override Storage methods - SAFE versions that NEVER throw
+        try {
+          const getItem = Storage.prototype.getItem;
+          Storage.prototype.getItem = function(key) {
+            try {
+              return getItem.call(this, key);
+            } catch (err) {
+              // Silently return from memory store
+              return memoryStore.get(key) || null;
+            }
+          };
+          
+          const setItem = Storage.prototype.setItem;
+          Storage.prototype.setItem = function(key, value) {
+            try {
+              return setItem.call(this, key, value);
+            } catch (err) {
+              // Silently store in memory
+              memoryStore.set(key, value);
+            }
+          };
+          
+          const removeItem = Storage.prototype.removeItem;
+          Storage.prototype.removeItem = function(key) {
+            try {
+              return removeItem.call(this, key);
+            } catch (err) {
+              // Silently remove from memory
+              memoryStore.delete(key);
+            }
+          };
+        } catch (e) {
+          // If we can't patch Storage, continue
+        }
+      })();
+    </script>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

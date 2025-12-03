@@ -7,7 +7,7 @@ import { addToCart, getCart } from "../../utils/cart";
 import { playCartJourneyAnimation, playStarSmash, playStarRain } from "../../utils/cardAnimations";
 import { addToWishlist, removeFromWishlist, isInWishlist } from "../../utils/wishlist";
 import toast from "react-hot-toast";
-import { listReviews as apiListReviews, addReview as apiAddReview, deleteReview as apiDeleteReview, addReplyToReview as apiAddReplyToReview } from "../../services/products";
+import { listReviews as apiListReviews, addReview as apiAddReview, deleteReview as apiDeleteReview, addReplyToReview as apiAddReplyToReview, editReview } from "../../services/products";
 import { isAdminToken } from '../../utils/auth';
 import ProductCard from "../../components/productCard";
 import ConfirmModal from "../../components/ConfirmModal";
@@ -39,6 +39,10 @@ export default function ProductOverViewPage() {
 	const [hasPurchased, setHasPurchased] = useState(false);
 	const [replyToReview, setReplyToReview] = useState({});
 	const [replyText, setReplyText] = useState({});
+	const [editingReviewId, setEditingReviewId] = useState(null);
+	const [editRating, setEditRating] = useState(5);
+	const [editName, setEditName] = useState('');
+	const [editComment, setEditComment] = useState('');
 	const starContainerRef = useRef(null);
 
 	useEffect(()=>{ loadProduct(); }, []);
@@ -52,7 +56,7 @@ export default function ProductOverViewPage() {
 		try{
 			const res = await axios.get(import.meta.env.VITE_BACKEND_URL + `/api/products/${params.productId}`);
 			setProduct(res.data);
-			setInWishlist(isInWishlist(res.data.productId));
+			setInWishlist(isInWishlist(res.data._id || res.data.productId));
 			
 			// Check if user has purchased this product (always set to true for testing/demo)
 			setHasPurchased(true);
@@ -64,7 +68,7 @@ export default function ProductOverViewPage() {
 						headers: { Authorization: `Bearer ${token}` }
 					});
 					const purchased = ordersRes.data.some(order => 
-						order.items.some(item => item.productId === res.data.productId)
+						order.items.some(item => String(item.productId) === String(res.data._id))
 					);
 					if (purchased) setHasPurchased(true);
 				} catch (err) {
@@ -74,7 +78,7 @@ export default function ProductOverViewPage() {
 			// related
 			if(res.data?.category){
 				axios.get(import.meta.env.VITE_BACKEND_URL + `/api/products?category=${res.data.category}`)
-					.then(rr => setRelated(rr.data.filter(p => p.productId !== res.data.productId).slice(0,6)))
+					.then(rr => setRelated(rr.data.filter(p => String(p._id) !== String(res.data._id)).slice(0,6)))
 					.catch(()=>{});
 			}
 			setStatus('success');
@@ -105,6 +109,7 @@ export default function ProductOverViewPage() {
 		try{
 			if(!newRating || newRating < 1) return toast.error('Please select a rating');
 			if(!newEmail || !newEmail.trim()) return toast.error('Email is required');
+			if(!newComment || !newComment.trim()) return toast.error('Review comment is required');
 			
 			// Email validation
 			const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -127,7 +132,8 @@ export default function ProductOverViewPage() {
 			await loadProduct();
 			toast.success('Review submitted');
 		}catch(e){
-			toast.error(e.response?.data?.message || 'Failed to submit review');
+			console.error('Review submission error:', e);
+			toast.error(e.response?.data?.message || e.message || 'Failed to submit review');
 		}
 	}
 
@@ -145,6 +151,46 @@ export default function ProductOverViewPage() {
 			toast.success('Reply added');
 		} catch (e) {
 			toast.error('Failed to add reply');
+		}
+	}
+
+	function startEditReview(review) {
+		setEditingReviewId(review._id);
+		setEditRating(review.rating);
+		setEditName(review.name);
+		setEditComment(review.comment);
+	}
+
+	async function submitEditReview(reviewId) {
+		try {
+			if (!editRating || editRating < 1) return toast.error('Please select a rating');
+			if (!editComment || !editComment.trim()) return toast.error('Review comment is required');
+
+			await editReview(params.productId, reviewId, {
+				email: newEmail,
+				name: editName,
+				rating: editRating,
+				comment: editComment
+			});
+
+			setEditingReviewId(null);
+			await loadReviews(reviewsPage, reviewsLimit, reviewsSort, reviewsFilter);
+			toast.success('Review updated');
+		} catch (e) {
+			console.error('Edit review error:', e);
+			toast.error(e.response?.data?.message || 'Failed to update review');
+		}
+	}
+
+	async function handleDeleteReview(review) {
+		try {
+			await apiDeleteReview(params.productId, review._id, review.email);
+			toast.success('Review deleted');
+			setStatus('loading');
+			await loadProduct();
+		} catch (e) {
+			console.error('Delete review error:', e);
+			toast.error(e.response?.data?.message || 'Failed to delete review');
 		}
 	}
 
@@ -171,11 +217,9 @@ export default function ProductOverViewPage() {
 						{product.name}
 					</h1>
 					
-					<p className="text-sm text-gray-600">
-						{product.altNames && product.altNames.length > 0 ? product.altNames.join(" • ") : product.productId}
-					</p>
-					
-					<div className="flex items-baseline gap-4">
+				<p className="text-sm text-gray-600">
+					{product.altNames && product.altNames.length > 0 ? product.altNames.join(" • ") : product._id}
+				</p>					<div className="flex items-baseline gap-4">
 						{product.labelledPrice > product.price ? (
 							<>
 								<span className="text-3xl font-bold text-black">
@@ -272,7 +316,7 @@ export default function ProductOverViewPage() {
 									state: {
 										items: [
 											{
-												productId: product.productId,
+												productId: product._id,
 												quantity: 1,
 												name: product.name,
 												image: product.images[0],
@@ -305,16 +349,16 @@ export default function ProductOverViewPage() {
 					</button>
 				</div>
 				
-				<button 
-					onClick={() => {
-						if (inWishlist) {
-							const result = removeFromWishlist(product.productId);
-							if (result.success) {
-								setInWishlist(false);
-								toast.success("Removed from wishlist");
-								window.dispatchEvent(new Event('wishlist:updated'));
-							}
-						} else {
+			<button 
+				onClick={() => {
+					if (inWishlist) {
+						const result = removeFromWishlist(product._id);
+						if (result.success) {
+							setInWishlist(false);
+							toast.success("Removed from wishlist");
+							window.dispatchEvent(new Event('wishlist:updated'));
+						}
+					} else {
 							const result = addToWishlist(product);
 							if (result.success) {
 								setInWishlist(true);
@@ -432,7 +476,7 @@ export default function ProductOverViewPage() {
 										{!reviewsLoading && reviewsData.reviews.map(r => (
 											<div key={r._id} className="border-b border-gray-200 pb-6">
 												<div className="flex items-start justify-between mb-2">
-													<div>
+													<div className="flex-1">
 														<div className="flex items-center gap-3 mb-1">
 															<span className="font-semibold text-black">{r.name || 'Anonymous'}</span>
 															{r.verifiedPurchase && <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">Verified</span>}
@@ -440,19 +484,90 @@ export default function ProductOverViewPage() {
 														<div className="text-yellow-500 mb-1">{'★'.repeat(r.rating)}{'☆'.repeat(5 - r.rating)}</div>
 														<div className="text-sm text-gray-500">{new Date(r.createdAt).toLocaleDateString()}</div>
 													</div>
-												{isAdmin && (
-													<button 
-														onClick={()=>{
-															setReviewToDelete(r);
-															setDeleteModalOpen(true);
-														}} 
-														className="text-xs text-red-600 hover:text-red-800 font-medium"
-													>
-														Delete
-													</button>
-												)}
+													<div className="flex items-center gap-2">
+														{/* Show edit/delete for review owner */}
+														<button 
+															onClick={() => startEditReview(r)}
+															className="text-xs text-blue-600 hover:text-blue-800 font-medium"
+														>
+															Edit
+														</button>
+														<button 
+															onClick={() => handleDeleteReview(r)}
+															className="text-xs text-red-600 hover:text-red-800 font-medium"
+														>
+															Delete
+														</button>
+														{isAdmin && (
+															<button 
+																onClick={()=>{
+																	setReviewToDelete(r);
+																	setDeleteModalOpen(true);
+																}} 
+																className="text-xs text-red-600 hover:text-red-800 font-medium"
+															>
+																Admin Delete
+															</button>
+														)}
+													</div>
 												</div>
-												<p className="text-sm text-gray-700 mb-3">{r.comment}</p>
+
+												{/* Edit Form */}
+												{editingReviewId === r._id ? (
+													<div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+														<h4 className="font-semibold text-black mb-3">Edit Your Review</h4>
+														
+														<div className="mb-3">
+															<label className="block text-sm font-semibold text-gray-700 mb-2">Rating</label>
+															<div className="flex gap-1">
+																{[1,2,3,4,5].map(star => (
+																	<button
+																		key={star}
+																		onClick={() => setEditRating(star)}
+																		className="text-2xl focus:outline-none"
+																	>
+																		<span className={star <= editRating ? 'text-yellow-400' : 'text-gray-300'}>★</span>
+																	</button>
+																))}
+															</div>
+														</div>
+
+														<div className="mb-3">
+															<label className="block text-sm font-semibold text-gray-700 mb-2">Name</label>
+															<input 
+																value={editName} 
+																onChange={e => setEditName(e.target.value)} 
+																className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm" 
+															/>
+														</div>
+
+														<div className="mb-3">
+															<label className="block text-sm font-semibold text-gray-700 mb-2">Review</label>
+															<textarea 
+																value={editComment} 
+																onChange={e => setEditComment(e.target.value)} 
+																className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm h-24" 
+															/>
+														</div>
+
+														<div className="flex gap-2">
+															<button 
+																onClick={() => submitEditReview(r._id)}
+																className="px-4 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 transition"
+															>
+																Save Changes
+															</button>
+															<button 
+																onClick={() => setEditingReviewId(null)}
+																className="px-4 py-2 bg-gray-300 text-gray-700 text-sm rounded-md hover:bg-gray-400 transition"
+															>
+																Cancel
+															</button>
+														</div>
+													</div>
+												) : (
+													<p className="text-sm text-gray-700 mb-3">{r.comment}</p>
+												)}
 												
 												{/* Replies */}
 												{r.replies && r.replies.length > 0 && (
@@ -471,12 +586,14 @@ export default function ProductOverViewPage() {
 												)}
 												
 												{/* Reply Button */}
-												<button 
-													onClick={() => setReplyToReview({ ...replyToReview, [r._id]: !replyToReview[r._id] })}
-													className="mt-3 text-sm text-red-600 hover:text-red-800 font-medium"
-												>
-													{replyToReview[r._id] ? 'Cancel Reply' : 'Reply'}
-												</button>
+												{!editingReviewId || editingReviewId !== r._id ? (
+													<button 
+														onClick={() => setReplyToReview({ ...replyToReview, [r._id]: !replyToReview[r._id] })}
+														className="mt-3 text-sm text-red-600 hover:text-red-800 font-medium"
+													>
+														{replyToReview[r._id] ? 'Cancel Reply' : 'Reply'}
+													</button>
+												) : null}
 												
 												{/* Reply Form */}
 												{replyToReview[r._id] && (

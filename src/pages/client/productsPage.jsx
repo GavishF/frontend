@@ -220,7 +220,7 @@ export default function ProductsPage() {
 			) : (
 				<div className="w-full flex flex-wrap gap-8 justify-center p-6">
 					{filtered.map(product => (
-						<ProductCard key={product.productId} product={product} />
+						<ProductCard key={product._id} product={product} />
 					))}
 					{!filtered.length && (
 						<div className="text-center py-16 w-full">

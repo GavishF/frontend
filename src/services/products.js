@@ -21,8 +21,12 @@ export function addReview(productId, payload){
   return client.post(`/api/products/${productId}/reviews`, payload);
 }
 
-export function deleteReview(productId, reviewId){
-  return client.delete(`/api/products/${productId}/reviews/${reviewId}`);
+export function deleteReview(productId, reviewId, email){
+  return client.delete(`/api/products/${productId}/reviews/${reviewId}`, { data: { email } });
+}
+
+export function editReview(productId, reviewId, payload){
+  return client.put(`/api/products/${productId}/reviews/${reviewId}`, payload);
 }
 
 export function addReplyToReview(productId, reviewId, payload){

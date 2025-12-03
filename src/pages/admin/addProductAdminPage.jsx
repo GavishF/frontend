@@ -223,7 +223,7 @@ export default function AddProductPage() {
 			.get(import.meta.env.VITE_BACKEND_URL + "/api/products/next-code", {
 				headers: { Authorization: "Bearer " + token },
 			})
-			.then((r) => setProductId(r.data.next))
+			.then((r) => setProductId(r.data.code))
 			.catch(() => setProductId("(auto)"));
 	}, []);
 
@@ -265,19 +265,15 @@ export default function AddProductPage() {
 			const responses = await Promise.all(uploads);
 
 			const payload = {
-				productId: productId && productId !== '(auto)' ? productId : undefined,
 				name: productName,
-				altNames: alternativeNames ? alternativeNames.split(",") : [],
-				labelledPrice: Number(labelledPrice) || 0,
-				price: Number(price) || 0,
+				price: Number(price),
 				images: responses,
-				description,
-			stock: Number(stock) || 0,
-			isAvailable,
-			category: category || undefined,
-		};
-
-		const token = getItem("token");
+				description: description || 'No description',
+				stock: Number(stock) || 0,
+				category: category || 'accessories',
+				colors: [],
+				sizes: []
+		};		const token = getItem("token");
 		if (!token) return navigate("/login");			await axios.post(import.meta.env.VITE_BACKEND_URL + "/api/products", payload, {
 			headers: { Authorization: "Bearer " + token },
 		});

@@ -22,10 +22,11 @@ export default function ProductCard({ product }) {
 	const [inWishlist, setInWishlist] = useState(false);
 	const cardRef = useRef(null);
 	const navigate = useNavigate();
+	const productId = product._id || product.productId;
 	
 	useEffect(() => {
-		setInWishlist(isInWishlist(product.productId));
-	}, [product.productId]);
+		setInWishlist(isInWishlist(productId));
+	}, [productId]);
 	
 	function handleWishlistToggle(e) {
 		e.preventDefault();
@@ -35,7 +36,7 @@ export default function ProductCard({ product }) {
 		
 		if (inWishlist) {
 			playWishlistRemoveAnimation(heartButton, () => {
-				const result = removeFromWishlist(product.productId);
+				const result = removeFromWishlist(productId);
 				if (result.success) {
 					setInWishlist(false);
 					toast.success("Removed from wishlist");
@@ -111,7 +112,7 @@ export default function ProductCard({ product }) {
 		
 		// Play card pack animation then navigate
 		playCardPackAnimation(cardElement, () => {
-			navigate(`/overview/${product.productId}`);
+			navigate(`/overview/${productId}`);
 		});
 	}
 
@@ -154,7 +155,7 @@ export default function ProductCard({ product }) {
 			</div>
 			<div className="flex flex-col p-4 gap-2">
 				<div className="flex justify-between items-start">
-					<span className="text-neutral-400 text-[11px] tracking-wide">{product.productId}</span>
+					<span className="text-neutral-400 text-[11px] tracking-wide">{product._id}</span>
 					{product.category && (
 						<span className="text-[10px] px-2 py-1 rounded-md bg-gray-100 border border-gray-300 group-hover:border-red-600 transition-colors text-gray-700">
 							{product.category}

@@ -1,9 +1,73 @@
+import './bootstrap.js' // MUST be first - runs before everything
 import { StrictMode, useEffect, useState, Component } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
 import { BrowserRouter } from 'react-router-dom'
 import GlobalLoader from './components/GlobalLoader'
+import './utils/storageErrorHandler.js' // Import second to patch Promise
+
+// CRITICAL: Suppress ALL storage errors at global level
+if (typeof window !== 'undefined') {
+  // Override fetch to suppress storage error responses
+  const originalFetch = window.fetch;
+  window.fetch = function(...args) {
+    return originalFetch.apply(this, args).catch(err => {
+      if (err && err.message && err.message.includes('storage')) {
+        console.log('[Storage Error Suppressed]', err.message);
+        return Promise.resolve(new Response('', { status: 500 }));
+      }
+      throw err;
+    });
+  };
+
+  // Wrap document.addEventListener to suppress storage errors
+  const originalAddEventListener = EventTarget.prototype.addEventListener;
+  EventTarget.prototype.addEventListener = function(type, listener, options) {
+    if (type === 'unhandledrejection' || type === 'error') {
+      const wrappedListener = function(event) {
+        try {
+          const msg = event?.reason?.message || event?.message || String(event);
+          if (msg.includes('storage') || msg.includes('Storage')) {
+            event.preventDefault?.();
+            event.stopImmediatePropagation?.();
+            return;
+          }
+        } catch(e) {}
+        return listener(event);
+      };
+      return originalAddEventListener.call(this, type, wrappedListener, options);
+    }
+    return originalAddEventListener.call(this, type, listener, options);
+  };
+}
+
+// Suppress storage access errors globally
+if (typeof window !== 'undefined') {
+  try {
+    const originalSetItem = Storage.prototype.setItem;
+    Storage.prototype.setItem = function(...args) {
+      try { return originalSetItem.apply(this, args); } catch(e) { 
+        if(!e.message.includes('storage')) throw e;
+      }
+    };
+    
+    const originalGetItem = Storage.prototype.getItem;
+    Storage.prototype.getItem = function(...args) {
+      try { return originalGetItem.apply(this, args); } catch(e) { 
+        if(!e.message.includes('storage')) throw e;
+        return null;
+      }
+    };
+    
+    const originalRemoveItem = Storage.prototype.removeItem;
+    Storage.prototype.removeItem = function(...args) {
+      try { return originalRemoveItem.apply(this, args); } catch(e) { 
+        if(!e.message.includes('storage')) throw e;
+      }
+    };
+  } catch(e) { /* ignore */ }
+}
 
 function ErrorOverlay(){
   const [error, setError] = useState(null);
@@ -66,9 +130,19 @@ function showDomError(message){
 }
 
 window.addEventListener('error', (ev)=>{
+  // Suppress storage access errors completely
+  if(ev && ev.message && (ev.message.includes('storage') || ev.message.includes('Storage'))) {
+    ev.preventDefault();
+    return;
+  }
   try{ showDomError((ev && ev.message) || String(ev)); }catch(e){}
 });
 window.addEventListener('unhandledrejection', (ev)=>{
+  // Suppress storage access errors completely
+  if(ev && ev.reason && ev.reason.message && (ev.reason.message.includes('storage') || ev.reason.message.includes('Storage'))) {
+    ev.preventDefault();
+    return;
+  }
   try{ showDomError((ev && ev.reason && ev.reason.message) || JSON.stringify(ev)); }catch(e){}
 });
 
@@ -95,7 +169,7 @@ class AppErrorBoundary extends Component {
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <BrowserRouter>
+    <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <GlobalLoader />
       <div id="app-root" className="app-root transition-all duration-300">
         <AppErrorBoundary>

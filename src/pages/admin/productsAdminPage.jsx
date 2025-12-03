@@ -110,7 +110,7 @@ export default function ProductsAdminPage() {
 											className="w-[50px] h-[50px]"
 										/>
 									</td>
-									<td className="p-[10px] text-black">{product.productId}</td>
+									<td className="p-[10px] text-black">{product._id}</td>
 									<td className="p-[10px] text-black">{product.name}</td>
 									<td className="p-[10px] text-black">{product.price}</td>
 									<td className="p-[10px] text-black">{product.labelledPrice}</td>
@@ -126,15 +126,15 @@ export default function ProductsAdminPage() {
 												navigate("/login");
 												return;
 											}
-												axios
-													.delete(
-														import.meta.env.VITE_BACKEND_URL + "/api/products/" + product.productId,
-														{
-															headers: {
-																Authorization: `Bearer ${token}`,
-															},
-														}
-													)
+											axios
+												.delete(
+													import.meta.env.VITE_BACKEND_URL + "/api/products/" + product._id,
+													{
+														headers: {
+															Authorization: `Bearer ${token}`,
+														},
+													}
+												)
 													.then((res) => {
 														toast.success("Product deleted successfully");
 														setIsLoading(!isLoading);

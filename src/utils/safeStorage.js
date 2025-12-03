@@ -6,9 +6,13 @@ function canUse(){
   try{
     if(typeof window === 'undefined' || !('localStorage' in window)) return false;
     const testKey = '__stor_test__';
-    window.localStorage.setItem(testKey,'1');
-    window.localStorage.removeItem(testKey);
-    return true;
+    try {
+      window.localStorage.setItem(testKey,'1');
+      window.localStorage.removeItem(testKey);
+      return true;
+    } catch(e) {
+      return false;
+    }
   }catch(e){
     return false;
   }
@@ -19,11 +23,16 @@ const enabled = canUse();
 export function getItem(key){
   try {
     if(enabled){
-      try{return window.localStorage.getItem(key);}catch(e){ return memoryStore.get(key) || null; }
+      try{
+        const val = window.localStorage.getItem(key);
+        return val || null;
+      }catch(e){ 
+        return memoryStore.get(key) || null; 
+      }
     }
     return memoryStore.get(key) || null;
   } catch(e) {
-    return memoryStore.get(key) || null;
+    try { return memoryStore.get(key) || null; } catch(_) { return null; }
   }
 }
 export function setItem(key,val){
@@ -33,7 +42,7 @@ export function setItem(key,val){
     }
     memoryStore.set(key,val);
   } catch(e) {
-    memoryStore.set(key,val);
+    try { memoryStore.set(key,val); } catch(_) { /* ignore */ }
   }
 }
 export function removeItem(key){
@@ -43,7 +52,7 @@ export function removeItem(key){
     }
     memoryStore.delete(key);
   } catch(e) {
-    memoryStore.delete(key);
+    try { memoryStore.delete(key); } catch(_) { /* ignore */ }
   }
 }
 export function isPersistent(){ return enabled; }

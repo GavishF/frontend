@@ -234,12 +234,12 @@ function FeaturedStrip(){
       <h2 className="text-2xl font-bold mb-4 text-black">Featured Picks</h2>
       <div className="flex gap-4 overflow-x-auto py-2">
         {items.map(it => (
-          <a key={it.productId} href={`/overview/${it.productId}`} className="min-w-[220px] p-4 bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+          <a key={it._id} href={`/overview/${it._id}`} className="min-w-[220px] p-4 bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
             <div className="h-36 mb-3 overflow-hidden rounded">
               <img src={it.images?.[0]} alt={it.name} className="w-full h-full object-cover" />
             </div>
             <div className="text-sm font-semibold text-black">{it.name}</div>
-            <div className="text-xs text-gray-500">{it.productId}</div>
+            <div className="text-xs text-gray-500">{it._id}</div>
           </a>
         ))}
       </div>

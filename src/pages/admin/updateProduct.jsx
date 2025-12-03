@@ -7,15 +7,15 @@ import { getItem } from "../../utils/safeStorage.js";
 
 export default function UpdateProductPage() {
     const location = useLocation()
-    const [productId, setProductId] = useState(location.state.productId);
+    const [productId, setProductId] = useState(location.state._id || location.state.productId);
     const [productName, setProductName] = useState(location.state.name);
-    const [alternativeNames, setAlternativeNames] = useState(location.state.altNames.join(","));
-    const [labelledPrice, setLabelledPrice] = useState(location.state.labelledPrice);
+    const [alternativeNames, setAlternativeNames] = useState((location.state.altNames || []).join(","));
+    const [labelledPrice, setLabelledPrice] = useState(location.state.labelledPrice || 0);
     const [price, setPrice] = useState(location.state.price);
     const [images, setImages] = useState([]);
     const [description, setDescription] = useState(location.state.description);
     const [stock, setStock] = useState(location.state.stock);
-    const [isAvailable, setIsAvailable] = useState(location.state.isAvailable);
+    const [isAvailable, setIsAvailable] = useState(location.state.isAvailable !== false);
     const [category, setCategory] = useState(location.state.category);
     const [categories, setCategories] = useState([]);
     const navigate = useNavigate()
@@ -47,20 +47,14 @@ export default function UpdateProductPage() {
 
         const altNamesInArray = alternativeNames.split(",")
         const productData = {
-            productId: productId,
             name: productName,
-            altNames: altNamesInArray,
-            labelledPrice: labelledPrice,
-            price: price,
-            images: responses,
+            price: Number(price),
+            images: responses.length > 0 ? responses : location.state.images,
             description: description,
-            stock: stock,
-            isAvailable: isAvailable,
-            category: category
-        }
-
-        if(responses.length == 0){
-            productData.images = location.state.images
+            stock: Number(stock),
+            category: category,
+            colors: location.state.colors || [],
+            sizes: location.state.sizes || []
         }
 
 		const token = getItem("token");        if(token == null){

@@ -34,30 +34,63 @@ export default function PaymentPage() {
 		await new Promise(resolve => setTimeout(resolve, 2000));
 
 		try {
-			const token = getItem('token');
+			let token = '';
+			try { 
+				token = getItem('token') || ''; 
+			} catch(e) { 
+				// Silently fail - storage might not be available
+				token = '';
+			}
+			
 			// Place the order after "successful" payment
-			await axios.post(
-				import.meta.env.VITE_BACKEND_URL + '/api/orders',
-				orderData,
-				{
-					headers: {
-						Authorization: `Bearer ${token}`,
-					},
-				}
-			);
+			try {
+				await axios.post(
+					import.meta.env.VITE_BACKEND_URL + '/api/orders',
+					orderData,
+					{
+						headers: {
+							Authorization: `Bearer ${token}`,
+						},
+					}
+				);
+			} catch (apiError) {
+				console.log('Order API call error:', apiError.message);
+				throw apiError;
+			}
 
-		// Clear cart using safe storage (avoids restricted-context errors)
-		try { safeSetItem('cart', JSON.stringify([])); } catch (_) { /* ignore */ }
-		syncCartCount();
-		window.dispatchEvent(new Event('cart:updated'));
+			// Clear cart using safe storage (avoids restricted-context errors)
+			// Each operation wrapped separately to prevent cascade failures
+			try { 
+				safeSetItem('cart', JSON.stringify([])); 
+			} catch (_) { 
+				// ignore 
+			}
+			
+			try { 
+				syncCartCount(); 
+			} catch (_) { 
+				// ignore 
+			}
+			
+			try { 
+				window.dispatchEvent(new Event('cart:updated')); 
+			} catch (_) { 
+				// ignore 
+			}
 
-		toast.success('Payment successful! Order placed.');
-		setProcessing(false);
-		
-		// Play celebration animation before navigating
-		await playPaymentCelebration();
-		navigate('/products');
+			toast.success('Payment successful! Order placed.');
+			setProcessing(false);
+			
+			// Play celebration animation before navigating
+			try {
+				await playPaymentCelebration();
+			} catch (_) {
+				// Animation error shouldn't block navigation
+			}
+			
+			navigate('/products');
 		} catch (err) {
+			console.log('Payment error:', err.message);
 			toast.error('Failed to place order. Please try again.');
 			setProcessing(false);
 		}
