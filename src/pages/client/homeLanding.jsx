@@ -4,7 +4,6 @@ import toast from 'react-hot-toast';
 import ImageSlider from '../../components/imageSlider';
 import { sendOtp, verifyOtp } from '../../services/newsletter';
 import { startSocialProof } from '../../utils/socialProof';
-import FreeShippingBar from '../../components/FreeShippingBar';
 import Type3D from '../../components/Type3D';
 import { PiHandSwipeLeftDuotone } from 'react-icons/pi';
 import { getItem as safeGetItem, setItem as safeSetItem, getItem } from '../../utils/safeStorage';
@@ -291,8 +290,6 @@ export default function HomeLanding(){
           </div>
         </div>
       </section>
-
-      <FreeShippingBar />
 
       {/* Categories section */}
       <CategoriesShowcase />
