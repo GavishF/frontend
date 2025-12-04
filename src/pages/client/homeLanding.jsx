@@ -334,28 +334,41 @@ export default function HomeLanding(){
 
 function CategoriesShowcase(){
   const [categories,setCategories] = useState([]);
+  
+  // Unsplash fallback images for categories
+  const unsplashImages = {
+    'men': 'https://images.unsplash.com/photo-1506629082632-401d14d9d881?w=500&h=500&fit=crop',
+    'women': 'https://images.unsplash.com/photo-1495521821757-a1efb6729352?w=500&h=500&fit=crop',
+    'kids': 'https://images.unsplash.com/photo-1519238263413-b37e4a63a966?w=500&h=500&fit=crop',
+    'accessories': 'https://images.unsplash.com/photo-1523170335684-f042f1e0f2ba?w=500&h=500&fit=crop'
+  };
+  
   useEffect(()=>{
     axios.get(import.meta.env.VITE_BACKEND_URL + '/api/categories')
       .then(r=> setCategories(Array.isArray(r.data) ? r.data.slice(0,8) : []))
       .catch(()=>{});
   },[]);
+  
   if(!categories.length) return null;
+  
   return (
     <section className="px-6 md:px-12 lg:px-20 pt-4 pb-16">
       <h2 className="text-3xl font-bold mb-10 text-black">Shop Categories</h2>
       <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {categories.map(c => (
-          <a key={c._id} href={`/products?category=${c.slug}`} className="group relative rounded-xl bg-gray-900 border border-gray-200 hover:border-red-600 overflow-hidden shadow-sm hover:shadow-md transition-all h-64">
-            {c.image && (
-              <img src={c.image} alt={c.name} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-            )}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-            <div className="absolute bottom-0 left-0 right-0 p-6 flex flex-col z-20">
-              <span className="text-xl font-bold capitalize drop-shadow-lg" style={{color: '#ffffff'}}>{c.name}</span>
-              <span className="text-xs mt-2 inline-block px-2 py-1 rounded bg-white/20 backdrop-blur-sm border border-white/30 w-fit" style={{color: '#ffffff'}}>Shop Now →</span>
-            </div>
-          </a>
-        ))}
+        {categories.map(c => {
+          // Use category's own image, or fallback to Unsplash
+          const imageUrl = c.image || unsplashImages[c.slug?.toLowerCase()] || unsplashImages['accessories'];
+          return (
+            <a key={c._id} href={`/products?category=${c.slug}`} className="group relative rounded-xl bg-gray-900 border border-gray-200 hover:border-red-600 overflow-hidden shadow-sm hover:shadow-md transition-all h-64">
+              <img src={imageUrl} alt={c.name} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 p-6 flex flex-col z-20">
+                <span className="text-xl font-bold capitalize drop-shadow-lg" style={{color: '#ffffff'}}>{c.name}</span>
+                <span className="text-xs mt-2 inline-block px-2 py-1 rounded bg-white/20 backdrop-blur-sm border border-white/30 w-fit" style={{color: '#ffffff'}}>Shop Now →</span>
+              </div>
+            </a>
+          );
+        })}
       </div>
     </section>
   )
