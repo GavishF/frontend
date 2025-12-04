@@ -332,12 +332,12 @@ export default function HomeLanding(){
 function CategoriesShowcase(){
   const [categories,setCategories] = useState([]);
   
-  // Unsplash fallback images for categories
+  // Unsplash images for categories with proper sizing
   const unsplashImages = {
-    'men': 'https://images.unsplash.com/photo-1506629082632-401d14d9d881?w=500&h=500&fit=crop',
-    'women': 'https://images.unsplash.com/photo-1495521821757-a1efb6729352?w=500&h=500&fit=crop',
-    'kids': 'https://images.unsplash.com/photo-1519238263413-b37e4a63a966?w=500&h=500&fit=crop',
-    'accessories': 'https://images.unsplash.com/photo-1523170335684-f042f1e0f2ba?w=500&h=500&fit=crop'
+    'men': 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&h=400&fit=crop&crop=faces',
+    'women': 'https://images.unsplash.com/photo-1539689034638-6a917bb4718b?w=600&h=400&fit=crop&crop=faces',
+    'kids': 'https://images.unsplash.com/photo-1503454537688-e6694e7faa25?w=600&h=400&fit=crop',
+    'accessories': 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=600&h=400&fit=crop'
   };
   
   useEffect(()=>{
