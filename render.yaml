@@ -8,3 +8,5 @@ services:
     envVars:
       - key: VITE_BACKEND_URL
         value: https://nikola-backend.onrender.com
+      - key: VITE_GOOGLE_CLIENT_ID
+        value: 43671891986-qhl06a0tqh6crajv70br6pceurmsebp7.apps.googleusercontent.com
