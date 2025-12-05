@@ -4,30 +4,32 @@ const memoryStore = new Map();
 
 function canUse(){
   try{
-    if(typeof window === 'undefined' || !('localStorage' in window)) return false;
-    // Quick check without accessing storage directly
-    const testKey = '__stor_test__';
-    const testValue = '1';
+    if(typeof window === 'undefined') return false;
+    
+    // Don't try to check the property existence since that can throw in some contexts
+    let storage;
+    try {
+      storage = window.localStorage;
+      if (!storage) return false;
+    } catch(e) {
+      // If we can't even access localStorage property, it's not available
+      return false;
+    }
+    
+    // Test with a unique key to avoid conflicts
+    const testKey = '__stor_test_' + Date.now();
     
     try {
-      // Test only if not in restricted context
-      if (!window.localStorage) return false;
-      
-      // Use Object.getOwnPropertyDescriptor to check if setItem is callable
-      // without actually calling it (avoids triggering storage permission checks)
-      const descriptor = Object.getOwnPropertyDescriptor(window.localStorage, 'setItem');
-      if (!descriptor || typeof descriptor.value !== 'function') return false;
-      
-      // Safe to call now
-      window.localStorage.setItem(testKey, testValue);
-      window.localStorage.removeItem(testKey);
+      storage.setItem(testKey, '1');
+      storage.removeItem(testKey);
       return true;
     } catch(e) {
-      // Storage access denied, use memory store
+      // SecurityError, QuotaExceededError, or any DOMException means storage isn't available
+      // This is the expected path on Render and restricted contexts
       return false;
     }
   }catch(e){
-    // Any error means storage is unavailable
+    // Outermost catch for any unexpected errors
     return false;
   }
 }

@@ -13,7 +13,7 @@ export default function ContactsAdmin(){
 
   function load(){
     setLoading(true);
-    axios.get(import.meta.env.VITE_BACKEND_URL + '/api/contact', { headers })
+    axios.get(import.meta.env.VITE_BACKEND_URL + '/api/tickets', { headers })
       .then(r=> setItems(r.data))
       .catch(()=> toast.error('Failed to load contacts'))
       .finally(()=> setLoading(false));
@@ -23,12 +23,12 @@ export default function ContactsAdmin(){
 
   function sendReply(){
     if(!reply.trim()) return toast.error('Reply required');
-    axios.post(import.meta.env.VITE_BACKEND_URL + `/api/contact/${selected._id}/reply`, { message: reply }, { headers })
+    axios.put(import.meta.env.VITE_BACKEND_URL + `/api/tickets/${selected._id}/reply`, { message: reply }, { headers })
       .then(r=>{ toast.success('Reply sent'); setSelected(r.data); setReply(''); load(); })
       .catch(err=> toast.error(err?.response?.data?.message || 'Failed'));
   }
   function closeTicket(){
-    axios.post(import.meta.env.VITE_BACKEND_URL + `/api/contact/${selected._id}/close`, {}, { headers })
+    axios.put(import.meta.env.VITE_BACKEND_URL + `/api/tickets/${selected._id}/status`, { status: 'closed' }, { headers })
       .then(r=>{ toast.success('Ticket closed'); setSelected(r.data); load(); })
       .catch(()=> toast.error('Close failed'));
   }
