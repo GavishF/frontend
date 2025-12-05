@@ -262,7 +262,7 @@ export default function HomeLanding(){
         <div className="flex-1 max-w-xl order-2 md:order-1 relative z-10">
           <h1 className="text-4xl md:text-5xl font-extrabold leading-tight mb-6 flex items-center gap-3 flex-wrap" style={{ color: 'white' }}>
             <span style={{ color: 'white' }}>Elevated Fashion Essentials</span>
-            <img src="/logo.png" alt="Nikola" className="h-14 md:h-16 object-contain inline-block" />
+            <img src="/logo.png" alt="Nikola" className="h-14 md:h-16 object-contain inline-block p-2 border-2 border-white rounded" />
           </h1>
           <p className="text-base md:text-lg leading-relaxed mb-8" style={{ color: 'white' }}>
             Timeless silhouettes. Modern tailoring. Discover statement pieces and everyday styles curated for understated luxury. Explore the new collection now.
