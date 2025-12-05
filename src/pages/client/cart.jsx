@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { addToCart, getCart, getTotal, syncCartCount } from "../../utils/cart";
 import { TbTrash } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
+import Footer from "../../components/Footer";
 
 export default function CartPage() {
 	const [cart, setCart] = useState(getCart());
@@ -116,6 +117,7 @@ export default function CartPage() {
 					</>
 				)}
 			</div>
+			<Footer />
 		</div>
 	);
 }

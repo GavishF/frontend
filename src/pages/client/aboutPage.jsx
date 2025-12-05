@@ -2,11 +2,12 @@ import Footer from '../../components/Footer';
 
 export default function AboutPage(){
   return (
-    <div className="w-full h-full overflow-y-auto p-8 md:p-14 bg-white text-black">
-      <div className="max-w-4xl mx-auto flex flex-col gap-8">
-        <h1 className="text-4xl font-extrabold text-black">About Nikola</h1>
-        <p className="leading-relaxed text-lg text-gray-700">Nikola is a modern collection platform focused on delivering high quality, performance-driven products with a distinctive red & black aesthetic. We combine sustainable sourcing, meticulous manufacturing standards, and contemporary design language to bring you items that last and inspire.</p>
-        <div className="grid md:grid-cols-3 gap-6">
+    <div className="w-full h-full overflow-y-auto bg-white text-black">
+      <div className="p-8 md:p-14">
+        <div className="max-w-4xl mx-auto flex flex-col gap-8">
+          <h1 className="text-4xl font-extrabold text-black">About Nikola</h1>
+          <p className="leading-relaxed text-lg text-gray-700">Nikola is a modern collection platform focused on delivering high quality, performance-driven products with a distinctive red & black aesthetic. We combine sustainable sourcing, meticulous manufacturing standards, and contemporary design language to bring you items that last and inspire.</p>
+          <div className="grid md:grid-cols-3 gap-6">
           <div className="p-6 rounded-xl border border-gray-200 bg-white shadow-md">
             <h3 className="font-semibold mb-2">Mission</h3>
             <p className="text-sm text-gray-600">Empower customers through durable, functional design and transparent practices.</p>
@@ -27,6 +28,8 @@ export default function AboutPage(){
           <li>Secure authentication and protected user data flows.</li>
           <li>Forward-looking roadmap including personalization and AI-powered recommendations.</li>
         </ul>
+        </div>
+        </div>
       </div>
       <Footer />
     </div>

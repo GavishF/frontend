@@ -34,10 +34,11 @@ export default function ContactPage(){
   }
 
   return (
-    <div className="w-full h-full overflow-y-auto p-6 md:p-12 bg-white text-black">
-      <div className="max-w-3xl mx-auto">
-        <h1 className="text-3xl font-bold mb-6">Contact Nikola</h1>
-        <p className="mb-8 text-sm text-gray-600">Questions, feedback, or support requests—drop us a message and we will get back to you soon.</p>
+    <div className="w-full h-full overflow-y-auto bg-white text-black">
+      <div className="p-6 md:p-12">
+        <div className="max-w-3xl mx-auto">
+          <h1 className="text-3xl font-bold mb-6">Contact Nikola</h1>
+          <p className="mb-8 text-sm text-gray-600">Questions, feedback, or support requests—drop us a message and we will get back to you soon.</p>
         <form onSubmit={submit} className="grid gap-6">
           <div className="grid md:grid-cols-2 gap-6">
             <div className="flex flex-col gap-2">
@@ -64,6 +65,7 @@ export default function ContactPage(){
             {sent && <span className="text-sm text-green-600">Delivered ✓</span>}
           </div>
         </form>
+        </div>
       </div>
       <Footer />
     </div>

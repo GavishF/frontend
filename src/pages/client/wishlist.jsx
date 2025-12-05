@@ -5,6 +5,7 @@ import { TbTrash, TbShoppingCart } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import ConfirmModal from "../../components/ConfirmModal";
+import Footer from "../../components/Footer";
 import { playWishlistRemoveAnimation, playCartJourneyAnimation } from "../../utils/cardAnimations";
 
 export default function WishlistPage() {
@@ -153,6 +154,7 @@ export default function WishlistPage() {
 				message="Are you sure you want to remove all items from your wishlist?"
 			/>
 		</div>
+		<Footer />
 	</div>
 );
 }
