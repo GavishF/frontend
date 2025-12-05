@@ -92,10 +92,10 @@ export default function OrdersPageAdmin() {
 									{new Date(order.date).toLocaleDateString()}
 								</td>
 								<td className="p-[10px] text-end">
-									{order.total.toLocaleString("en-US", {
+									{order.total ? order.total.toLocaleString("en-US", {
 										minimumFractionDigits: 2,
 										maximumFractionDigits: 2,
-									})}
+									}) : 'N/A'}
 								</td>
 							</tr>
 						);
@@ -195,10 +195,10 @@ export default function OrdersPageAdmin() {
                             {/* total */}
                             <p>
 								<span className="font-semibold">Total:</span>{" "}
-								{clickedOrder.total.toLocaleString("en-US", {
+								{clickedOrder.total ? clickedOrder.total.toLocaleString("en-US", {
 									minimumFractionDigits: 2,
 									maximumFractionDigits: 2,
-								})}
+								}) : 'N/A'}
 							</p>
 							<p>
 								<span className="font-semibold">Status:</span>{" "}
@@ -254,10 +254,10 @@ export default function OrdersPageAdmin() {
 											<p className="font-semibold">{item.name}</p>
 											<p className="text-sm text-gray-600">Qty: {item.qty}</p>
 											<p className="text-sm text-gray-600">
-												Price: Rs. {item.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+												Price: Rs. {item.price ? item.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : 'N/A'}
 											</p>
 											<p className="text-sm font-medium">
-												Subtotal: Rs. {(item.qty * item.price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+												Subtotal: Rs. {(item.qty && item.price) ? (item.qty * item.price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : 'N/A'}
 											</p>
 										</div>
 									</div>
