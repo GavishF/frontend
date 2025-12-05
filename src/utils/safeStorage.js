@@ -5,17 +5,29 @@ const memoryStore = new Map();
 function canUse(){
   try{
     if(typeof window === 'undefined' || !('localStorage' in window)) return false;
+    // Quick check without accessing storage directly
     const testKey = '__stor_test__';
+    const testValue = '1';
+    
     try {
-      window.localStorage.setItem(testKey,'1');
+      // Test only if not in restricted context
+      if (!window.localStorage) return false;
+      
+      // Use Object.getOwnPropertyDescriptor to check if setItem is callable
+      // without actually calling it (avoids triggering storage permission checks)
+      const descriptor = Object.getOwnPropertyDescriptor(window.localStorage, 'setItem');
+      if (!descriptor || typeof descriptor.value !== 'function') return false;
+      
+      // Safe to call now
+      window.localStorage.setItem(testKey, testValue);
       window.localStorage.removeItem(testKey);
       return true;
     } catch(e) {
-      console.debug('localStorage not available, using memory store');
+      // Storage access denied, use memory store
       return false;
     }
   }catch(e){
-    console.debug('canUse check failed, using memory store');
+    // Any error means storage is unavailable
     return false;
   }
 }
