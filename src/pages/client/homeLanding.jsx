@@ -250,7 +250,7 @@ function FeaturedStrip(){
 export default function HomeLanding(){
   useEffect(()=>{ const stop = startSocialProof(15000); return ()=> stop && stop(); }, []);
   return (
-    <div className="w-full min-h-screen bg-white text-black">
+    <div className="w-full h-full overflow-y-auto bg-white text-black">
       {/* Hero + Slider combined */}
       <section 
         className="w-full px-6 md:px-12 lg:px-20 pt-16 md:pt-24 pb-12 md:pb-20 flex flex-col md:flex-row items-center gap-12 md:gap-20 relative bg-cover bg-center bg-no-repeat"
