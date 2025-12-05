@@ -12,8 +12,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import ForgetPasswordPage from "./pages/client/forgetPassword";
 import { init3DTyping } from "./utils/typing3d";
 
-const clientId =
-	"1086978250852-q498jik4ukaq8q6m66ar26dgt6chjv24.apps.googleusercontent.com";
+const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 function App() {
 	useEffect(() => {
