@@ -223,23 +223,56 @@ function TestimonialsCarousel(){
 
 function FeaturedStrip(){
   const [items, setItems] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const itemsPerPage = 4;
+
   useEffect(()=>{
     axios.get(import.meta.env.VITE_BACKEND_URL + '/api/products')
-      .then(r=> setItems(Array.isArray(r.data) ? r.data.slice(0,6) : []))
+      .then(r=> setItems(Array.isArray(r.data) ? r.data.slice(0,12) : []))
       .catch(()=>{});
   },[]);
+
+  const totalPages = Math.ceil(items.length / itemsPerPage);
+  const canShowNext = currentIndex < (items.length - itemsPerPage);
+  const canShowPrev = currentIndex > 0;
+
+  const goNext = () => {
+    if(canShowNext) setCurrentIndex(i => i + itemsPerPage);
+  };
+
+  const goPrev = () => {
+    if(canShowPrev) setCurrentIndex(i => Math.max(0, i - itemsPerPage));
+  };
+
   if(!items.length) return null;
+
+  const visibleItems = items.slice(currentIndex, currentIndex + itemsPerPage);
+
   return (
-    <section className="px-6 md:px-12 lg:px-20 py-8">
-      <h2 className="text-2xl font-bold mb-4 text-black">Featured Picks</h2>
-      <div className="flex gap-4 overflow-x-auto py-2">
-        {items.map(it => (
-          <a key={it._id} href={`/overview/${it._id}`} className="min-w-[220px] p-4 bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
-            <div className="h-36 mb-3 overflow-hidden rounded">
-              <img src={it.images?.[0]} alt={it.name} className="w-full h-full object-cover" />
+    <section className="px-6 md:px-12 lg:px-20 py-12">
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-3xl font-bold text-black">Featured Picks</h2>
+        {items.length > itemsPerPage && (
+          <div className="flex gap-2">
+            <button onClick={goPrev} disabled={!canShowPrev} className="p-2 rounded-full border-2 border-red-600 text-red-600 hover:bg-red-50 disabled:opacity-40 disabled:cursor-not-allowed transition">
+              ←
+            </button>
+            <button onClick={goNext} disabled={!canShowNext} className="p-2 rounded-full border-2 border-red-600 text-red-600 hover:bg-red-50 disabled:opacity-40 disabled:cursor-not-allowed transition">
+              →
+            </button>
+          </div>
+        )}
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {visibleItems.map(it => (
+          <a key={it._id} href={`/overview/${it._id}`} className="group overflow-hidden rounded-lg border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-300">
+            <div className="relative h-80 overflow-hidden bg-gray-100">
+              <img src={it.images?.[0]} alt={it.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
             </div>
-            <div className="text-sm font-semibold text-black">{it.name}</div>
-            <div className="text-xs text-gray-500">{it._id}</div>
+            <div className="p-5 bg-white">
+              <div className="text-base font-semibold text-black group-hover:text-red-600 transition mb-1">{it.name}</div>
+              <div className="text-xs text-gray-500 truncate">{it._id}</div>
+            </div>
           </a>
         ))}
       </div>
