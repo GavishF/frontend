@@ -52,14 +52,14 @@ export default function ReviewsPage(){
         <form onSubmit={submit} className="mt-6 grid gap-6 p-8 md:p-10 rounded-lg border-2 border-red-600 bg-white shadow-lg">
           <h2 className="text-3xl font-bold text-black">Add a Review</h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
             <input 
               placeholder="Your name" 
               value={draft.name} 
               onChange={e=> setDraft(d=> ({...d, name:e.target.value}))} 
-              className="px-5 py-4 text-base rounded-lg bg-white text-black border-2 border-red-600 focus:border-red-700 focus:ring-2 focus:ring-red-200 outline-none transition" 
+              className="md:col-span-2 px-5 py-4 text-base rounded-lg bg-white text-black border-2 border-red-600 focus:border-red-700 focus:ring-2 focus:ring-red-200 outline-none transition" 
             />
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
               <label className="text-base font-semibold whitespace-nowrap">Rating</label>
               <select 
                 value={draft.rating} 
@@ -74,12 +74,12 @@ export default function ReviewsPage(){
           <textarea 
             placeholder="Share your experience" 
             value={draft.text} 
-            rows={6} 
+            rows={8} 
             onChange={e=> setDraft(d=> ({...d, text:e.target.value}))} 
-            className="px-5 py-4 text-base rounded-lg bg-white text-black border-2 border-red-600 focus:border-red-700 focus:ring-2 focus:ring-red-200 outline-none resize-none transition" 
+            className="w-full px-5 py-4 text-base rounded-lg bg-white text-black border-2 border-red-600 focus:border-red-700 focus:ring-2 focus:ring-red-200 outline-none resize-none transition" 
           />
 
-          <button className="px-8 py-4 text-lg font-semibold rounded-lg bg-red-600 hover:bg-red-700 text-white transition shadow-md">Submit Review</button>
+          <button className="px-8 py-4 text-lg font-semibold rounded-lg bg-red-600 hover:bg-red-700 text-white transition shadow-md w-full md:w-auto">Submit Review</button>
         </form>
       </div>
     </div>
