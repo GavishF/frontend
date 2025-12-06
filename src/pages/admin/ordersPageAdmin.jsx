@@ -106,165 +106,185 @@ export default function OrdersPageAdmin() {
 			)}
 			\
 			{popupVisible && clickedOrder && (
-				<div className="fixed top-0 left-0 w-full h-full bg-[#00000050] flex justify-center items-center z-50">
-					<div className="w-full max-w-2xl max-h-[600px] bg-white rounded-lg  p-6 relative shadow-xl">
-						{/* Delete Order */}
-						<button
-							className="absolute top-2 left-2 p-2 rounded-lg hover:opacity-90"
-							style={{ background: 'linear-gradient(135deg, #8C0009 0%, #BE0108 100%)', color: '#ffffff' }}
-							onClick={async () => {
-							if (!confirm('Delete this order permanently?')) return;
-							try {
-								await axios.delete(
-									import.meta.env.VITE_BACKEND_URL + "/api/orders/" + clickedOrder.orderID,
-									{ headers: { Authorization: `Bearer ${getItem("token")}` } }
-								);
-									toast.success('Order deleted');
-									setPopupVisible(false);
-									setLoading(true);
-								} catch (err) {
-									toast.error('Failed to delete order');
-								}
-							}}
-						>
-							Delete Order
-						</button>
-                        {
-							(orderStatus!=clickedOrder.status || orderNotes != clickedOrder.notes)&&<button className="absolute top-2 right-2 p-2 rounded-lg hover:opacity-90" style={{ background: 'linear-gradient(135deg, #8C0009 0%, #BE0108 100%)', color: '#ffffff' }} 
-                            onClick={async ()=>{
-                                setPopupVisible(false);
-                                try{
-                                    await axios.put(
-                                        import.meta.env.VITE_BACKEND_URL + "/api/orders/" + clickedOrder.orderID,
-                                        {
-                                            status: orderStatus,
-                                            notes: orderNotes
-                                        },
-                                        {
-                                            headers: {
-                                                Authorization: `Bearer ${getItem("token")}`,
-                                            },
-                                        }
-                                    );
-                                    toast.success("Order updated successfully");
-                                    setLoading(true);
-                                }catch(err){
-                                    toast.error("Failed to update order");
-                                }
-
-                            }}>
-                                Save Changes
-                            </button>
-                        }
-						{/* Close Button */}
-						<button
-							className="absolute w-[30px] h-[30px] border-2 top-[-25px] right-[-25px] rounded-full cursor-pointer z-50"
-							style={{ background: 'linear-gradient(135deg, #8C0009 0%, #BE0108 100%)', borderColor: '#8C0009', color: '#ffffff' }}
-							onMouseEnter={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#8C0009'; }}
-							onMouseLeave={(e) => { e.currentTarget.style.background = 'linear-gradient(135deg, #8C0009 0%, #BE0108 100%)'; e.currentTarget.style.color = 'white'; }}
-							onClick={() => setPopupVisible(false)}
-						>
-							X
-						</button>
-
-						{/* Header */}
-						<h2 className="text-2xl font-semibold mb-4">Order Details</h2>
-
-						{/* Customer Info */}
-						<div className="mb-6 space-y-1">
-							<p>
-								<span className="font-semibold">Order ID:</span>{" "}
-								{clickedOrder.orderID}
-							</p>
-							<p>
-								<span className="font-semibold">Name:</span> {clickedOrder.name}
-							</p>
-							<p>
-								<span className="font-semibold">Email:</span>{" "}
-								{clickedOrder.email}
-							</p>
-							<p>
-								<span className="font-semibold">Phone:</span>{" "}
-								{clickedOrder.phone}
-							</p>
-
-							<p>
-								<span className="font-semibold">Address:</span>{" "}
-								{clickedOrder.address}
-							</p>
-                            {/* total */}
-                            <p>
-								<span className="font-semibold">Total:</span>{" "}
-								{clickedOrder.total ? clickedOrder.total.toLocaleString("en-US", {
-									minimumFractionDigits: 2,
-									maximumFractionDigits: 2,
-								}) : 'N/A'}
-							</p>
-							<p>
-								<span className="font-semibold">Status:</span>{" "}
-								<span
-									className={`capitalize px-2 py-1 rounded ${
-										clickedOrder.status === "pending"
-											? "bg-yellow-100 text-yellow-700"
-											: "bg-green-100 text-green-700"
-									}`}
+				<div className="fixed top-0 left-0 w-full h-full bg-[#00000080] flex justify-center items-center z-50 p-4">
+					<div className="w-full max-w-4xl max-h-[90vh] bg-white rounded-xl overflow-y-auto shadow-2xl">
+						{/* Header with Actions */}
+						<div className="sticky top-0 bg-gradient-to-r from-[#8C0009] to-[#BE0108] text-white p-6 flex justify-between items-center">
+							<h2 className="text-3xl font-bold">Order Details</h2>
+							<div className="flex gap-3">
+								{(orderStatus !== clickedOrder.status || orderNotes !== clickedOrder.notes) && (
+									<button 
+										className="px-6 py-2 bg-white text-red-700 font-semibold rounded-lg hover:bg-gray-100 transition-colors"
+										onClick={async () => {
+											setPopupVisible(false);
+											try {
+												await axios.put(
+													import.meta.env.VITE_BACKEND_URL + "/api/orders/" + clickedOrder.orderID,
+													{
+														status: orderStatus,
+														notes: orderNotes
+													},
+													{
+														headers: {
+															Authorization: `Bearer ${getItem("token")}`,
+														},
+													}
+												);
+												toast.success("Order updated successfully");
+												setLoading(true);
+											} catch (err) {
+												toast.error("Failed to update order");
+											}
+										}}
+									>
+										✓ Save Changes
+									</button>
+								)}
+								<button 
+									className="px-6 py-2 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition-colors"
+									onClick={async () => {
+										if (!confirm('Delete this order permanently?')) return;
+										try {
+											await axios.delete(
+												import.meta.env.VITE_BACKEND_URL + "/api/orders/" + clickedOrder.orderID,
+												{ headers: { Authorization: `Bearer ${getItem("token")}` } }
+											);
+											toast.success('Order deleted');
+											setPopupVisible(false);
+											setLoading(true);
+										} catch (err) {
+											toast.error('Failed to delete order');
+										}
+									}}
 								>
-									{clickedOrder.status}
-								</span>
-                                <select
-                                    className="ml-4 p-1 border rounded"
-                                    value={orderStatus}
-                                    onChange={(e) => setOrderStatus(e.target.value)}
-                                >
-                                    <option value="pending">Pending</option>
-                                    <option value="completed">Completed</option>
-                                    <option value="cancelled">Cancelled</option>
-                                </select>
-							</p>
-                            <p>
-								<span className="font-semibold">Notes:</span>{" "}
-								{clickedOrder.notes}
-							</p>
-                            <textarea
-                                className="w-full h-[50px] p-2 border rounded mt-2"
-                                value={orderNotes}
-                                onChange={(e) => setOrderNotes(e.target.value)}
-                            ></textarea>
-							<p>
-								<span className="font-semibold">Date:</span>{" "}
-								{new Date(clickedOrder.date).toLocaleString()}
-							</p>
+									🗑️ Delete
+								</button>
+								<button 
+									className="px-4 py-2 bg-white text-gray-700 font-bold rounded-lg hover:bg-gray-100 transition-colors text-lg"
+									onClick={() => setPopupVisible(false)}
+								>
+									✕
+								</button>
+							</div>
 						</div>
 
-						{/* Items */}
-						<div>
-							<h3 className="text-xl font-semibold mb-2">Items</h3>
-							<div className="space-y-4 max-h-[100px] overflow-y-auto">
-								{clickedOrder.items && clickedOrder.items.length > 0 ? (
-									clickedOrder.items.map((item, index) => (
-										<div
-											key={item._id || index}
-											className="flex items-center gap-4 border p-3 rounded-md"
-										>
-											<img
-												src={item.image}
-												alt={item.name}
-											className="w-16 h-16 object-cover rounded-md border"
-										/>
-										<div className="flex-1">
-											<p className="font-semibold">{item.name}</p>
-											<p className="text-sm text-gray-600">Qty: {item.qty}</p>
-											<p className="text-sm text-gray-600">
-												Price: Rs. {item.price ? item.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : 'N/A'}
-											</p>
-											<p className="text-sm font-medium">
-												Subtotal: Rs. {(item.qty && item.price) ? (item.qty * item.price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : 'N/A'}
-											</p>
+						{/* Content */}
+						<div className="p-8 space-y-8">
+							{/* Customer Information */}
+							<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+								<div className="space-y-4">
+									<h3 className="text-lg font-bold text-gray-900 border-b-2 border-red-700 pb-2">Customer Info</h3>
+									<div className="space-y-3">
+										<div>
+											<p className="text-xs text-gray-500 uppercase font-semibold">Order ID</p>
+											<p className="text-lg font-semibold text-gray-900">{clickedOrder.orderID}</p>
+										</div>
+										<div>
+											<p className="text-xs text-gray-500 uppercase font-semibold">Name</p>
+											<p className="text-lg text-gray-900">{clickedOrder.name}</p>
+										</div>
+										<div>
+											<p className="text-xs text-gray-500 uppercase font-semibold">Email</p>
+											<p className="text-lg text-blue-600 truncate">{clickedOrder.email}</p>
+										</div>
+										<div>
+											<p className="text-xs text-gray-500 uppercase font-semibold">Phone</p>
+											<p className="text-lg text-gray-900">{clickedOrder.phone}</p>
 										</div>
 									</div>
-								))
+								</div>
+
+								<div className="space-y-4">
+									<h3 className="text-lg font-bold text-gray-900 border-b-2 border-red-700 pb-2">Order Info</h3>
+									<div className="space-y-3">
+										<div>
+											<p className="text-xs text-gray-500 uppercase font-semibold">Address</p>
+											<p className="text-base text-gray-900">{clickedOrder.address}</p>
+										</div>
+										<div>
+											<p className="text-xs text-gray-500 uppercase font-semibold">Order Date</p>
+											<p className="text-lg text-gray-900">{new Date(clickedOrder.date).toLocaleString()}</p>
+										</div>
+										<div>
+											<p className="text-xs text-gray-500 uppercase font-semibold">Total Amount</p>
+											<p className="text-2xl font-bold text-red-700">Rs. {clickedOrder.total ? clickedOrder.total.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : 'N/A'}</p>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							{/* Order Status */}
+							<div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
+								<h3 className="text-lg font-bold text-gray-900 mb-4 border-b-2 border-red-700 pb-2">Order Status</h3>
+								<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+									<div>
+										<p className="text-xs text-gray-500 uppercase font-semibold mb-2">Current Status</p>
+										<span className={`inline-block px-4 py-2 rounded-full font-semibold capitalize ${
+											clickedOrder.status === "pending" ? "bg-yellow-100 text-yellow-800" :
+											clickedOrder.status === "completed" ? "bg-green-100 text-green-800" :
+											"bg-red-100 text-red-800"
+										}`}>
+											{clickedOrder.status}
+										</span>
+									</div>
+									<div>
+										<p className="text-xs text-gray-500 uppercase font-semibold mb-2">Change Status</p>
+										<select
+											className="w-full p-2 border-2 border-gray-300 rounded-lg font-semibold focus:border-red-700 focus:ring-2 focus:ring-red-200 transition-all"
+											value={orderStatus}
+											onChange={(e) => setOrderStatus(e.target.value)}
+										>
+											<option value="pending">Pending</option>
+											<option value="completed">Completed</option>
+											<option value="cancelled">Cancelled</option>
+										</select>
+									</div>
+								</div>
+							</div>
+
+							{/* Order Notes */}
+							<div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
+								<h3 className="text-lg font-bold text-gray-900 mb-4 border-b-2 border-red-700 pb-2">Order Notes</h3>
+								<div className="mb-3">
+									<p className="text-sm text-gray-600 mb-2">Current Notes:</p>
+									<p className="text-gray-900 text-base">{clickedOrder.notes || '(No notes)'}</p>
+								</div>
+								<div>
+									<p className="text-xs text-gray-500 uppercase font-semibold mb-2">Add/Edit Notes</p>
+									<textarea
+										className="w-full h-24 p-3 border-2 border-gray-300 rounded-lg font-sans focus:border-red-700 focus:ring-2 focus:ring-red-200 transition-all"
+										value={orderNotes}
+										onChange={(e) => setOrderNotes(e.target.value)}
+										placeholder="Enter order notes..."
+									></textarea>
+								</div>
+							</div>
+
+							{/* Items */}
+							<div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
+								<h3 className="text-lg font-bold text-gray-900 mb-4 border-b-2 border-red-700 pb-2">Order Items ({clickedOrder.items?.length || 0})</h3>
+								{clickedOrder.items && clickedOrder.items.length > 0 ? (
+									<div className="space-y-3 max-h-[300px] overflow-y-auto">
+										{clickedOrder.items.map((item, index) => (
+											<div key={item._id || index} className="bg-white p-4 rounded-lg border border-gray-200 flex gap-4 hover:shadow-md transition-shadow">
+												<img
+													src={item.image}
+													alt={item.name}
+													className="w-20 h-20 object-cover rounded-md border border-gray-300"
+												/>
+												<div className="flex-1">
+													<p className="font-bold text-gray-900">{item.name}</p>
+													<p className="text-sm text-gray-600">Quantity: {item.qty}</p>
+													<p className="text-sm text-gray-600">Unit Price: Rs. {item.price ? item.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : 'N/A'}</p>
+													<p className="text-base font-semibold text-red-700">Subtotal: Rs. {(item.qty && item.price) ? (item.qty * item.price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : 'N/A'}</p>
+												</div>
+											</div>
+										))}
+									</div>
 								) : (
-									<div className="text-gray-500 text-sm">No items in this order</div>
+									<div className="text-center py-8 text-gray-500">
+										<p className="text-lg">No items in this order</p>
+									</div>
 								)}
 							</div>
 						</div>
