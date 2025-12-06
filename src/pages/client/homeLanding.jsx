@@ -358,19 +358,19 @@ function NewsletterSignup(){
   }
 
   return (
-    <div className="max-w-xl mx-auto">
-      <div className="flex flex-col sm:flex-row gap-3 justify-center">
-        <input value={email} onChange={e=>setEmail(e.target.value)} type="email" placeholder="Your email" className="px-4 py-3 rounded-md bg-white border-2 border-red-600 focus:border-red-700 focus:ring-2 focus:ring-red-600 outline-none w-full sm:w-1/2 text-black" />
+    <div className="max-w-2xl mx-auto">
+      <div className="flex flex-col sm:flex-row gap-4 justify-center items-stretch sm:items-center">
+        <input value={email} onChange={e=>setEmail(e.target.value)} type="email" placeholder="example@email.com" className="px-6 py-4 rounded-md bg-white border-2 border-red-600 focus:border-red-700 focus:ring-2 focus:ring-red-600 outline-none flex-1 text-base text-black" />
         {!otpSent ? (
-          <button onClick={handleSend} disabled={loading} className="px-6 py-3 rounded-md bg-red-600 hover:bg-red-700">{loading ? 'Sending...' : 'Subscribe'}</button>
+          <button onClick={handleSend} disabled={loading} className="px-8 py-4 rounded-md bg-red-600 hover:bg-red-700 text-white font-semibold whitespace-nowrap">{loading ? 'Sending...' : 'Subscribe'}</button>
         ) : (
           <div className="flex gap-2">
-            <input value={otp} onChange={e=>setOtp(e.target.value)} placeholder="Enter OTP" className="px-3 py-2 rounded-md bg-white border-2 border-red-600 focus:border-red-700 focus:ring-2 focus:ring-red-600 outline-none text-black" />
-            <button onClick={handleVerify} disabled={loading} className="px-4 py-2 rounded-md bg-red-600 hover:bg-red-700">{loading ? 'Verifying...' : 'Verify'}</button>
+            <input value={otp} onChange={e=>setOtp(e.target.value)} placeholder="Enter OTP" className="px-4 py-3 rounded-md bg-white border-2 border-red-600 focus:border-red-700 focus:ring-2 focus:ring-red-600 outline-none flex-1 text-black" />
+            <button onClick={handleVerify} disabled={loading} className="px-6 py-3 rounded-md bg-red-600 hover:bg-red-700 text-white font-semibold whitespace-nowrap">{loading ? 'Verifying...' : 'Verify'}</button>
           </div>
         )}
       </div>
-      <div className="text-xs text-gray-500 mt-2">By subscribing you agree to receive occasional promotional emails. Unsubscribe anytime.</div>
+      <div className="text-xs text-gray-500 mt-3">By subscribing you agree to receive occasional promotional emails. Unsubscribe anytime.</div>
     </div>
   )
 }
