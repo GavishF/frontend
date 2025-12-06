@@ -189,6 +189,8 @@ export default function AddProductPage() {
 	const [categories, setCategories] = useState([]);
 	const [showAnimation, setShowAnimation] = useState(false);
 	const [animationImage, setAnimationImage] = useState(null);
+	const [colorsEnabled, setColorsEnabled] = useState(false);
+	const [colors, setColors] = useState([]);
 	const fileInputRef = useRef(null);
 	const navigate = useNavigate();
 
@@ -382,6 +384,107 @@ export default function AddProductPage() {
 							<option value={"false"}>No</option>
 						</select>
 					</div>
+				</div>
+
+				{/* Color Management Section */}
+				<div className="mt-6 p-4 rounded-lg border border-neutral-700 bg-neutral-900">
+					<div className="flex items-center justify-between mb-4">
+						<h3 className="text-sm font-semibold">Product Colors</h3>
+						<label className="flex items-center gap-2 cursor-pointer">
+							<input 
+								type="checkbox" 
+								checked={colorsEnabled} 
+								onChange={(e) => setColorsEnabled(e.target.checked)}
+								className="w-4 h-4 cursor-pointer"
+							/>
+							<span className="text-xs">Enable colors</span>
+						</label>
+					</div>
+
+					{colorsEnabled && (
+						<div className="space-y-3">
+							{/* Color List */}
+							<div className="space-y-2">
+								{colors.length === 0 ? (
+									<p className="text-xs text-gray-400">No colors added yet</p>
+								) : (
+									<div className="flex flex-wrap gap-2">
+										{colors.map((color, idx) => (
+											<div key={idx} className="flex items-center gap-2 bg-neutral-800 p-2 rounded">
+												<div 
+													className="w-6 h-6 rounded border border-gray-500" 
+													style={{ backgroundColor: color.hex }}
+													title={color.name}
+												/>
+												<span className="text-xs">{color.name}</span>
+												<button
+													onClick={() => setColors(colors.filter((_, i) => i !== idx))}
+													className="text-xs px-2 py-1 rounded bg-red-900 hover:bg-red-800 text-white"
+												>
+													Remove
+												</button>
+											</div>
+										))}
+									</div>
+								)}
+							</div>
+
+							{/* Add Color Form */}
+							<div className="border-t border-neutral-700 pt-3 mt-3">
+								<p className="text-xs text-gray-400 mb-2">Add New Color:</p>
+								<div className="flex gap-2 items-end flex-wrap">
+									<div className="flex-1 min-w-[150px]">
+										<label className="text-xs">Color Name</label>
+										<input 
+											type="text" 
+											id="colorName"
+											placeholder="e.g., Red, Blue" 
+											className="w-full h-8 rounded bg-neutral-800 border border-neutral-600 px-2 mt-1 text-white text-xs"
+										/>
+									</div>
+									<div>
+										<label className="text-xs">Hex Code</label>
+										<input 
+											type="color" 
+											id="colorHex"
+											defaultValue="#3B82F6"
+											className="w-12 h-8 rounded border border-neutral-600 cursor-pointer"
+										/>
+									</div>
+									<button
+										onClick={() => {
+											const nameInput = document.getElementById('colorName');
+											const hexInput = document.getElementById('colorHex');
+											const name = nameInput.value.trim();
+											const hex = hexInput.value;
+											
+											if (!name) {
+												toast.error('Please enter a color name');
+												return;
+											}
+											
+											if (colors.some(c => c.name.toLowerCase() === name.toLowerCase())) {
+												toast.error('This color already exists');
+												return;
+											}
+											
+											setColors([...colors, { name, hex }]);
+											nameInput.value = '';
+											hexInput.value = '#3B82F6';
+											toast.success('Color added');
+										}}
+										className="px-3 py-2 rounded bg-red-700 hover:bg-red-600 text-white text-xs font-semibold"
+									>
+										Add Color
+									</button>
+								</div>
+							</div>
+						</div>
+					)}
+
+					{!colorsEnabled && (
+						<p className="text-xs text-gray-500 italic">Colors are disabled. Enable to add color options for this product.</p>
+					)}
 				</div>
 
 				<div className="mt-6 flex gap-3">
