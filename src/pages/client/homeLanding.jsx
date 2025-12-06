@@ -221,6 +221,64 @@ function TestimonialsCarousel(){
   );
 }
 
+function FeaturesCarousel(){
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const features = [
+    {
+      title: 'Quality First',
+      description: 'We source and craft products with uncompromising attention to detail.'
+    },
+    {
+      title: 'Modern Design',
+      description: 'Aesthetic, functional, and timeless pieces for everyday use.'
+    },
+    {
+      title: 'Secure Experience',
+      description: 'Protected accounts, encrypted access, and reliable order tracking.'
+    }
+  ];
+
+  const itemsPerPage = 3;
+  const canShowNext = currentIndex < (features.length - itemsPerPage);
+  const canShowPrev = currentIndex > 0;
+
+  const goNext = () => {
+    if(canShowNext) setCurrentIndex(i => i + 1);
+  };
+
+  const goPrev = () => {
+    if(canShowPrev) setCurrentIndex(i => i - 1);
+  };
+
+  const visibleItems = features.slice(currentIndex, currentIndex + itemsPerPage);
+
+  return (
+    <section className="px-6 md:px-12 lg:px-20 py-12 pb-16">
+      <div className="flex items-center justify-between mb-8">
+        <h2 className="text-3xl font-bold text-black">Why Choose Nikola</h2>
+        {features.length > itemsPerPage && (
+          <div className="flex gap-2 md:hidden">
+            <button onClick={goPrev} disabled={!canShowPrev} className="p-2 rounded-full border-2 border-red-600 text-red-600 hover:bg-red-50 disabled:opacity-40 disabled:cursor-not-allowed transition">
+              ←
+            </button>
+            <button onClick={goNext} disabled={!canShowNext} className="p-2 rounded-full border-2 border-red-600 text-red-600 hover:bg-red-50 disabled:opacity-40 disabled:cursor-not-allowed transition">
+              →
+            </button>
+          </div>
+        )}
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {visibleItems.map((feature, idx) => (
+          <div key={idx} className="p-8 rounded-xl border border-gray-200 bg-white hover:border-red-600 hover:shadow-lg transition-all duration-300">
+            <h3 className="text-xl font-semibold mb-3 text-black">{feature.title}</h3>
+            <p className="text-base text-gray-600 leading-relaxed">{feature.description}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function FeaturedStrip(){
   const [items, setItems] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -326,20 +384,7 @@ export default function HomeLanding(){
       </section>
 
       {/* Feature cards */}
-      <section className="pb-12 px-6 md:px-12 lg:px-20 grid md:grid-cols-3 gap-8">
-        <div className="p-6 rounded-xl border border-gray-200 bg-white hover:border-red-600 transition-colors shadow-sm">
-          <h3 className="text-lg font-semibold mb-2 text-black">Quality First</h3>
-          <p className="text-sm text-gray-600">We source and craft products with uncompromising attention to detail.</p>
-        </div>
-        <div className="p-6 rounded-xl border border-gray-200 bg-white hover:border-red-600 transition-colors shadow-sm">
-          <h3 className="text-lg font-semibold mb-2 text-black">Modern Design</h3>
-          <p className="text-sm text-gray-600">Aesthetic, functional, and timeless pieces for everyday use.</p>
-        </div>
-        <div className="p-6 rounded-xl border border-gray-200 bg-white hover:border-red-600 transition-colors shadow-sm">
-          <h3 className="text-lg font-semibold mb-2 text-black">Secure Experience</h3>
-          <p className="text-sm text-gray-600">Protected accounts, encrypted access, and reliable order tracking.</p>
-        </div>
-      </section>
+      <FeaturesCarousel />
 
       {/* Featured products */}
       <FeaturedStrip />
