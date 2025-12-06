@@ -18,6 +18,8 @@ export default function UpdateProductPage() {
     const [isAvailable, setIsAvailable] = useState(location.state.isAvailable !== false);
     const [category, setCategory] = useState(location.state.category);
     const [categories, setCategories] = useState([]);
+    const [colorsEnabled, setColorsEnabled] = useState((location.state.colors || []).length > 0);
+    const [colors, setColors] = useState(location.state.colors || []);
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -53,7 +55,7 @@ export default function UpdateProductPage() {
             description: description,
             stock: Number(stock),
             category: category,
-            colors: location.state.colors || [],
+            colors: colorsEnabled ? colors : [],
             sizes: location.state.sizes || []
         }
 
@@ -187,6 +189,108 @@ export default function UpdateProductPage() {
                         ))}
                     </select>
                 </div>
+
+                {/* Color Management */}
+                <div className="w-full border-[1px] rounded-md p-4 mt-4 bg-gray-50">
+                    <div className="flex items-center justify-between mb-3">
+                        <label className="text-sm font-semibold">Product Colors</label>
+                        <label className="flex items-center gap-2 cursor-pointer">
+                            <input 
+                                type="checkbox" 
+                                checked={colorsEnabled} 
+                                onChange={(e) => setColorsEnabled(e.target.checked)}
+                                className="w-4 h-4 cursor-pointer"
+                            />
+                            <span className="text-xs">Enable colors</span>
+                        </label>
+                    </div>
+
+                    {colorsEnabled && (
+                        <div className="space-y-3">
+                            {/* Color List */}
+                            <div className="space-y-2">
+                                {colors.length === 0 ? (
+                                    <p className="text-xs text-gray-500">No colors added yet</p>
+                                ) : (
+                                    <div className="flex flex-wrap gap-2">
+                                        {colors.map((color, idx) => (
+                                            <div key={idx} className="flex items-center gap-2 bg-white p-2 rounded border">
+                                                <div 
+                                                    className="w-6 h-6 rounded border" 
+                                                    style={{ backgroundColor: color.hex || color }}
+                                                    title={color.name || color}
+                                                />
+                                                <span className="text-xs">{color.name || color}</span>
+                                                <button
+                                                    onClick={() => setColors(colors.filter((_, i) => i !== idx))}
+                                                    className="text-xs px-2 py-1 rounded bg-red-500 hover:bg-red-600 text-white"
+                                                >
+                                                    Remove
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Add Color Form */}
+                            <div className="border-t pt-3 mt-3">
+                                <p className="text-xs text-gray-600 mb-2">Add New Color:</p>
+                                <div className="flex gap-2 items-end flex-wrap">
+                                    <div className="flex-1 min-w-[150px]">
+                                        <label className="text-xs">Color Name</label>
+                                        <input 
+                                            type="text" 
+                                            id="colorName"
+                                            placeholder="e.g., Red, Blue" 
+                                            className="w-full h-8 rounded border px-2 mt-1 text-sm"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="text-xs">Hex Code</label>
+                                        <input 
+                                            type="color" 
+                                            id="colorHex"
+                                            defaultValue="#3B82F6"
+                                            className="w-12 h-8 rounded border cursor-pointer"
+                                        />
+                                    </div>
+                                    <button
+                                        onClick={() => {
+                                            const nameInput = document.getElementById('colorName');
+                                            const hexInput = document.getElementById('colorHex');
+                                            const name = nameInput.value.trim();
+                                            const hex = hexInput.value;
+                                            
+                                            if (!name) {
+                                                toast.error('Please enter a color name');
+                                                return;
+                                            }
+                                            
+                                            if (colors.some(c => (c.name || c).toLowerCase() === name.toLowerCase())) {
+                                                toast.error('This color already exists');
+                                                return;
+                                            }
+                                            
+                                            setColors([...colors, { name, hex }]);
+                                            nameInput.value = '';
+                                            hexInput.value = '#3B82F6';
+                                            toast.success('Color added');
+                                        }}
+                                        className="px-3 py-2 rounded bg-red-600 hover:bg-red-700 text-white text-xs font-semibold"
+                                    >
+                                        Add Color
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {!colorsEnabled && (
+                        <p className="text-xs text-gray-500 italic">Colors are disabled. Enable to add color options for this product.</p>
+                    )}
+                </div>
+
                 <div className="w-full flex justify-center flex-row py-[20px]">
                     <Link
                         to={"/admin/products"}
