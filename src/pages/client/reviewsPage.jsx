@@ -49,37 +49,39 @@ export default function ReviewsPage(){
           ))}
         </div>
 
-        <form onSubmit={submit} className="mt-6 grid gap-6 p-8 md:p-10 rounded-lg border-2 border-red-600 bg-white shadow-lg">
+        <form onSubmit={submit} className="mt-6 grid gap-5 p-8 md:p-10 rounded-lg border-2 border-red-600 bg-white shadow-lg">
           <h2 className="text-3xl font-bold text-black">Add a Review</h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
-            <input 
-              placeholder="Your name" 
-              value={draft.name} 
-              onChange={e=> setDraft(d=> ({...d, name:e.target.value}))} 
-              className="md:col-span-2 px-5 py-4 text-base rounded-lg bg-white text-black border-2 border-red-600 focus:border-red-700 focus:ring-2 focus:ring-red-200 outline-none transition" 
-            />
-            <div className="flex items-center gap-3">
-              <label className="text-base font-semibold whitespace-nowrap">Rating</label>
-              <select 
-                value={draft.rating} 
-                onChange={e=> setDraft(d=> ({...d, rating:Number(e.target.value)}))} 
-                className="flex-1 px-4 py-3 text-base rounded-lg bg-white text-black border-2 border-red-600 focus:border-red-700 focus:ring-2 focus:ring-red-200 outline-none transition"
-              >
-                {[5,4,3,2,1].map(n=> <option key={n} value={n}>{n} Star{n!==1?'s':''}</option>)}
-              </select>
+          <div className="grid gap-5">
+            <div className="flex gap-6 items-start">
+              <input 
+                placeholder="Your name" 
+                value={draft.name} 
+                onChange={e=> setDraft(d=> ({...d, name:e.target.value}))} 
+                className="flex-1 px-5 py-4 text-base rounded-lg bg-white text-black border-2 border-red-600 focus:border-red-700 focus:ring-2 focus:ring-red-200 outline-none transition" 
+              />
+              <div className="flex items-center gap-3 min-w-fit">
+                <label className="text-base font-semibold whitespace-nowrap">Rating</label>
+                <select 
+                  value={draft.rating} 
+                  onChange={e=> setDraft(d=> ({...d, rating:Number(e.target.value)}))} 
+                  className="px-4 py-4 text-base rounded-lg bg-white text-black border-2 border-red-600 focus:border-red-700 focus:ring-2 focus:ring-red-200 outline-none transition"
+                >
+                  {[5,4,3,2,1].map(n=> <option key={n} value={n}>{n} Star{n!==1?'s':''}</option>)}
+                </select>
+              </div>
             </div>
+
+            <textarea 
+              placeholder="Share your experience" 
+              value={draft.text} 
+              rows={8} 
+              onChange={e=> setDraft(d=> ({...d, text:e.target.value}))} 
+              className="w-full px-5 py-4 text-base rounded-lg bg-white text-black border-2 border-red-600 focus:border-red-700 focus:ring-2 focus:ring-red-200 outline-none resize-none transition" 
+            />
           </div>
 
-          <textarea 
-            placeholder="Share your experience" 
-            value={draft.text} 
-            rows={8} 
-            onChange={e=> setDraft(d=> ({...d, text:e.target.value}))} 
-            className="w-full px-5 py-4 text-base rounded-lg bg-white text-black border-2 border-red-600 focus:border-red-700 focus:ring-2 focus:ring-red-200 outline-none resize-none transition" 
-          />
-
-          <button className="px-8 py-4 text-lg font-semibold rounded-lg bg-red-600 hover:bg-red-700 text-white transition shadow-md w-full md:w-auto">Submit Review</button>
+          <button className="px-8 py-4 text-lg font-semibold rounded-lg bg-red-600 hover:bg-red-700 text-white transition shadow-md w-full">Submit Review</button>
         </form>
       </div>
     </div>
