@@ -10,7 +10,6 @@ export default function Footer() {
           <div className="space-y-4">
             <div className="flex items-center gap-2">
               <img src="/logo.png" alt="Nikola" className="h-8 object-contain" />
-              <h3 className="text-lg font-bold">Nikola</h3>
             </div>
             <p className="text-gray-400 text-sm leading-relaxed">
               Elevated fashion essentials. Timeless silhouettes, modern tailoring, and understated luxury.
@@ -45,19 +44,19 @@ export default function Footer() {
             <ul className="space-y-3 text-sm">
               <li className="flex items-start gap-3">
                 <FiMapPin className="flex-shrink-0 mt-1 text-red-600" />
-                <span className="text-gray-400">Colombo, Sri Lanka</span>
+                <span className="text-gray-400">No 7, Galle Road, Bambalapitiya, Colombo 04</span>
               </li>
               <li className="flex items-start gap-3">
                 <FiPhone className="flex-shrink-0 mt-1 text-red-600" />
-                <a href="tel:+94701234567" className="text-gray-400 hover:text-white transition">+94 70 123 4567</a>
+                <a href="tel:+94774628194" className="text-gray-400 hover:text-white transition">077 462 8194</a>
               </li>
               <li className="flex items-start gap-3">
                 <FiMail className="flex-shrink-0 mt-1 text-red-600" />
-                <a href="mailto:info@nikola.lk" className="text-gray-400 hover:text-white transition">info@nikola.lk</a>
+                <a href="mailto:nikola.collection.lk@gmail.com" className="text-gray-400 hover:text-white transition">nikola.collection.lk@gmail.com</a>
               </li>
               <li className="flex items-start gap-3">
                 <FiGlobe className="flex-shrink-0 mt-1 text-red-600" />
-                <a href="https://nikola.lk" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition">nikola.lk</a>
+                <a href="https://nikola-frontend.onrender.com/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition">nikola-frontend.onrender.com</a>
               </li>
             </ul>
           </div>
