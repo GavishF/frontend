@@ -70,6 +70,7 @@ if (typeof window !== 'undefined') {
       }
     };
   } catch(e) { }
+}
 
 function ErrorOverlay(){
   const [error, setError] = useState(null);
