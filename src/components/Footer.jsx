@@ -44,7 +44,7 @@ export default function Footer() {
             <ul className="space-y-3 text-sm">
               <li className="flex items-start gap-3">
                 <FiMapPin className="flex-shrink-0 mt-1 text-red-600" />
-                <span className="text-gray-400">No 7, Galle Road, Bambalapitiya, Colombo 04</span>
+                <span className="text-gray-400">No 7, Galle Road, Bambalapitiya</span>
               </li>
               <li className="flex items-start gap-3">
                 <FiPhone className="flex-shrink-0 mt-1 text-red-600" />
