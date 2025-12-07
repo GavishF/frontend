@@ -1,13 +1,7 @@
-// Bootstrap script - runs FIRST before anything else
-// MUST be imported first in main.jsx
-// This provides additional protection on top of HTML-level suppression
+// Bootstrap script - runs first before anything else
 
 if (typeof window !== 'undefined') {
-  // Storage error suppression is already handled in index.html
-  // This just provides a fallback in case the HTML script didn't work
-  
   try {
-    // Don't modify Storage again if already patched
     if (!window.__storagePatched) {
       const memoryStore = new Map();
       
@@ -41,7 +35,6 @@ if (typeof window !== 'undefined') {
       window.__storagePatched = true;
     }
   } catch (e) {
-    // Silently fail
   }
 }
 

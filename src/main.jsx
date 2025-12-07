@@ -1,11 +1,11 @@
-import './bootstrap.js' // MUST be first - runs before everything
+import './bootstrap.js'
 import { StrictMode, useEffect, useState, Component } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
 import { BrowserRouter } from 'react-router-dom'
 import GlobalLoader from './components/GlobalLoader'
-import './utils/storageErrorHandler.js' // Import second to patch Promise
+import './utils/storageErrorHandler.js'
 
 // CRITICAL: Suppress ALL storage errors at global level
 if (typeof window !== 'undefined') {
