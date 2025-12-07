@@ -6,7 +6,7 @@ import Loader from "../../components/loader";
 import ProductCard from "../../components/productCard";
 import ProductSkeleton from "../../components/productSkeleton";
 import Footer from "../../components/Footer";
-import { FaShoppingBasket } from "react-icons/fa";
+import { FiShoppingBag } from "react-icons/fi";
 
 function ProductsLoader({ fadeOut, products }) {
     const basketRef = useRef(null);
@@ -127,7 +127,7 @@ function ProductsLoader({ fadeOut, products }) {
             <canvas ref={canvasRef} className="absolute inset-0" style={{ opacity: 0.15 }} />
             <div className="relative z-10 flex flex-col items-center">
                 <div ref={basketRef} className="text-red-600 text-[120px]" style={{ filter: 'drop-shadow(0 10px 30px rgba(220, 38, 38, 0.3))' }}>
-                    <FaShoppingBasket />
+                    <FiShoppingBag />
                 </div>
                 <div className="mt-8 flex items-center gap-2">
                     <div className="w-2 h-2 bg-red-600 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>

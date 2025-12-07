@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { BiCart, BiStore } from "react-icons/bi";
+import { FiShoppingBag, BiStore } from "react-icons/bi";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { HiHome } from "react-icons/hi";
-import { AiOutlineHeart } from "react-icons/ai";
+import { FaRegHeart } from "react-icons/fa";
 import { IoMdInformationCircleOutline, IoMdContact } from "react-icons/io";
 import { MdOutlineReviews, MdAdminPanelSettings } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
@@ -82,13 +82,13 @@ export default function Header() {
 								<HiHome className="text-red-600 text-2xl mr-2" /> Home
 							</button>
 							<button className="text-black hover:text-red-600 text-lg flex flex-row items-center" onClick={()=>{ setIsOpen(false); navigate('/products') }}>
-								<BiStore className="text-red-600 text-2xl mr-2" /> Products
-							</button>
-							<button className="text-black hover:text-red-600 text-lg flex flex-row items-center" onClick={()=>{ setIsOpen(false); navigate('/cart') }}>
-								<BiCart className="text-red-600 text-2xl mr-2" /> Cart
+							<BiStore className="text-red-600 text-2xl mr-2" /> Products
+						</button>
+						<button className="text-black hover:text-red-600 text-lg flex flex-row items-center" onClick={()=>{ setIsOpen(false); navigate('/cart') }}>
+							<FiShoppingBag className="text-red-600 text-2xl mr-2" /> Cart
 							</button>
 						<button className="text-black hover:text-red-600 text-lg flex flex-row items-center" onClick={()=>{ setIsOpen(false); navigate('/wishlist') }}>
-							<AiOutlineHeart className="text-red-600 text-2xl mr-2" /> Wishlist
+							<FaRegHeart className="text-red-600 text-2xl mr-2" /> Wishlist
 						</button>
 						<button className="text-black hover:text-red-600 text-lg flex flex-row items-center" onClick={()=>{ setIsOpen(false); navigate('/reviews') }}>
 							<MdOutlineReviews className="text-red-600 text-2xl mr-2" /> Reviews
@@ -119,11 +119,11 @@ export default function Header() {
 				</div>
 				<div className="flex md:hidden items-center gap-4">
 					<Link to="/wishlist" className="relative">
-						<AiOutlineHeart className="text-black text-3xl hover:text-red-600 transition-colors" />
+						<FaRegHeart className="text-black text-3xl hover:text-red-600 transition-colors" />
 						{wishlistCount > 0 && <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">{wishlistCount}</span>}
 					</Link>
 					<Link to="/cart" className="relative" data-header-cart>
-						<BiCart className="text-black text-3xl hover:text-red-600 transition-colors" />
+						<FiShoppingBag className="text-black text-3xl hover:text-red-600 transition-colors" />
 						<span id="cart-badge" className="absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">{cartCount}</span>
 					</Link>
 				</div>
@@ -145,12 +145,12 @@ export default function Header() {
 							<MdAdminPanelSettings className="text-black text-2xl hover:text-red-600 transition-colors" />
 						</Link>
 					)}
-					<Link to="/wishlist" className="relative">
-						<AiOutlineHeart className="text-black text-2xl hover:text-red-600 transition-colors" />
-						{wishlistCount > 0 && <span className="absolute -top-2 -right-3 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">{wishlistCount}</span>}
-					</Link>
+				<Link to="/wishlist" className="relative">
+					<FaRegHeart className="text-black text-2xl hover:text-red-600 transition-colors" />
+					{wishlistCount > 0 && <span className="absolute -top-2 -right-3 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">{wishlistCount}</span>}
+				</Link>
 					<Link to="/cart" className="relative" data-header-cart>
-						<BiCart className="text-black text-2xl hover:text-red-600 transition-colors" />
+						<FiShoppingBag className="text-black text-2xl hover:text-red-600 transition-colors" />
 						<span id="cart-badge" className="absolute -top-2 -right-3 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">{cartCount}</span>
 					</Link>
 					{!token && (

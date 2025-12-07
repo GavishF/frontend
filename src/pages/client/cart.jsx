@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { addToCart, getCart, getTotal, syncCartCount } from "../../utils/cart";
-import { TbTrash } from "react-icons/tb";
+import { MdDelete } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import Footer from "../../components/Footer";
 
@@ -89,7 +89,7 @@ export default function CartPage() {
 											setCart(getCart());
 										}}
 									>
-										<TbTrash className="text-lg" />
+										<MdDelete className="text-lg" />
 									</button>
 								</div>
 							))}

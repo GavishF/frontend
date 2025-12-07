@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { getWishlist, removeFromWishlist } from "../../utils/wishlist";
 import { addToCart } from "../../utils/cart";
-import { TbTrash, TbShoppingCart } from "react-icons/tb";
+import { MdDelete } from "react-icons/md";
+import { FiShoppingBag } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import ConfirmModal from "../../components/ConfirmModal";
@@ -90,7 +91,7 @@ export default function WishlistPage() {
 										onClick={(e) => handleRemove(item.productId, document.getElementById(`wishlist-item-${item.productId}`))}
 										className="absolute top-3 right-3 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md hover:bg-red-50 transition"
 									>
-										<TbTrash className="text-xl text-red-600" />
+										<MdDelete className="text-xl text-red-600" />
 									</button>
 								</div>
 								<div className="p-4">
@@ -113,7 +114,7 @@ export default function WishlistPage() {
 										onClick={() => handleAddToCart(item, document.getElementById(`wishlist-item-${item.productId}`))}
 										className="px-4 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition flex items-center gap-2 shadow-md"
 									>
-										<TbShoppingCart className="text-lg" />
+										<FiShoppingBag className="text-lg" />
 										Add to Cart
 									</button>
 									</div>

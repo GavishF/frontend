@@ -2,7 +2,8 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { parseProductsXLS, downloadProductTemplate } from "../../utils/xls";
-import { BiEdit, BiPlus, BiTrash } from "react-icons/bi";
+import { BiEdit, BiPlus } from "react-icons/bi";
+import { MdDelete } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import { getItem } from "../../utils/safeStorage.js";
 
@@ -117,7 +118,7 @@ export default function ProductsAdminPage() {
 									<td className="p-[10px] text-black">{product.category}</td>
 									<td className="p-[10px] text-black">{product.stock}</td>
 									<td className="p-[10px] flex flex-row justify-center items-center">
-									<BiTrash
+									<MdDelete
 										className="p-[7px] text-3xl rounded-full shadow-2xl shadow-black cursor-pointer"
 										style={{ background: 'linear-gradient(135deg, #8C0009 0%, #BE0108 100%)', color: '#ffffff' }}
 										onClick={() => {

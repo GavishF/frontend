@@ -157,13 +157,13 @@ export default function OrdersPageAdmin() {
 										}
 									}}
 								>
-									🗑️ Delete
+									Delete
 								</button>
 								<button 
 									className="px-4 py-2 bg-white text-gray-700 font-bold rounded-lg hover:bg-gray-100 transition-colors text-lg"
 									onClick={() => setPopupVisible(false)}
 								>
-									✕
+									Close
 								</button>
 							</div>
 						</div>

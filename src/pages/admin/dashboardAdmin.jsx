@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import { FaMoneyBillWave, FaUsers, FaShoppingCart, FaChartLine } from 'react-icons/fa';
 import { FaBoxArchive, FaArrowTrendUp } from 'react-icons/fa6';
-import { GiShoppingBag } from 'react-icons/gi';
+import { FiShoppingBag } from 'react-icons/fi';
 import { MdPendingActions, MdCheckCircle, MdCancel } from 'react-icons/md';
 import { HiOutlineArchiveBox } from "react-icons/hi2";
 import safeStorage from '../../utils/safeStorage.js';
@@ -431,7 +431,7 @@ export default function DashboardAdmin() {
                     trend={12.5}
                 />
                 <StatCard
-                    icon={GiShoppingBag}
+                    icon={FiShoppingBag}
                     title="Total Orders"
                     value={stats.totalOrders}
                     subtitle={`${stats.pendingOrders} pending`}
@@ -540,7 +540,7 @@ export default function DashboardAdmin() {
                     <p className="text-white/80 text-sm mt-1">Create new listing</p>
                 </a>
                 <a href="/admin/orders" className="rounded-xl p-6 text-center transition-all shadow-lg hover:shadow-2xl transform hover:-translate-y-1 text-white" style={{ background: 'linear-gradient(135deg, #8C0009 0%, #BE0108 100%)' }}>
-                    <GiShoppingBag className="text-4xl text-white mx-auto mb-3" style={{ color: '#ffffff' }} />
+                    <FiShoppingBag className="text-4xl text-white mx-auto mb-3" style={{ color: '#ffffff' }} />
                     <h3 className="text-white font-bold text-lg">Manage Orders</h3>
                     <p className="text-white/80 text-sm mt-1">Process & ship</p>
                 </a>

@@ -1,6 +1,6 @@
 import { Link, Route, Routes, useNavigate } from "react-router-dom";
 import { FaBoxArchive, FaChartLine } from "react-icons/fa6";
-import { GiShoppingBag } from "react-icons/gi";
+import { FiShoppingBag } from "react-icons/fi";
 import { IoPeople } from "react-icons/io5";
 import { IoSettings } from "react-icons/io5";
 import { MdOutlineMail, MdAdminPanelSettings } from 'react-icons/md';
@@ -133,7 +133,7 @@ export default function AdminPage() {
                             <FaBoxArchive className="text-red-400 text-xl"/> <span className="font-medium">Products</span>
                         </Link>
                         <Link className="flex flex-row h-[60px] w-full border-t border-gray-300 px-6 items-center text-md gap-4 text-black hover:bg-red-600 hover:text-white hover:border-l-4 hover:border-l-red-500 transition-all" to="/admin/orders">
-                            <GiShoppingBag className="text-red-400 text-xl"/> <span className="font-medium">Orders</span>
+                            <FiShoppingBag className="text-red-400 text-xl"/> <span className="font-medium">Orders</span>
                         </Link>
                         <Link className="flex flex-row h-[60px] w-full border-t border-gray-300 px-6 items-center text-md gap-4 text-black hover:bg-red-600 hover:text-white hover:border-l-4 hover:border-l-red-500 transition-all" to="/admin/users">
                             <IoPeople className="text-red-400 text-xl"/> <span className="font-medium">Users</span>
