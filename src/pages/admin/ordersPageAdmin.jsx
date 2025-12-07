@@ -82,7 +82,7 @@ export default function OrdersPageAdmin() {
 									setPopupVisible(true);
 								}}
 							>
-								<td className="p-[10px]">{order.orderID}</td>
+								<td className="p-[10px]">{order._id}</td>
 								<td className="p-[10px]">{order.email}</td>
 								<td className="p-[10px]">{order.name}</td>
 								<td className="p-[10px]">{order.address}</td>
@@ -177,7 +177,7 @@ export default function OrdersPageAdmin() {
 									<div className="space-y-3">
 										<div>
 											<p className="text-xs text-gray-500 uppercase font-semibold">Order ID</p>
-											<p className="text-lg font-semibold text-gray-900">{clickedOrder.orderID}</p>
+											<p className="text-lg font-semibold text-gray-900">{clickedOrder._id}</p>
 										</div>
 										<div>
 											<p className="text-xs text-gray-500 uppercase font-semibold">Name</p>

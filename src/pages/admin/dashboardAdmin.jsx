@@ -509,8 +509,8 @@ export default function DashboardAdmin() {
                             ) : (
                                 stats.recentOrders.map((order) => (
                                     <tr key={order._id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                                        <td className="py-4 px-4 font-mono text-sm" style={{ color: '#000000' }}>#{order.orderId || order._id.slice(-6)}</td>
-                                        <td className="py-4 px-4" style={{ color: '#000000' }}>{order.firstName} {order.lastName}</td>
+                                        <td className="py-4 px-4 font-mono text-sm" style={{ color: '#000000' }}>#{order._id.slice(-6)}</td>
+                                        <td className="py-4 px-4" style={{ color: '#000000' }}>{order.name}</td>
                                         <td className="py-4 px-4 font-semibold" style={{ color: '#000000' }}>රු {order.total?.toLocaleString()}</td>
                                         <td className="py-4 px-4">
                                             <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
