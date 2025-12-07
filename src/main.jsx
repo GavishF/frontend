@@ -9,11 +9,19 @@ import './utils/storageErrorHandler.js' // Import second to patch Promise
 
 // CRITICAL: Suppress ALL storage errors at global level
 if (typeof window !== 'undefined') {
+  // Suppress unhandled promise rejections from storage errors
+  window.addEventListener('unhandledrejection', event => {
+    const msg = event?.reason?.message || String(event?.reason || '');
+    if (msg.includes('storage') || msg.includes('Storage') || msg.includes('Access')) {
+      event.preventDefault();
+    }
+  });
+
   // Override fetch to suppress storage error responses
   const originalFetch = window.fetch;
   window.fetch = function(...args) {
     return originalFetch.apply(this, args).catch(err => {
-      if (err && err.message && err.message.includes('storage')) {
+      if (err && err.message && (err.message.includes('storage') || err.message.includes('Access'))) {
         console.log('[Storage Error Suppressed]', err.message);
         return Promise.resolve(new Response('', { status: 500 }));
       }
