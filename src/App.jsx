@@ -12,45 +12,38 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import ForgetPasswordPage from "./pages/client/forgetPassword";
 import { init3DTyping } from "./utils/typing3d";
 import Snowflakes from "./components/Snowflakes";
-import { getChristmasStatus } from "./services/christmas";
+import ChristmasGiftModal from "./components/ChristmasGiftModal";
+import { ChristmasProvider, useChristmas } from "./context/ChristmasContext";
 
 const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
-function App() {
-	const [christmasMode, setChristmasMode] = useState(false);
+function AppContent() {
+	const { christmasMode } = useChristmas();
 
 	useEffect(() => {
 		const cleanup = init3DTyping();
 		return cleanup;
 	}, []);
 
-	useEffect(() => {
-		// Fetch Christmas mode status
-		getChristmasStatus()
-			.then(res => {
-				setChristmasMode(res.data.enabled);
-				// Store in localStorage for quick access
-				localStorage.setItem('christmasMode', JSON.stringify(res.data));
-			})
-			.catch(err => console.log('Could not fetch Christmas status'));
-
-		// Check every 30 seconds for updates
-		const interval = setInterval(() => {
-			getChristmasStatus()
-				.then(res => {
-					setChristmasMode(res.data.enabled);
-					localStorage.setItem('christmasMode', JSON.stringify(res.data));
-				})
-				.catch(err => console.log('Could not fetch Christmas status'));
-		}, 30000);
-
-		return () => clearInterval(interval);
-	}, []);
-
 	return (
 		<GoogleOAuthProvider clientId={clientId}>
 			{christmasMode && <Snowflakes />}
-			<div className="w-full h-screen flex justify-center items-center bg-primary text-secondary">
+			<ChristmasGiftModal />
+			<div className={`w-full h-screen flex justify-center items-center text-secondary overflow-hidden transition-all duration-500 ${
+				christmasMode 
+					? 'bg-gradient-to-b from-red-50 via-white to-green-50' 
+					: 'bg-primary'
+			}`}>
+				{christmasMode && (
+					<style>{`
+						* {
+							--christmas-glow: 0 0 20px rgba(220, 38, 38, 0.3);
+						}
+						body {
+							background: linear-gradient(135deg, #fecaca 0%, #fef2f2 50%, #dcfce7 100%);
+						}
+					`}</style>
+				)}
 				<Toaster position="top-right" />
 				<Routes>
 					<Route path="/login" element={<LoginPage />} />
@@ -62,6 +55,14 @@ function App() {
 				</Routes>
 			</div>
 		</GoogleOAuthProvider>
+	);
+}
+
+function App() {
+	return (
+		<ChristmasProvider>
+			<AppContent />
+		</ChristmasProvider>
 	);
 }
 

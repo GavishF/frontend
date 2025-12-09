@@ -4,6 +4,7 @@ import { addToWishlist, removeFromWishlist, isInWishlist } from '../utils/wishli
 import { playCardPackAnimation, playCartJourneyAnimation, playWishlistRemoveAnimation } from '../utils/cardAnimations';
 import toast from 'react-hot-toast';
 import { useState, useEffect, useRef } from 'react';
+import { useChristmas } from '../context/ChristmasContext';
 
 function Stars({ value, size = 12 }) {
 	const stars = [];
@@ -23,6 +24,7 @@ export default function ProductCard({ product }) {
 	const cardRef = useRef(null);
 	const navigate = useNavigate();
 	const productId = product._id || product.productId;
+	const { christmasMode, discount: christmasDiscount } = useChristmas();
 	
 	useEffect(() => {
 		setInWishlist(isInWishlist(productId));
@@ -120,11 +122,19 @@ export default function ProductCard({ product }) {
 		<div
 			ref={cardRef}
 			onClick={handleCardClick}
-			className="group w-[260px] h-[360px] flex flex-col shrink-0 rounded-2xl overflow-hidden bg-white border border-gray-200 hover:border-red-600 hover:shadow-xl transition relative hover-lift cursor-pointer"
+			className={`group w-[260px] h-[360px] flex flex-col shrink-0 rounded-2xl overflow-hidden border transition relative hover-lift cursor-pointer ${
+				christmasMode
+					? 'bg-gradient-to-br from-red-50 to-green-50 border-red-300 hover:border-red-600 hover:shadow-2xl hover:shadow-red-300/50'
+					: 'bg-white border-gray-200 hover:border-red-600 hover:shadow-xl'
+			}`}
 		>
-			{discount && (
-				<span className="absolute top-3 left-3 bg-red-600 text-white text-xs font-semibold px-2 py-1 rounded-full shadow z-10">
-					Sale
+			{(discount || christmasMode) && (
+				<span className={`absolute top-3 left-3 text-white text-xs font-semibold px-2 py-1 rounded-full shadow z-10 transition ${
+					christmasMode
+						? 'bg-gradient-to-r from-red-600 to-green-600 animate-pulse'
+						: 'bg-red-600'
+				}`}>
+					{christmasMode && discount ? `${christmasDiscount + (product.labelledPrice - product.price) / product.labelledPrice * 100}% OFF` : discount ? 'Sale' : christmasMode ? `${christmasDiscount}% OFF` : ''}
 				</span>
 			)}
 			

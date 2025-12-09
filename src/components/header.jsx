@@ -10,6 +10,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { syncCartCount } from "../utils/cart";
 import { isAdminToken } from "../utils/auth";
 import { getItem, removeItem } from "../utils/safeStorage.js";
+import { useChristmas } from "../context/ChristmasContext";
 
 export default function Header() {
 	const navigate = useNavigate();
@@ -69,8 +70,20 @@ export default function Header() {
 		return ()=> document.removeEventListener('keydown', onKey)
 	},[])
 
+	const { christmasMode, discount: christmasDiscount } = useChristmas();
+
 	return (
-		<header className="h-[100px] bg-white flex justify-center items-center relative shadow-sm z-40">
+		<>
+			{christmasMode && (
+				<div className="w-full bg-gradient-to-r from-red-600 via-red-500 to-green-600 text-white py-2 text-center font-bold text-sm animate-pulse shadow-lg">
+					🎄 CHRISTMAS SALE - {christmasDiscount}% OFF ON ALL ITEMS! 🎅
+				</div>
+			)}
+			<header className={`h-[100px] flex justify-center items-center relative shadow-sm z-40 ${
+				christmasMode 
+					? 'bg-gradient-to-r from-red-50 to-green-50'
+					: 'bg-white'
+			}`}>
 			{isOpen && (
 				<div className="fixed z-[60] top-0 left-0 w-[100vw] h-[100vh] bg-white/95 backdrop-blur-sm">
 					<div className="h-full w-[86vw] max-w-[340px] bg-white text-black flex flex-col shadow-2xl">
@@ -167,5 +180,6 @@ export default function Header() {
 				</div>
 			</div>
 		</header>
+		</>
 	);
 }

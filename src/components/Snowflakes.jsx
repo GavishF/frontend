@@ -11,7 +11,7 @@ const Snowflakes = () => {
         left: Math.random() * 100,
         delay: Math.random() * 2,
         duration: 8 + Math.random() * 4,
-        opacity: 0.5 + Math.random() * 0.5,
+        opacity: 0.7 + Math.random() * 0.3,
         size: 20 + Math.random() * 30
       };
       return snowflake;
@@ -33,7 +33,7 @@ const Snowflakes = () => {
   }, []);
 
   return (
-    <div className="fixed top-0 left-0 w-full h-full pointer-events-none overflow-hidden">
+    <div className="fixed top-0 left-0 w-full h-full pointer-events-none overflow-hidden" style={{ zIndex: 9999 }}>
       {snowflakes.map(snowflake => (
         <div
           key={snowflake.id}
@@ -46,7 +46,7 @@ const Snowflakes = () => {
             fontSize: `${snowflake.size}px`
           }}
         >
-          <FaRegSnowflake className="text-blue-200" />
+          <FaRegSnowflake className="text-red-600" style={{ filter: 'drop-shadow(0 0 2px rgba(220, 38, 38, 0.8))' }} />
         </div>
       ))}
       <style>{`
