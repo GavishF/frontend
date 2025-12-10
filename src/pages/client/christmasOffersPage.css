@@ -1,0 +1,304 @@
+/* Christmas Offers Page Styles */
+
+.christmas-offers-hero {
+  background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+  position: relative;
+  overflow: hidden;
+  min-height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+}
+
+.christmas-offers-hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(255,255,255,0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.christmas-offers-content {
+  position: relative;
+  z-index: 2;
+}
+
+.offer-card {
+  background: white;
+  border-radius: 24px;
+  padding: 32px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  border: 4px solid transparent;
+}
+
+.offer-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.15);
+}
+
+.offer-card-red {
+  border-color: #dc2626;
+  background: linear-gradient(135deg, #fef2f2 0%, #fff5f5 100%);
+}
+
+.offer-card-orange {
+  border-color: #ea580c;
+  background: linear-gradient(135deg, #fff7ed 0%, #fffbf0 100%);
+}
+
+.offer-card-yellow {
+  border-color: #eab308;
+  background: linear-gradient(135deg, #fefce8 0%, #fffacd 100%);
+}
+
+.offer-card-purple {
+  border-color: #a855f7;
+  background: linear-gradient(135deg, #faf5ff 0%, #f9f0ff 100%);
+}
+
+/* Tab Buttons */
+.tab-button {
+  padding: 12px 32px;
+  border-radius: 50px;
+  font-weight: bold;
+  font-size: 18px;
+  transition: all 0.3s ease;
+  border: 2px solid #dc2626;
+  background: white;
+  color: #dc2626;
+  cursor: pointer;
+}
+
+.tab-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 25px rgba(220, 38, 38, 0.2);
+}
+
+.tab-button.active {
+  background: #dc2626;
+  color: white;
+  box-shadow: 0 20px 40px rgba(220, 38, 38, 0.3);
+  transform: scale(1.08);
+}
+
+/* Deal Cards */
+.deal-card {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  border-radius: 24px;
+  padding: 24px;
+  color: white;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.deal-card:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: scale(1.05);
+}
+
+.deal-card h3 {
+  font-size: 32px;
+  font-weight: black;
+  margin-bottom: 8px;
+}
+
+.deal-card p {
+  font-size: 18px;
+  margin-bottom: 16px;
+}
+
+.deal-code {
+  background: white;
+  color: #dc2626;
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-weight: bold;
+  font-size: 18px;
+  font-family: 'Courier New', monospace;
+}
+
+/* Animations */
+@keyframes pulse-scale {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+}
+
+@keyframes bounce-in {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-2px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(2px);
+  }
+}
+
+.offer-card {
+  animation: bounce-in 0.6s ease;
+}
+
+.tab-button.active {
+  animation: pulse-scale 1s infinite;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .offer-card {
+    padding: 20px;
+  }
+
+  .tab-button {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+
+  .deal-card h3 {
+    font-size: 24px;
+  }
+
+  .deal-code {
+    font-size: 14px;
+    padding: 10px 16px;
+  }
+}
+
+/* Celebratory Background Effects */
+.confetti-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.confetti-piece {
+  position: absolute;
+  font-size: 24px;
+  opacity: 0.8;
+}
+
+/* Floating Animation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(180deg);
+  }
+}
+
+.floating {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Gradient Text */
+.gradient-text {
+  background: linear-gradient(90deg, #dc2626, #ea580c, #dc2626);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-shift 3s ease infinite;
+}
+
+@keyframes gradient-shift {
+  0%, 100% {
+    background-position: 0%;
+  }
+  50% {
+    background-position: 100%;
+  }
+}
+
+/* Section Dividers */
+.festive-divider {
+  height: 4px;
+  background: linear-gradient(90deg, transparent, #dc2626, transparent);
+  margin: 40px 0;
+  border-radius: 2px;
+}
+
+/* Success Message */
+.success-toast {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border-radius: 12px;
+  padding: 16px 24px;
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+  animation: slide-in 0.3s ease;
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Center section content */
+.center-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+/* Interactive Elements */
+button:active {
+  transform: scale(0.95);
+}
+
+/* Light sparkle effect */
+.sparkle {
+  position: relative;
+}
+
+.sparkle::after {
+  content: '✨';
+  position: absolute;
+  animation: sparkle-fade 0.6s ease-out forwards;
+}
+
+@keyframes sparkle-fade {
+  0% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.5) translateY(-20px);
+  }
+}

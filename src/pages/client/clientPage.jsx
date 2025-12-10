@@ -10,6 +10,7 @@ import ContactPage from './contactPage';
 import AboutPage from './aboutPage';
 import ReviewsPage from './reviewsPage';
 import WishlistPage from './wishlist';
+import ChristmasOffersPage from './christmasOffersPage';
 
 export default function ClientWebPage() {
 	return (
@@ -18,6 +19,7 @@ export default function ClientWebPage() {
 			<div className="w-full h-[calc(100%-100px)] ">
 				<Routes path="/">
 					<Route path="/" element={<HomeLanding />} />
+					<Route path="/christmas-offers" element={<ChristmasOffersPage />} />
 					<Route
 						path="/products"
 						element={<ProductsPage/>}

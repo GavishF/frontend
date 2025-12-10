@@ -3,7 +3,7 @@ import { FiShoppingBag } from "react-icons/fi";
 import { BiStore } from "react-icons/bi";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { HiHome } from "react-icons/hi";
-import { FaRegHeart } from "react-icons/fa";
+import { FaRegHeart, FaGift } from "react-icons/fa";
 import { IoMdInformationCircleOutline, IoMdContact } from "react-icons/io";
 import { MdOutlineReviews, MdAdminPanelSettings } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
@@ -92,7 +92,11 @@ export default function Header() {
 								<HiHome className="text-red-600 text-2xl mr-2" /> Home
 							</button>
 							<button className="text-black hover:text-red-600 text-lg flex flex-row items-center" onClick={()=>{ setIsOpen(false); navigate('/products') }}>
-							<BiStore className="text-red-600 text-2xl mr-2" /> Products
+								<BiStore className="text-red-600 text-2xl mr-2" /> Products
+							</button>
+							<button className="text-black hover:text-red-600 text-lg flex flex-row items-center" onClick={()=>{ setIsOpen(false); navigate('/christmas-offers') }}>
+								<FaGift className="text-red-600 text-2xl mr-2" /> Christmas Offers
+							</button>
 						</button>
 						<button className="text-black hover:text-red-600 text-lg flex flex-row items-center" onClick={()=>{ setIsOpen(false); navigate('/cart') }}>
 							<FiShoppingBag className="text-red-600 text-2xl mr-2" /> Cart
@@ -144,6 +148,9 @@ export default function Header() {
 				<div className="flex-1 flex justify-center items-center gap-8">
 					<Link to="/" className="text-black hover:text-red-600 text-lg nav-underline">Home</Link>
 					<Link to="/products" className="text-black hover:text-red-600 text-lg nav-underline">Products</Link>
+					<Link to="/christmas-offers" className="text-black hover:text-red-600 text-lg nav-underline font-bold flex items-center gap-2">
+						<FaGift className="text-red-600" /> Christmas Offers
+					</Link>
 					<Link to="/reviews" className="text-black hover:text-red-600 text-lg nav-underline">Reviews</Link>
 					<Link to="/about-us" className="text-black hover:text-red-600 text-lg nav-underline">About Us</Link>
 					<Link to="/contact-us" className="text-black hover:text-red-600 text-lg nav-underline">Contact Us</Link>
