@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useChristmas } from '../context/ChristmasContext';
+import { FaClock } from 'react-icons/fa';
 import './ChristmasCalendar.css';
 
 const ChristmasCalendar = () => {
@@ -27,6 +28,7 @@ const ChristmasCalendar = () => {
         streak: 0,
         lastClaimedDay: null,
         claimedDays: [],
+        startDay: dayOfMonth,
         rewards: generateRewards()
       };
       localStorage.setItem('christmasCalendar', JSON.stringify(newData));
@@ -102,6 +104,7 @@ const ChristmasCalendar = () => {
   if (!christmasMode || !calendarData) return null;
 
   const today = new Date().getDate();
+  const startDay = calendarData.startDay || 1;
   const rewards = calendarData.rewards || generateRewards();
 
   return (
@@ -118,13 +121,14 @@ const ChristmasCalendar = () => {
         {rewards.map((item) => {
           const isClaimed = calendarData.claimedDays?.includes(item.day);
           const isToday = item.day === today;
-          const isAvailable = item.day <= today;
+          const isMissed = item.day < startDay;
+          const isAvailable = item.day <= today && !isMissed;
           const isOpen = openDay === item.day;
 
           return (
             <div
               key={item.day}
-              className={`calendar-day ${isClaimed ? 'claimed' : ''} ${isToday ? 'today' : ''} ${isAvailable && !isClaimed ? 'available' : 'locked'}`}
+              className={`calendar-day ${isClaimed ? 'claimed' : ''} ${isToday ? 'today' : ''} ${isMissed ? 'missed' : ''} ${isAvailable && !isClaimed ? 'available' : 'locked'}`}
               onClick={() => handleClaimReward(item.day)}
             >
               {isOpen ? (
@@ -146,15 +150,19 @@ const ChristmasCalendar = () => {
                 <>
                   <div className="day-number">{item.day}</div>
                   {isClaimed && <div className="claimed-checkmark">✓</div>}
-                  {isAvailable && !isClaimed && !claimedToday && (
+                  {isMissed && (
                     <div className="day-info">
-                      <div className="day-reward">{item.reward}</div>
-                      <div className="day-desc">{item.description}</div>
+                      <span className="missed-text">✕</span>
                     </div>
                   )}
-                  {!isAvailable && (
+                  {!isAvailable && !isMissed && (
                     <div className="day-info">
-                      <span className="locked-text">🔒</span>
+                      <FaClock className="locked-icon" />
+                    </div>
+                  )}
+                  {isAvailable && !isClaimed && (
+                    <div className="day-info">
+                      <span className="surprise-text">?</span>
                     </div>
                   )}
                 </>

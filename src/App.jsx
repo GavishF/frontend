@@ -13,6 +13,7 @@ import ForgetPasswordPage from "./pages/client/forgetPassword";
 import { init3DTyping } from "./utils/typing3d";
 import Snowflakes from "./components/Snowflakes";
 import ChristmasGiftModal from "./components/ChristmasGiftModal";
+import SurprisePopup from "./components/SurprisePopup";
 import { useChristmas } from "./context/ChristmasContext";
 
 const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
@@ -29,21 +30,7 @@ function AppContent() {
 		<GoogleOAuthProvider clientId={clientId}>
 			{christmasMode && <Snowflakes />}
 			<ChristmasGiftModal />
-			<div className={`w-full h-screen flex justify-center items-center text-secondary overflow-hidden transition-all duration-500 ${
-				christmasMode 
-					? 'bg-gradient-to-b from-red-50 via-white to-green-50' 
-					: 'bg-primary'
-			}`}>
-				{christmasMode && (
-					<style>{`
-						* {
-							--christmas-glow: 0 0 20px rgba(220, 38, 38, 0.3);
-						}
-						body {
-							background: linear-gradient(135deg, #fecaca 0%, #fef2f2 50%, #dcfce7 100%);
-						}
-					`}</style>
-				)}
+			<div className="w-full h-screen flex justify-center items-center text-secondary overflow-hidden transition-all duration-500 bg-primary">
 				<Toaster position="top-right" />
 				<Routes>
 					<Route path="/login" element={<LoginPage />} />

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import ImageSlider from '../../components/imageSlider';
@@ -340,7 +340,24 @@ function FeaturedStrip(){
 }
 
 export default function HomeLanding(){
+  const calendarRef = useRef(null);
+  
   useEffect(()=>{ const stop = startSocialProof(15000); return ()=> stop && stop(); }, []);
+  
+  // Listen for gift modal close event to scroll to calendar
+  useEffect(() => {
+    const handleGiftClose = () => {
+      if (calendarRef.current) {
+        setTimeout(() => {
+          calendarRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 300);
+      }
+    };
+    
+    window.addEventListener('christmasgift:close', handleGiftClose);
+    return () => window.removeEventListener('christmasgift:close', handleGiftClose);
+  }, []);
+  
   return (
     <div className="w-full h-full overflow-y-auto bg-white text-black">
       {/* Hero + Slider combined */}
@@ -388,7 +405,9 @@ export default function HomeLanding(){
       <FeaturesCarousel />
 
       {/* Christmas Advent Calendar */}
-      <ChristmasCalendar />
+      <div ref={calendarRef}>
+        <ChristmasCalendar />
+      </div>
 
       {/* Featured products */}
       <FeaturedStrip />

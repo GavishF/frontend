@@ -9,16 +9,17 @@ const Snowflakes = () => {
       const snowflake = {
         id: Math.random(),
         left: Math.random() * 100,
-        delay: Math.random() * 2,
-        duration: 8 + Math.random() * 4,
-        opacity: 0.7 + Math.random() * 0.3,
-        size: 20 + Math.random() * 30
+        delay: Math.random() * 3,
+        duration: 12 + Math.random() * 6,
+        opacity: 0.4 + Math.random() * 0.4,
+        size: 8 + Math.random() * 12,
+        wobbleAmount: 20 + Math.random() * 40
       };
       return snowflake;
     };
 
     // Create initial snowflakes
-    const initialSnowflakes = Array.from({ length: 50 }, createSnowflake);
+    const initialSnowflakes = Array.from({ length: 40 }, createSnowflake);
     setSnowflakes(initialSnowflakes);
 
     // Add new snowflakes periodically
@@ -27,7 +28,7 @@ const Snowflakes = () => {
         ...prev.slice(-100),
         createSnowflake()
       ]);
-    }, 300);
+    }, 500);
 
     return () => clearInterval(interval);
   }, []);
@@ -42,19 +43,43 @@ const Snowflakes = () => {
             left: `${snowflake.left}%`,
             top: '-30px',
             opacity: snowflake.opacity,
-            animation: `fall ${snowflake.duration}s linear ${snowflake.delay}s infinite`,
-            fontSize: `${snowflake.size}px`
+            animation: `fall ${snowflake.duration}s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${snowflake.delay}s infinite`,
+            fontSize: `${snowflake.size}px`,
+            '--wobble': `${snowflake.wobbleAmount}px`
           }}
         >
-          <FaRegSnowflake className="text-red-600" style={{ filter: 'drop-shadow(0 0 2px rgba(220, 38, 38, 0.8))' }} />
+          <FaRegSnowflake className="text-red-600" style={{ filter: 'drop-shadow(0 0 1px rgba(220, 38, 38, 0.6))' }} />
         </div>
       ))}
       <style>{`
         @keyframes fall {
-          to {
-            transform: translateY(100vh) rotate(360deg);
+          0% {
+            transform: translateY(0) translateX(0) rotate(0deg);
             opacity: 0;
           }
+          5% {
+            opacity: var(--snowflake-opacity, 0.6);
+          }
+          85% {
+            opacity: var(--snowflake-opacity, 0.6);
+          }
+          100% {
+            transform: translateY(100vh) translateX(var(--wobble)) rotate(360deg);
+            opacity: 0;
+          }
+        }
+
+        @keyframes wobble {
+          0%, 100% {
+            transform: translateX(0);
+          }
+          50% {
+            transform: translateX(var(--wobble));
+          }
+        }
+
+        .animate-fall {
+          animation: fall 12s linear infinite !important;
         }
       `}</style>
     </div>

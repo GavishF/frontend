@@ -1,0 +1,247 @@
+.limited-spots-container {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(147, 51, 234, 0.05) 100%);
+  border: 2px solid #3b82f6;
+  border-radius: 16px;
+  padding: 28px;
+  max-width: 500px;
+  margin: 20px auto;
+}
+
+.contest-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.contest-header h3 {
+  font-size: 22px;
+  font-weight: bold;
+  color: #1f2937;
+  margin-bottom: 8px;
+}
+
+.contest-header p {
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.spots-meter {
+  margin-bottom: 24px;
+}
+
+.meter-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.meter-label span:first-child {
+  font-size: 20px;
+  color: #3b82f6;
+  font-weight: bold;
+}
+
+.meter-label span:last-child {
+  color: #9ca3af;
+}
+
+.progress-container {
+  margin-bottom: 12px;
+}
+
+.spots-bar {
+  height: 32px;
+  background: #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  border: 2px solid #d1d5db;
+}
+
+.spots-filled {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6 0%, #6366f1 100%);
+  transition: width 0.5s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.spots-filled::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.filled-count {
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  z-index: 1;
+}
+
+.spots-info {
+  text-align: center;
+}
+
+.availability {
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 6px;
+  display: inline-block;
+}
+
+.availability.high {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.availability.medium {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.availability.low {
+  background: #fee2e2;
+  color: #7f1d1d;
+}
+
+.availability.full {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+.entry-button {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.entry-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+}
+
+.entry-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.entry-button.entered {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.entry-button.full {
+  background: linear-gradient(135deg, #9ca3af 0%, #6b7280 100%);
+}
+
+.winner-card {
+  background: white;
+  border: 2px solid #fbbf24;
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(251, 191, 36, 0.2);
+  margin-bottom: 16px;
+}
+
+.winner-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+  animation: bounce 1s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.winner-card h4 {
+  font-size: 20px;
+  color: #fbbf24;
+  margin-bottom: 8px;
+}
+
+.winner-message {
+  color: #6b7280;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.winner-code {
+  background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%);
+  border: 2px solid #fbbf24;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #92400e;
+  letter-spacing: 2px;
+  font-family: 'Courier New', monospace;
+  margin: 12px 0;
+}
+
+.discount-value {
+  font-size: 24px;
+  font-weight: bold;
+  color: #3b82f6;
+  margin-bottom: 16px;
+}
+
+.copy-code-btn {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.copy-code-btn:hover {
+  background: #2563eb;
+}
+
+.contest-rules {
+  background: #f9fafb;
+  border-left: 4px solid #3b82f6;
+  border-radius: 4px;
+  padding: 12px;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.contest-rules p {
+  margin: 0;
+}

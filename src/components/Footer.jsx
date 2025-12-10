@@ -6,11 +6,7 @@ export default function Footer() {
   const { christmasMode } = useChristmas();
   
   return (
-    <footer className={`text-white py-12 md:py-16 border-t transition ${
-      christmasMode
-        ? 'bg-gradient-to-r from-red-900 to-green-900 border-red-800'
-        : 'bg-black border-gray-800'
-    }`}>
+    <footer className="bg-black text-white py-12 md:py-16 border-t border-gray-800 transition">
       <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
           {/* Brand Section */}

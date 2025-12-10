@@ -196,92 +196,112 @@ export default function ProductsPage() {
   }, [products, category]);
 
 	return (
-		<div className="w-full h-full flex flex-col bg-white">
+		<div className="w-full min-h-screen flex flex-col bg-white">
 			{loading && (christmasMode ? <ChristmasStarLoader /> : <ProductsLoader fadeOut={fadeLoader} products={products} />)}
-			<div className="w-full px-6 py-6 flex flex-col md:flex-row gap-4 md:items-center md:justify-between bg-white border-b border-gray-200">
-				<div className="flex flex-col md:flex-row gap-4 md:items-center">
-					<input
-						type="text"
-						placeholder="Search products..."
-						value={pendingSearch}
-						onChange={(e) => { setPendingSearch(e.target.value); setLoading(true); }}
-						className="w-full md:w-[320px] h-[44px] border-2 border-red-600 rounded-lg px-4 bg-white text-black placeholder-gray-400 focus:outline-none focus:border-red-700"
-					/>
-					<select
-						value={category}
-						onChange={(e)=> { const v=e.target.value; setCategory(v); setLoading(true); if(v==='all'){ searchParams.delete('category'); setSearchParams(searchParams); } else { searchParams.set('category', v); setSearchParams(searchParams); } }}
-						className="h-[44px] border-2 border-red-600 rounded-lg px-3 bg-white text-black focus:outline-none focus:border-red-700"
-					>
-						<option value="all">All Categories</option>
-						{categories.map(c=> <option key={c._id} value={c.slug}>{c.name}</option>)}
-					</select>
-				</div>
-				<span className="text-sm text-gray-600">{filtered.length} result(s)</span>
-			</div>
-			{loading ? (
-				<div className="flex flex-wrap gap-8 justify-center py-10">
-					{Array.from({length:6}).map((_,i)=> <ProductSkeleton key={i} />)}
-				</div>
-			) : (
-				<div className="w-full flex flex-wrap gap-8 justify-center p-6">
-					{filtered.map(product => (
-						<ProductCard key={product._id} product={product} />
-					))}
-					{!filtered.length && (
-						<div className="text-center py-16 w-full">
-							<div className="text-6xl mb-4">🔍</div>
-							<h2 className="text-2xl font-semibold text-gray-700 mb-2">No products found</h2>
-							<p className="text-gray-500 mb-6">Try adjusting your search or filter to find what you're looking for</p>
-							<button 
-								onClick={() => { setQuery(''); setPendingSearch(''); setCategory('all'); }}
-								className="px-6 py-3 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition shadow-md"
+			
+			{/* Header Section */}
+			<div className="w-full bg-gradient-to-br from-white to-gray-50 border-b border-gray-200 sticky top-0 z-30">
+				<div className="max-w-7xl mx-auto px-4 md:px-6 py-6">
+					<h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">Our Collection</h1>
+					
+					{/* Search and Filter Bar */}
+					<div className="flex flex-col md:flex-row gap-4 md:items-center md:justify-between">
+						<div className="flex flex-col sm:flex-row gap-3 flex-1 md:flex-initial">
+							<input
+								type="text"
+								placeholder="Search products..."
+								value={pendingSearch}
+								onChange={(e) => { setPendingSearch(e.target.value); setLoading(true); }}
+								className="flex-1 h-[44px] border-2 border-gray-300 rounded-lg px-4 bg-white text-black placeholder-gray-400 focus:outline-none focus:border-red-600 transition"
+							/>
+							<select
+								value={category}
+								onChange={(e)=> { const v=e.target.value; setCategory(v); setLoading(true); if(v==='all'){ searchParams.delete('category'); setSearchParams(searchParams); } else { searchParams.set('category', v); setSearchParams(searchParams); } }}
+								className="h-[44px] border-2 border-gray-300 rounded-lg px-4 bg-white text-black focus:outline-none focus:border-red-600 transition"
 							>
-								Clear Filters
-							</button>
+								<option value="all">All Categories</option>
+								{categories.map(c=> <option key={c._id} value={c.slug}>{c.name}</option>)}
+							</select>
 						</div>
-					)}
+						<div className="text-sm text-gray-600 font-medium">
+							{filtered.length} product{filtered.length !== 1 ? 's' : ''}
+						</div>
+					</div>
 				</div>
-			)}
+			</div>
 
-			{/* How it works + FAQ */}
-			<section className="px-6 md:px-12 lg:px-20 py-12 border-t border-neutral-800 mt-8">
-				<div className="max-w-4xl mx-auto">
-					<h3 className="text-2xl font-semibold mb-4">How Nikola Works</h3>
-					<p className="text-gray-600 mb-6">Browse curated collections, filter by category, and discover elevated essentials designed for everyday wear. Fast checkout and secure payments with delivery tracking for all orders.</p>
-				<div className="grid md:grid-cols-3 gap-4 mb-8">
-					<div 
-						onClick={() => setGlowingCard(glowingCard === 'curated' ? null : 'curated')}
-						className={`p-4 bg-neutral-900 rounded border border-neutral-800 cursor-pointer transition-all duration-300 ${glowingCard === 'curated' ? 'border-red-600 shadow-lg shadow-red-600/50 bg-neutral-800' : ''}`}>
-						<h4 className="font-semibold">Curated Picks</h4>
-						<p className="text-sm text-neutral-400">We hand-select items for quality and style.</p>
+			{/* Main Content */}
+			<div className="flex-1 max-w-7xl mx-auto w-full px-4 md:px-6 py-8">
+				{loading ? (
+					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+						{Array.from({length:8}).map((_,i)=> <ProductSkeleton key={i} />)}
 					</div>
-					<div 
-						onClick={() => setGlowingCard(glowingCard === 'returns' ? null : 'returns')}
-						className={`p-4 bg-neutral-900 rounded border border-neutral-800 cursor-pointer transition-all duration-300 ${glowingCard === 'returns' ? 'border-red-600 shadow-lg shadow-red-600/50 bg-neutral-800' : ''}`}>
-						<h4 className="font-semibold">Easy Returns</h4>
-						<p className="text-sm text-neutral-400">Hassle-free returns within 14 days.</p>
+				) : filtered.length > 0 ? (
+					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+						{filtered.map(product => (
+							<ProductCard key={product._id} product={product} />
+						))}
 					</div>
-					<div 
-						onClick={() => setGlowingCard(glowingCard === 'sustainable' ? null : 'sustainable')}
-						className={`p-4 bg-neutral-900 rounded border border-neutral-800 cursor-pointer transition-all duration-300 ${glowingCard === 'sustainable' ? 'border-red-600 shadow-lg shadow-red-600/50 bg-neutral-800' : ''}`}>
-						<h4 className="font-semibold">Sustainable</h4>
-						<p className="text-sm text-neutral-400">Mindful materials and thoughtful production.</p>
+				) : (
+					<div className="flex flex-col items-center justify-center py-20">
+						<div className="text-6xl mb-4">🔍</div>
+						<h2 className="text-2xl font-semibold text-gray-700 mb-2">No products found</h2>
+						<p className="text-gray-500 mb-8 text-center max-w-md">Try adjusting your search or filter to find what you're looking for</p>
+						<button 
+							onClick={() => { setQuery(''); setPendingSearch(''); setCategory('all'); }}
+							className="px-6 py-3 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition shadow-md"
+						>
+							Clear Filters
+						</button>
 					</div>
-				</div>
-					<h4 className="text-xl font-semibold mb-3">Frequently Asked</h4>
-					<div className="space-y-3 text-sm text-neutral-400">
-						<div>
-							<strong>Shipping:</strong> Standard delivery in 3-7 business days.
+				)}
+			</div>
+
+			{/* Info Section */}
+			<section className="w-full bg-gray-50 border-t border-gray-200 mt-12">
+				<div className="max-w-7xl mx-auto px-4 md:px-6 py-12">
+					<h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8">Why Choose Nikola</h3>
+					<div className="grid md:grid-cols-3 gap-6 mb-12">
+						<div 
+							onClick={() => setGlowingCard(glowingCard === 'curated' ? null : 'curated')}
+							className={`p-6 bg-white rounded-lg border-2 cursor-pointer transition-all duration-300 ${glowingCard === 'curated' ? 'border-red-600 shadow-lg' : 'border-gray-200 hover:border-gray-300'}`}>
+							<h4 className="font-bold text-lg mb-2 text-gray-900">Curated Selection</h4>
+							<p className="text-gray-600">Hand-picked items for quality, style, and value that elevate your everyday.</p>
 						</div>
-						<div>
-							<strong>Payments:</strong> We accept major cards and secure gateways.
+						<div 
+							onClick={() => setGlowingCard(glowingCard === 'returns' ? null : 'returns')}
+							className={`p-6 bg-white rounded-lg border-2 cursor-pointer transition-all duration-300 ${glowingCard === 'returns' ? 'border-red-600 shadow-lg' : 'border-gray-200 hover:border-gray-300'}`}>
+							<h4 className="font-bold text-lg mb-2 text-gray-900">30-Day Returns</h4>
+							<p className="text-gray-600">Hassle-free returns and exchanges within 30 days for your peace of mind.</p>
 						</div>
-						<div>
-							<strong>Support:</strong> Reach us via the contact page for order help.
+						<div 
+							onClick={() => setGlowingCard(glowingCard === 'sustainable' ? null : 'sustainable')}
+							className={`p-6 bg-white rounded-lg border-2 cursor-pointer transition-all duration-300 ${glowingCard === 'sustainable' ? 'border-red-600 shadow-lg' : 'border-gray-200 hover:border-gray-300'}`}>
+							<h4 className="font-bold text-lg mb-2 text-gray-900">Sustainable</h4>
+							<p className="text-gray-600">Mindful materials and responsible production for a better tomorrow.</p>
+						</div>
+					</div>
+					
+					<div className="bg-white p-8 rounded-lg border border-gray-200">
+						<h4 className="text-xl font-bold text-gray-900 mb-6">Quick Answers</h4>
+						<div className="grid md:grid-cols-3 gap-8 text-sm">
+							<div>
+								<p className="font-semibold text-gray-900 mb-2">📦 Shipping</p>
+								<p className="text-gray-600">Standard delivery in 3-7 business days. Express options available.</p>
+							</div>
+							<div>
+								<p className="font-semibold text-gray-900 mb-2">💳 Payments</p>
+								<p className="text-gray-600">Secure checkout with major cards, PayPal, and encrypted gateways.</p>
+							</div>
+							<div>
+								<p className="font-semibold text-gray-900 mb-2">📞 Support</p>
+								<p className="text-gray-600">Reach us via the contact page for fast, friendly order assistance.</p>
+							</div>
 						</div>
 					</div>
 				</div>
 			</section>
+
 			<Footer />
 		</div>
 	);

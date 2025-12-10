@@ -5,12 +5,10 @@ import './ChristmasGiftModal.css';
 const ChristmasGiftModal = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpened, setIsOpened] = useState(false);
-  const [clickCount, setClickCount] = useState(0);
+  const [autoOpening, setAutoOpening] = useState(false);
   const canvasRef = useRef(null);
   const presentRef = useRef(null);
   const { christmasMode, discount } = useChristmas();
-
-  const CLICKS_NEEDED = 20;
 
   useEffect(() => {
     if (!christmasMode) return;
@@ -21,6 +19,20 @@ const ChristmasGiftModal = () => {
       sessionStorage.setItem('christmasGiftSeen', 'true');
     }
   }, [christmasMode]);
+
+  // Auto-open after 9 seconds
+  useEffect(() => {
+    if (!isOpen || isOpened) return;
+
+    const timer = setTimeout(() => {
+      setAutoOpening(true);
+      setTimeout(() => {
+        setIsOpened(true);
+      }, 1000);
+    }, 9000);
+
+    return () => clearTimeout(timer);
+  }, [isOpen, isOpened]);
 
   useEffect(() => {
     if (!isOpen || !canvasRef.current) return;
@@ -92,52 +104,25 @@ const ChristmasGiftModal = () => {
     };
   }, [isOpen]);
 
-  const handleGiftClick = () => {
-    if (isOpened) return;
-
-    const newCount = clickCount + 1;
-    setClickCount(newCount);
-
-    if (presentRef.current) {
-      presentRef.current.style.setProperty('--count', Math.ceil(newCount / 2));
-      presentRef.current.classList.add('animate');
-      setTimeout(() => {
-        presentRef.current?.classList.remove('animate');
-      }, 300);
-    }
-
-    if (newCount >= CLICKS_NEEDED) {
-      setTimeout(() => {
-        setIsOpened(true);
-      }, 300);
-    }
-  };
-
   const handleClose = () => {
     setIsOpen(false);
+    // Dispatch event to trigger calendar scroll
+    window.dispatchEvent(new CustomEvent('christmasgift:close'));
   };
 
   if (!isOpen || !christmasMode) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-[10000] pointer-events-auto overflow-hidden">
+    <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[10000] pointer-events-auto overflow-hidden backdrop-blur-sm">
       <canvas
         ref={canvasRef}
         className="absolute inset-0 w-full h-full pointer-events-none"
       />
 
       <style>{`
-        @keyframes wiggle {
-          0% { transform: translateX(0) rotateX(0); }
-          25% { transform: translateX(calc(var(--count) * -1px)) rotateX(calc(var(--count) * 1deg)); }
-          50% { transform: translateX(0) rotateX(0); }
-          75% { transform: translateX(calc(var(--count) * 1px)) rotateX(calc(var(--count) * -1deg)); }
-          100% { transform: translateX(0) rotateX(0); }
-        }
-
         @keyframes present-rotate {
-          0% { transform: rotateY(0); }
-          100% { transform: rotateY(360deg); }
+          0% { transform: rotateY(0) rotateX(-5deg); }
+          100% { transform: rotateY(360deg) rotateX(-5deg); }
         }
 
         @keyframes lid-animation {
@@ -151,32 +136,44 @@ const ChristmasGiftModal = () => {
         }
 
         @keyframes confetti {
-          0% { transform: translateY(0) rotateZ(0deg); opacity: 1; }
-          100% { transform: translateY(100vh) rotateZ(720deg); opacity: 0; }
+          0% { transform: translateY(0) rotateZ(0deg) scale(1); opacity: 1; }
+          100% { transform: translateY(100vh) rotateZ(720deg) scale(0); opacity: 0; }
+        }
+
+        @keyframes scale-in {
+          0% { transform: scale(0) rotateX(180deg); opacity: 0; }
+          50% { transform: scale(1.1) rotateX(0deg); }
+          100% { transform: scale(1) rotateX(0deg); opacity: 1; }
+        }
+
+        @keyframes pulse-glow {
+          0%, 100% { 
+            filter: drop-shadow(0 0 30px rgba(220, 38, 38, 0.6));
+          }
+          50% { 
+            filter: drop-shadow(0 0 50px rgba(220, 38, 38, 0.9));
+          }
         }
       `}</style>
 
       <div className="relative z-10 flex flex-col items-center justify-center gap-4 md:gap-6 px-4 w-full h-full">
-        {/* Headline */}
-        <div className="absolute top-10 md:top-20 text-4xl md:text-6xl lg:text-8xl font-bold text-white/15 text-center select-none" style={{ fontFamily: "'Mountains of Christmas', cursive" }}>
-          MERRY CHRISTMAS
+        {/* Epic Title */}
+        <div className="absolute top-12 md:top-20 text-center select-none" style={{ animation: 'scale-in 1s ease-out' }}>
+          <div className="text-5xl md:text-7xl lg:text-8xl font-black text-white drop-shadow-lg" style={{ fontFamily: "'Mountains of Christmas', cursive" }}>
+            SPECIAL GIFT
+          </div>
+          <div className="text-lg md:text-2xl text-white/90 font-semibold mt-2 drop-shadow">
+            A Festive Surprise Awaits
+          </div>
         </div>
 
-        {/* Instructions */}
-        {!isOpened && (
-          <div className="absolute top-1/4 text-3xl md:text-5xl lg:text-6xl font-bold text-white text-center select-none animate-pulse" style={{ fontFamily: "'Mountains of Christmas', cursive" }}>
-            CHRISTMAS PIÑATA
-          </div>
-        )}
-
-        {/* 3D Gift Box */}
+        {/* 3D Gift Box - Auto rotating */}
         {!isOpened ? (
           <div
             ref={presentRef}
             className="gift-present"
-            onClick={handleGiftClick}
             style={{
-              '--count': Math.ceil(clickCount / 2)
+              animation: autoOpening ? 'scale-in 0.8s ease-out' : 'present-rotate 20s linear infinite, pulse-glow 2s ease-in-out infinite'
             }}
           >
             <div className="wiggle-container">
@@ -196,81 +193,68 @@ const ChristmasGiftModal = () => {
                 </div>
               </div>
             </div>
-
-            {/* Click Counter */}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
-              <div className="text-center">
-                <div className="text-white font-bold text-sm md:text-lg">
-                  {clickCount}/{CLICKS_NEEDED}
-                </div>
-                <div className="text-white font-bold text-xs md:text-sm">
-                  CLICK ME!
-                </div>
-              </div>
-            </div>
           </div>
         ) : (
-          // Opened Gift - Show Discount
-          <div className="flex flex-col items-center justify-center gap-4 animate-bounce">
+          // Opened Gift - Show Discount with Epic Effect
+          <div className="flex flex-col items-center justify-center gap-4 relative z-10" style={{ animation: 'scale-in 0.6s ease-out' }}>
             {/* Explosion Effect */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className="text-6xl md:text-8xl animate-ping">✨</div>
+              <div className="text-8xl md:text-9xl animate-ping absolute">✨</div>
             </div>
 
-            {/* Discount Badge */}
-            <div className="bg-gradient-to-br from-red-600 to-red-700 rounded-full w-40 h-40 md:w-56 md:h-56 flex flex-col items-center justify-center shadow-2xl border-8 border-yellow-400 relative z-10">
-              <div className="text-6xl md:text-8xl font-black text-yellow-300">
+            {/* Discount Badge - Epic Style */}
+            <div className="bg-gradient-to-br from-red-600 via-red-500 to-red-700 rounded-full w-48 h-48 md:w-64 md:h-64 flex flex-col items-center justify-center shadow-2xl border-8 border-yellow-300 relative z-10" style={{ animation: 'pulse-glow 1s ease-in-out' }}>
+              <div className="text-7xl md:text-9xl font-black text-yellow-200 drop-shadow-lg">
                 {discount}%
               </div>
-              <div className="text-white font-bold text-lg md:text-2xl text-center mt-2">
+              <div className="text-white font-black text-2xl md:text-3xl text-center mt-3 drop-shadow">
                 OFF
               </div>
-              <div className="text-white font-semibold text-sm md:text-base text-center mt-2">
-                ALL ITEMS
+              <div className="text-yellow-100 font-bold text-lg md:text-xl text-center mt-2 drop-shadow">
+                EVERYTHING
               </div>
             </div>
 
             {/* Confetti Animation */}
-            {Array.from({ length: 20 }).map((_, i) => (
+            {Array.from({ length: 30 }).map((_, i) => (
               <div
                 key={i}
-                className="absolute w-2 h-2 rounded-full"
+                className="absolute w-3 h-3 rounded-full pointer-events-none"
                 style={{
                   left: '50%',
                   top: '50%',
-                  backgroundColor: ['#ff0000', '#00ff00', '#ffff00', '#0000ff'][i % 4],
-                  animation: `confetti ${1 + Math.random() * 1}s ease-in forwards`,
-                  animationDelay: `${Math.random() * 0.2}s`,
-                  marginLeft: `${(Math.random() - 0.5) * 200}px`,
-                  marginTop: `${(Math.random() - 0.5) * 200}px`
+                  backgroundColor: ['#ff0000', '#00ff00', '#ffff00', '#0000ff', '#ff00ff', '#00ffff'][i % 6],
+                  animation: `confetti ${1.5 + Math.random() * 1.5}s ease-in forwards`,
+                  animationDelay: `${Math.random() * 0.3}s`,
+                  marginLeft: `${(Math.random() - 0.5) * 300}px`,
+                  marginTop: `${(Math.random() - 0.5) * 300}px`
                 }}
               />
             ))}
           </div>
         )}
 
-        {/* Close Button */}
+        {/* Close Button - Only show after opened */}
         {isOpened && (
           <button
             onClick={handleClose}
-            className="absolute bottom-10 px-8 py-3 bg-white text-red-600 font-bold rounded-full hover:bg-red-50 transition shadow-lg text-lg md:text-xl"
+            className="absolute bottom-10 md:bottom-16 px-10 py-4 bg-gradient-to-r from-yellow-300 to-yellow-400 text-red-700 font-black rounded-full hover:from-yellow-200 hover:to-yellow-300 transition shadow-xl text-xl md:text-2xl transform hover:scale-105"
+            style={{ animation: 'scale-in 0.6s ease-out 0.3s both' }}
           >
-            Claim Discount! 🎉
+            Claim Now! 🎁
           </button>
         )}
 
-        {/* Skip Button */}
-        {!isOpened && (
-          <button
-            onClick={handleClose}
-            className="absolute bottom-10 text-white text-sm md:text-base hover:text-yellow-300 transition underline"
-          >
-            Skip
-          </button>
+        {/* Auto-opening indicator */}
+        {!isOpened && !autoOpening && (
+          <div className="absolute bottom-10 text-white/70 text-sm md:text-base text-center animate-pulse">
+            Opening in moments...
+          </div>
         )}
       </div>
     </div>
   );
+};
 };
 
 export default ChristmasGiftModal;

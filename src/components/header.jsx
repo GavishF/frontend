@@ -75,15 +75,11 @@ export default function Header() {
 	return (
 		<>
 			{christmasMode && (
-				<div className="w-full bg-gradient-to-r from-red-600 via-red-500 to-green-600 text-white py-2 text-center font-bold text-sm animate-pulse shadow-lg">
+				<div className="w-full bg-red-600 text-white py-2 text-center font-bold text-sm animate-pulse shadow-lg">
 					🎄 CHRISTMAS SALE - {christmasDiscount}% OFF ON ALL ITEMS! 🎅
 				</div>
 			)}
-			<header className={`h-[100px] flex justify-center items-center relative shadow-sm z-40 ${
-				christmasMode 
-					? 'bg-gradient-to-r from-red-50 to-green-50'
-					: 'bg-white'
-			}`}>
+			<header className="h-[100px] flex justify-center items-center relative shadow-sm z-40 bg-white">
 			{isOpen && (
 				<div className="fixed z-[60] top-0 left-0 w-[100vw] h-[100vh] bg-white/95 backdrop-blur-sm">
 					<div className="h-full w-[86vw] max-w-[340px] bg-white text-black flex flex-col shadow-2xl">
