@@ -307,23 +307,36 @@
 }
 
 /* Special nav links */
-.nav-link.offers-link {
+.nav-link.christmas-link {
 	color: #dc2626;
 	font-weight: 700;
+	background: linear-gradient(135deg, rgba(220, 38, 38, 0.1), rgba(220, 38, 38, 0.05));
+	border-radius: 4px;
+	padding: 12px 14px;
+	margin: 0 4px;
+	animation: pulse-subtle 2s ease-in-out infinite;
 }
 
-.nav-link.offers-link:hover {
+.nav-link.christmas-link:hover {
+	background: rgba(220, 38, 38, 0.15);
 	color: #b91c1c;
 }
 
-.nav-link.promo-link {
-	background: #fff5f5;
+.nav-link.admin-link {
+	color: #7c3aed;
+	font-weight: 700;
+	background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(124, 58, 237, 0.05));
 	border-radius: 4px;
 	padding: 12px 14px;
-	margin: 0 8px;
-	font-weight: 700;
-	color: #dc2626;
-	animation: pulse-subtle 2s ease-in-out infinite;
+	margin: 0 4px;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.nav-link.admin-link:hover {
+	background: rgba(124, 58, 237, 0.15);
+	color: #6d28d9;
 }
 
 @keyframes pulse-subtle {
@@ -395,6 +408,18 @@
 .mobile-cat-link.offers {
 	background: #fff5f5;
 	color: #dc2626;
+	font-weight: 700;
+}
+
+.mobile-cat-link.christmas-link {
+	background: linear-gradient(135deg, #fff5f5, #fef2f2);
+	color: #dc2626;
+	font-weight: 700;
+}
+
+.mobile-cat-link.admin-link {
+	background: #f3e8ff;
+	color: #7c3aed;
 	font-weight: 700;
 }
 

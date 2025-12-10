@@ -129,13 +129,6 @@ export default function Header() {
 					<div className="header-right">
 						<div className="currency-badge">LKR</div>
 						
-						<button className="icon-btn" title="Settings">
-							<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-								<circle cx="12" cy="12" r="3"></circle>
-								<path d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m3.08 3.08l4.24 4.24M1 12h6m6 0h6m-13.78 7.78l4.24-4.24m3.08-3.08l4.24-4.24"></path>
-							</svg>
-						</button>
-
 						<Link to="/wishlist" className="icon-btn wishlist-icon">
 							<FaRegHeart size={20} />
 							{wishlistCount > 0 && <span className="badge">{wishlistCount}</span>}
@@ -191,17 +184,19 @@ export default function Header() {
 					{christmasMode && (
 						<Link 
 							to="/christmas-offers"
-							className="nav-link offers-link"
+							className="nav-link christmas-link"
+							title="Christmas Offers & Games"
 						>
-							<FaGift size={16} /> OFFERS
+							🎄 CHRISTMAS
 						</Link>
 					)}
-					{christmasMode && (
+					{isAdmin && (
 						<Link 
-							to="/christmas-offers"
-							className="nav-link promo-link"
+							to="/admin/products"
+							className="nav-link admin-link"
+							title="Admin Panel"
 						>
-							🔥 BELOW 2000
+							<MdAdminPanelSettings size={16} /> ADMIN
 						</Link>
 					)}
 				</nav>
@@ -223,10 +218,19 @@ export default function Header() {
 							{christmasMode && (
 								<Link 
 									to="/christmas-offers"
-									className="mobile-cat-link offers"
+									className="mobile-cat-link christmas-link"
 									onClick={() => setIsOpen(false)}
 								>
-									🎁 CHRISTMAS OFFERS
+									🎄 CHRISTMAS OFFERS
+								</Link>
+							)}
+							{isAdmin && (
+								<Link 
+									to="/admin/products"
+									className="mobile-cat-link admin-link"
+									onClick={() => setIsOpen(false)}
+								>
+									⚙️ ADMIN PANEL
 								</Link>
 							)}
 						</div>
