@@ -255,6 +255,5 @@ const ChristmasGiftModal = () => {
     </div>
   );
 };
-};
 
 export default ChristmasGiftModal;
