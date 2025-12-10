@@ -5,7 +5,7 @@ import GiftFinder from '../../components/GiftFinder';
 import LimitedSpots from '../../components/LimitedSpots';
 import CountdownBanner from '../../components/CountdownBanner';
 import Footer from '../../components/Footer';
-import { FaGift, FaFire, FaSnowflake, FaStar, FaChampagne } from 'react-icons/fa';
+import { FaGift, FaFire, FaSnowflake, FaStar, FaWineGlass } from 'react-icons/fa';
 import './christmasOffersPage.css';
 
 export default function ChristmasOffersPage() {
@@ -63,7 +63,7 @@ export default function ChristmasOffersPage() {
       color: 'from-yellow-400 to-orange-500'
     },
     {
-      icon: <FaChampagne className="text-4xl" />,
+      icon: <FaWineGlass className="text-4xl" />,
       title: 'Flash Deals',
       description: 'Random surprise discounts triggered throughout your visit',
       color: 'from-purple-500 to-pink-500'
@@ -192,7 +192,7 @@ export default function ChristmasOffersPage() {
               {/* Limited Spots */}
               <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-12 border-4 border-orange-200">
                 <div className="flex items-center gap-4 mb-6">
-                  <FaChampagne className="text-4xl text-orange-600" />
+                  <FaWineGlass className="text-4xl text-orange-600" />
                   <h2 className="text-3xl md:text-4xl font-black text-orange-600">
                     🎯 Limited Spots Contest
                   </h2>
