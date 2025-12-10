@@ -1,16 +1,14 @@
 import { useState, useEffect } from "react";
-import { FiShoppingBag } from "react-icons/fi";
-import { BiStore } from "react-icons/bi";
-import { GiHamburgerMenu } from "react-icons/gi";
-import { HiHome } from "react-icons/hi";
+import { FiShoppingBag, FiSearch, FiMenu, FiX } from "react-icons/fi";
 import { FaRegHeart, FaGift } from "react-icons/fa";
-import { IoMdInformationCircleOutline, IoMdContact } from "react-icons/io";
-import { MdOutlineReviews, MdAdminPanelSettings } from "react-icons/md";
+import { IoMdInformationCircleOutline } from "react-icons/io";
+import { MdAdminPanelSettings } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import { syncCartCount } from "../utils/cart";
 import { isAdminToken } from "../utils/auth";
 import { getItem, removeItem } from "../utils/safeStorage.js";
 import { useChristmas } from "../context/ChristmasContext";
+import "./header.css";
 
 export default function Header() {
 	const navigate = useNavigate();
@@ -19,6 +17,7 @@ export default function Header() {
 	const [cartCount, setCartCount] = useState(0);
 	const [wishlistCount, setWishlistCount] = useState(0);
 	const [isAdmin, setIsAdmin] = useState(false);
+	const [searchQuery, setSearchQuery] = useState("");
 
 	// Initialize state from storage
 	useEffect(() => {
@@ -58,7 +57,6 @@ export default function Header() {
 	},[]);
 
 	useEffect(()=>{
-		// lock body scroll when mobile menu open to avoid overlap/scroll bleed
 		if(isOpen) document.body.style.overflow = 'hidden';
 		else document.body.style.overflow = '';
 		return ()=> { document.body.style.overflow = ''; };
@@ -72,116 +70,169 @@ export default function Header() {
 
 	const { christmasMode, discount: christmasDiscount } = useChristmas();
 
+	const handleSearch = (e) => {
+		e.preventDefault();
+		if(searchQuery.trim()) {
+			navigate(`/products?search=${encodeURIComponent(searchQuery)}`);
+		}
+	};
+
+	const categories = [
+		{ name: "NEW ARRIVALS", path: "/products?category=new" },
+		{ name: "BEST SELLERS", path: "/products?category=bestsellers" },
+		{ name: "WOMEN", path: "/products?category=women" },
+		{ name: "MEN", path: "/products?category=men" },
+		{ name: "KIDS", path: "/products?category=kids" },
+		{ name: "HOME & DECOR", path: "/products?category=home" },
+		{ name: "PERSONAL CARE", path: "/products?category=personal" },
+		{ name: "TRAVEL GEAR", path: "/products?category=travel" },
+		{ name: "MOTHER & BABYCARE", path: "/products?category=baby" },
+		{ name: "GIFT CARDS", path: "/products?category=giftcards" },
+	];
+
 	return (
 		<>
 			{christmasMode && (
-				<div className="w-full bg-red-600 text-white py-2 text-center font-bold text-sm animate-pulse shadow-lg">
+				<div className="header-promo">
 					🎄 CHRISTMAS SALE - {christmasDiscount}% OFF ON ALL ITEMS! 🎅
 				</div>
 			)}
-			<header className="h-[100px] flex justify-center items-center relative shadow-sm z-40 bg-white">
-			{isOpen && (
-				<div className="fixed z-[60] top-0 left-0 w-[100vw] h-[100vh] bg-white/95 backdrop-blur-sm">
-					<div className="h-full w-[86vw] max-w-[340px] bg-white text-black flex flex-col shadow-2xl">
-						<div className="w-full h-[100px] flex px-6 flex-row items-center justify-between border-b border-red-700/40">
-							<GiHamburgerMenu className="text-red-600 text-4xl cursor-pointer" onClick={()=> setIsOpen(false)} />
-							<img className="w-[120px] h-[60px] object-contain cursor-pointer" onClick={()=>{navigate('/'); setIsOpen(false)}} src="/logo.png" alt="Logo" />
-						</div>
-						<div className="w-full h-full flex flex-col p-6 items-start gap-5 overflow-y-auto">
-							<button className="text-black hover:text-red-600 text-lg flex flex-row items-center" onClick={()=>{ setIsOpen(false); navigate('/') }}>
-								<HiHome className="text-red-600 text-2xl mr-2" /> Home
+			
+			<header className="header-main">
+				{/* Top section - Logo, Search, Icons */}
+				<div className="header-top">
+					<div className="header-left">
+						<button 
+							className="menu-toggle md:hidden"
+							onClick={() => setIsOpen(!isOpen)}
+						>
+							{isOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+						</button>
+						<Link to="/" className="logo">
+							<img src="/logo.png" alt="Nikola" />
+						</Link>
+					</div>
+
+					<form onSubmit={handleSearch} className="search-container">
+						<input 
+							type="text"
+							placeholder="Type and hit enter to search..."
+							value={searchQuery}
+							onChange={(e) => setSearchQuery(e.target.value)}
+							className="search-input"
+						/>
+						<button type="submit" className="search-btn">
+							<FiSearch size={20} />
+						</button>
+					</form>
+
+					<div className="header-right">
+						<div className="currency-badge">LKR</div>
+						
+						<button className="icon-btn" title="Settings">
+							<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+								<circle cx="12" cy="12" r="3"></circle>
+								<path d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m3.08 3.08l4.24 4.24M1 12h6m6 0h6m-13.78 7.78l4.24-4.24m3.08-3.08l4.24-4.24"></path>
+							</svg>
+						</button>
+
+						<Link to="/wishlist" className="icon-btn wishlist-icon">
+							<FaRegHeart size={20} />
+							{wishlistCount > 0 && <span className="badge">{wishlistCount}</span>}
+						</Link>
+
+						<Link to="/cart" className="icon-btn cart-icon">
+							<FiShoppingBag size={20} />
+							{cartCount > 0 && <span className="badge">{cartCount}</span>}
+						</Link>
+
+						{!token ? (
+							<button 
+								onClick={() => navigate('/login')}
+								className="auth-btn"
+							>
+								<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+									<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+									<circle cx="12" cy="7" r="4"></circle>
+								</svg>
 							</button>
-							<button className="text-black hover:text-red-600 text-lg flex flex-row items-center" onClick={()=>{ setIsOpen(false); navigate('/products') }}>
-								<BiStore className="text-red-600 text-2xl mr-2" /> Products
+						) : (
+							<button 
+								onClick={() => {
+									removeItem('token');
+									removeItem('role');
+									setToken(null);
+									navigate('/login');
+								}}
+								className="auth-btn"
+								title="Logout"
+							>
+								<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+									<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+									<polyline points="16 17 21 12 16 7"></polyline>
+									<line x1="21" y1="12" x2="9" y2="12"></line>
+								</svg>
 							</button>
-							<button className="text-black hover:text-red-600 text-lg flex flex-row items-center" onClick={()=>{ setIsOpen(false); navigate('/christmas-offers') }}>
-								<FaGift className="text-red-600 text-2xl mr-2" /> Christmas Offers
-							</button>
-							<button className="text-black hover:text-red-600 text-lg flex flex-row items-center" onClick={()=>{ setIsOpen(false); navigate('/cart') }}>
-								<FiShoppingBag className="text-red-600 text-2xl mr-2" /> Cart
-							</button>
-							<button className="text-black hover:text-red-600 text-lg flex flex-row items-center" onClick={()=>{ setIsOpen(false); navigate('/wishlist') }}>
-								<FaRegHeart className="text-red-600 text-2xl mr-2" /> Wishlist
-							</button>
-							<button className="text-black hover:text-red-600 text-lg flex flex-row items-center" onClick={()=>{ setIsOpen(false); navigate('/reviews') }}>
-								<MdOutlineReviews className="text-red-600 text-2xl mr-2" /> Reviews
-							</button>
-							<button className="text-black hover:text-red-600 text-lg flex flex-row items-center" onClick={()=>{ setIsOpen(false); navigate('/about-us') }}>
-								<IoMdInformationCircleOutline className="text-red-600 text-2xl mr-2" /> About Us
-							</button>
-							<button className="text-black hover:text-red-600 text-lg flex flex-row items-center" onClick={()=>{ setIsOpen(false); navigate('/contact-us') }}>
-								<IoMdContact className="text-red-600 text-2xl mr-2" /> Contact Us
-							</button>
-							{isAdmin && (
-								<button className="text-black hover:text-red-600 text-lg flex flex-row items-center" onClick={()=>{ setIsOpen(false); navigate('/admin/products') }}>
-									<MdAdminPanelSettings className="text-red-600 text-2xl mr-2" /> Admin Panel
-								</button>
-							)}
-							<div className="border-t border-gray-200 w-full pt-5 mt-3">
-								{!token && <button className="text-red-600 hover:text-red-700 text-lg font-semibold" onClick={()=>{navigate('/login'); setIsOpen(false)}}>Login</button>}
-								{token && <button className="text-red-600 hover:text-red-700 text-lg font-semibold" onClick={()=>{removeItem('token'); removeItem('role'); setToken(null); navigate('/login'); setIsOpen(false)}}>Logout</button>}
-							</div>
-						</div>
+						)}
 					</div>
 				</div>
-			)}
-			<div className="w-full h-full flex items-center justify-between px-4 md:px-8">
-				<div className="flex items-center gap-4">
-					<GiHamburgerMenu className="text-red-600 text-3xl md:hidden cursor-pointer" onClick={()=> setIsOpen(true)} />
-					<img className="w-[140px] h-[70px] md:w-[180px] md:h-[90px] object-contain cursor-pointer logo-shadow" onClick={()=> navigate('/')} src="/logo.png" alt="Logo" />
-				</div>
-				<div className="flex md:hidden items-center gap-4">
-					<Link to="/wishlist" className="relative">
-						<FaRegHeart className="text-black text-3xl hover:text-red-600 transition-colors" />
-						{wishlistCount > 0 && <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">{wishlistCount}</span>}
-					</Link>
-					<Link to="/cart" className="relative" data-header-cart>
-						<FiShoppingBag className="text-black text-3xl hover:text-red-600 transition-colors" />
-						<span id="cart-badge" className="absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">{cartCount}</span>
-					</Link>
-				</div>
-			</div>
-			<GiHamburgerMenu className="text-black text-4xl absolute md:hidden left-4 z-50 hidden" onClick={()=> setIsOpen(true)} />
-			<div className="hidden md:flex w-full items-center px-8">
-				{/* Center nav links */}
-				<div className="flex-1 flex justify-center items-center gap-8">
-					<Link to="/" className="text-black hover:text-red-600 text-lg nav-underline">Home</Link>
-					<Link to="/products" className="text-black hover:text-red-600 text-lg nav-underline">Products</Link>
-					<Link to="/christmas-offers" className="text-black hover:text-red-600 text-lg nav-underline font-bold flex items-center gap-2">
-						<FaGift className="text-red-600" /> Christmas Offers
-					</Link>
-					<Link to="/reviews" className="text-black hover:text-red-600 text-lg nav-underline">Reviews</Link>
-					<Link to="/about-us" className="text-black hover:text-red-600 text-lg nav-underline">About Us</Link>
-					<Link to="/contact-us" className="text-black hover:text-red-600 text-lg nav-underline">Contact Us</Link>
-				</div>
-				{/* Right icons group */}
-				<div className="flex items-center gap-6">
-					{isAdmin && (
-						<Link to="/admin/products" className="relative">
-							<MdAdminPanelSettings className="text-black text-2xl hover:text-red-600 transition-colors" />
+
+				{/* Categories Navigation */}
+				<nav className="header-nav">
+					{categories.map((cat, idx) => (
+						<Link 
+							key={idx}
+							to={cat.path}
+							className="nav-link"
+						>
+							{cat.name}
+						</Link>
+					))}
+					{christmasMode && (
+						<Link 
+							to="/christmas-offers"
+							className="nav-link offers-link"
+						>
+							<FaGift size={16} /> OFFERS
 						</Link>
 					)}
-				<Link to="/wishlist" className="relative">
-					<FaRegHeart className="text-black text-2xl hover:text-red-600 transition-colors" />
-					{wishlistCount > 0 && <span className="absolute -top-2 -right-3 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">{wishlistCount}</span>}
-				</Link>
-					<Link to="/cart" className="relative" data-header-cart>
-						<FiShoppingBag className="text-black text-2xl hover:text-red-600 transition-colors" />
-						<span id="cart-badge" className="absolute -top-2 -right-3 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">{cartCount}</span>
-					</Link>
-					{!token && (
-						<button className="text-black hover:text-red-600 text-lg" onClick={()=>{navigate('/login')}}>
-							Login
-						</button>
+					{christmasMode && (
+						<Link 
+							to="/christmas-offers"
+							className="nav-link promo-link"
+						>
+							🔥 BELOW 2000
+						</Link>
 					)}
-					{token && (
-						<button className="text-black hover:text-red-600 text-lg" onClick={()=>{removeItem('token'); removeItem('role'); setToken(null); navigate('/login')}}>
-							Logout
-						</button>
-					)}
-				</div>
-			</div>
-		</header>
+				</nav>
+
+				{/* Mobile Menu */}
+				{isOpen && (
+					<div className="mobile-menu">
+						<div className="mobile-categories">
+							{categories.map((cat, idx) => (
+								<Link 
+									key={idx}
+									to={cat.path}
+									className="mobile-cat-link"
+									onClick={() => setIsOpen(false)}
+								>
+									{cat.name}
+								</Link>
+							))}
+							{christmasMode && (
+								<Link 
+									to="/christmas-offers"
+									className="mobile-cat-link offers"
+									onClick={() => setIsOpen(false)}
+								>
+									🎁 CHRISTMAS OFFERS
+								</Link>
+							)}
+						</div>
+					</div>
+				)}
+			</header>
 		</>
 	);
 }
