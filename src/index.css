@@ -856,6 +856,21 @@ img {
   object-fit: cover;
 }
 
+/* Snowflake falling animation */
+@keyframes fall {
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) translateX(var(--wobble, 0));
+    opacity: 0;
+  }
+}
+
 /* Prevent zoom-out text overflow */
 @media (max-width: 768px) {
   [class*="text-"] {
