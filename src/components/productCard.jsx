@@ -126,7 +126,7 @@ export default function ProductCard({ product }) {
 		>
 			{(discount || holidayMode) && (
 				<span className="absolute top-3 left-3 text-white text-xs font-semibold px-2 py-1 rounded-full shadow z-10 bg-red-600">
-					{holidayMode && discount ? `${Math.min(holidayDiscount, 25)}% OFF` : discount ? 'Sale' : holidayMode ? `${Math.min(holidayDiscount, 25)}% OFF` : ''}
+					{holidayMode ? `${holidayDiscount}% OFF` : discount ? 'Sale' : ''}
 				</span>
 			)}
 			
