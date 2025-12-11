@@ -158,7 +158,7 @@ const ChristmasGiftModal = () => {
 
       <div className="relative z-10 flex flex-col items-center justify-center gap-4 md:gap-6 px-4 w-full h-full">
         {/* Epic Title */}
-        <div className="absolute top-12 md:top-20 text-center select-none" style={{ animation: 'scale-in 1s ease-out' }}>
+        <div className="text-center select-none mb-8" style={{ animation: 'scale-in 1s ease-out' }}>
           <div className="text-5xl md:text-7xl lg:text-8xl font-black text-white drop-shadow-lg" style={{ fontFamily: "'Mountains of Christmas', cursive" }}>
             SPECIAL GIFT
           </div>
@@ -167,36 +167,37 @@ const ChristmasGiftModal = () => {
           </div>
         </div>
 
-        {/* 3D Gift Box - Auto rotating */}
-        {!isOpened ? (
-          <div
-            ref={presentRef}
-            className="gift-present"
-            style={{
-              animation: autoOpening ? 'scale-in 0.8s ease-out' : 'present-rotate 20s linear infinite, pulse-glow 2s ease-in-out infinite'
-            }}
-          >
-            <div className="wiggle-container">
-              <div className="rotate-container">
-                <div className="bottom"></div>
-                <div className="front"></div>
-                <div className="left"></div>
-                <div className="back"></div>
-                <div className="right"></div>
+        {/* 3D Gift Box Container - Properly centered */}
+        <div className="flex items-center justify-center flex-1 w-full">
+          {!isOpened ? (
+            <div
+              ref={presentRef}
+              className="gift-present"
+              style={{
+                animation: autoOpening ? 'scale-in 0.8s ease-out' : 'present-rotate 20s linear infinite, pulse-glow 2s ease-in-out infinite'
+              }}
+            >
+              <div className="wiggle-container">
+                <div className="rotate-container">
+                  <div className="bottom"></div>
+                  <div className="front"></div>
+                  <div className="left"></div>
+                  <div className="back"></div>
+                  <div className="right"></div>
 
-                <div className="lid">
-                  <div className="lid-top"></div>
-                  <div className="lid-front"></div>
-                  <div className="lid-left"></div>
-                  <div className="lid-back"></div>
-                  <div className="lid-right"></div>
+                  <div className="lid">
+                    <div className="lid-top"></div>
+                    <div className="lid-front"></div>
+                    <div className="lid-left"></div>
+                    <div className="lid-back"></div>
+                    <div className="lid-right"></div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        ) : (
-          // Opened Gift - Show Discount with Epic Effect
-          <div className="flex flex-col items-center justify-center gap-4 relative z-10" style={{ animation: 'scale-in 0.6s ease-out' }}>
+          ) : (
+            // Opened Gift - Show Discount with Epic Effect
+            <div className="flex flex-col items-center justify-center gap-4 relative z-10" style={{ animation: 'scale-in 0.6s ease-out' }}>
             {/* Explosion Effect */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
               <div className="text-8xl md:text-9xl animate-ping absolute">✨</div>
