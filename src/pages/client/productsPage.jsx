@@ -187,9 +187,7 @@ export default function ProductsPage() {
 			.catch(()=> toast.error('Failed to load categories'));
 		const c = searchParams.get('category');
 		if(c){ setCategory(c); }
-	},[]);
-
-  const filtered = useMemo(()=> {
+	},[searchParams]);  const filtered = useMemo(()=> {
     if (!Array.isArray(products)) return [];
     if(category==='all') return products;
     return products.filter(p=> p.category && p.category.toLowerCase() === category.toLowerCase());

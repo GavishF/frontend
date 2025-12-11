@@ -143,15 +143,23 @@ export default function SettingsAdmin(){
 
             {/* Holiday Discount */}
             <div>
-              <PeppermintSlider 
-                value={holidayDiscount}
-                onChange={setHolidayDiscount}
-                min={0}
-                max={100}
-                label="Holiday Discount (%)"
-                accentColor="#dc2626"
-              />
-              <p className='text-xs text-red-200 mt-1'>Applied to all products</p>
+              <div className='text-sm font-semibold text-white block mb-2'>Holiday Discount - Max 25%</div>
+              <div className='flex gap-2'>
+                {[5, 10, 15, 20, 25].map(val => (
+                  <button
+                    key={val}
+                    onClick={() => setHolidayDiscount(val)}
+                    className={`flex-1 py-2 rounded font-semibold transition ${
+                      holidayDiscount === val
+                        ? 'bg-red-600 text-white'
+                        : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                    }`}
+                  >
+                    {val}%
+                  </button>
+                ))}
+              </div>
+              <p className='text-xs text-red-200 mt-2'>Max discount is capped at 25% - does not stack with product discounts</p>
             </div>
 
             {/* Snowflakes */}

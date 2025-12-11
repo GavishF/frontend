@@ -12,7 +12,8 @@ export function HolidayProvider({ children }) {
       try {
         const response = await getHolidayStatus();
         setHolidayMode(response.data.enabled);
-        setDiscount(response.data.discount);
+        // Cap discount at 25% max
+        setDiscount(Math.min(response.data.discount, 25));
         localStorage.setItem('holidayMode', JSON.stringify(response.data));
       } catch (error) {
         console.log('Could not fetch Holiday status, checking localStorage');
@@ -21,7 +22,8 @@ export function HolidayProvider({ children }) {
           try {
             const data = JSON.parse(stored);
             setHolidayMode(data.enabled);
-            setDiscount(data.discount);
+            // Cap discount at 25% max
+            setDiscount(Math.min(data.discount, 25));
           } catch (e) {
             // Default to holiday mode enabled for development
             setHolidayMode(true);
