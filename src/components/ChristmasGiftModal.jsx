@@ -233,13 +233,13 @@ const ChristmasGiftModal = () => {
               />
             ))}
           </div>
-        )}
-
+          )}
+        </div>
         {/* Close Button - Only show after opened */}
         {isOpened && (
           <button
             onClick={handleClose}
-            className="absolute bottom-10 md:bottom-16 px-10 py-4 bg-gradient-to-r from-yellow-300 to-yellow-400 text-red-700 font-black rounded-full hover:from-yellow-200 hover:to-yellow-300 transition shadow-xl text-xl md:text-2xl transform hover:scale-105"
+            className="mt-8 px-10 py-4 bg-gradient-to-r from-yellow-300 to-yellow-400 text-red-700 font-black rounded-full hover:from-yellow-200 hover:to-yellow-300 transition shadow-xl text-xl md:text-2xl transform hover:scale-105"
             style={{ animation: 'scale-in 0.6s ease-out 0.3s both' }}
           >
             Claim Now! 🎁
@@ -248,7 +248,7 @@ const ChristmasGiftModal = () => {
 
         {/* Auto-opening indicator */}
         {!isOpened && !autoOpening && (
-          <div className="absolute bottom-10 text-white/70 text-sm md:text-base text-center animate-pulse">
+          <div className="mt-6 text-white/70 text-sm md:text-base text-center animate-pulse">
             Opening in moments...
           </div>
         )}

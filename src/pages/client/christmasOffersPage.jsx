@@ -4,8 +4,9 @@ import SpinTheWheel from '../../components/SpinTheWheel';
 import GiftFinder from '../../components/GiftFinder';
 import LimitedSpots from '../../components/LimitedSpots';
 import CountdownBanner from '../../components/CountdownBanner';
+import ChristmasCalendar from '../../components/ChristmasCalendar';
 import Footer from '../../components/Footer';
-import { FaGift, FaFire, FaSnowflake, FaStar, FaWineGlass } from 'react-icons/fa';
+import { FaGift, FaFire, FaSnowflake, FaStar, FaWineGlass, FaClock } from 'react-icons/fa';
 import './christmasOffersPage.css';
 
 export default function ChristmasOffersPage() {
@@ -283,6 +284,22 @@ export default function ChristmasOffersPage() {
                     <h3 className="text-xl font-bold mb-2">🎁 What if I win?</h3>
                     <p>Your discount code will appear instantly. Copy it and use it in your checkout for instant savings!</p>
                   </div>
+                </div>
+              </div>
+
+              {/* Advent Calendar */}
+              <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-12 border-4 border-green-200">
+                <div className="flex items-center gap-4 mb-6">
+                  <FaClock className="text-4xl text-green-600" />
+                  <h2 className="text-3xl md:text-4xl font-black text-green-600">
+                    📅 Advent Calendar
+                  </h2>
+                </div>
+                <p className="text-gray-700 mb-8 text-lg">
+                  Open a door each day from December 1-25 to reveal exclusive discounts! Log in daily for your surprise reward.
+                </p>
+                <div className="overflow-x-auto pb-4">
+                  <ChristmasCalendar />
                 </div>
               </div>
             </div>
