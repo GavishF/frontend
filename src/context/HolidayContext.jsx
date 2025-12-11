@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { getHolidayStatus } from '../services/holiday';
+import { getItem, setItem } from '../utils/safeStorage';
 
 export const HolidayContext = createContext();
 
@@ -14,10 +15,10 @@ export function HolidayProvider({ children }) {
         setHolidayMode(response.data.enabled);
         // Cap discount at 25% max
         setDiscount(Math.min(response.data.discount, 25));
-        localStorage.setItem('holidayMode', JSON.stringify(response.data));
+        setItem('holidayMode', JSON.stringify(response.data));
       } catch (error) {
-        console.log('Could not fetch Holiday status, checking localStorage');
-        const stored = localStorage.getItem('holidayMode');
+        console.log('Could not fetch Holiday status, checking storage');
+        const stored = getItem('holidayMode');
         if (stored) {
           try {
             const data = JSON.parse(stored);

@@ -24,7 +24,7 @@ export default function UpdateProductPage() {
 
     useEffect(() => {
         axios
-            .get(import.meta.env.VITE_BACKEND_URL + "/api/categories")
+            .get(import.meta.env.VITE_BACKEND_URL + "/api/products/categories")
             .then((r) => {
                 const filtered = r.data.filter(c => c.slug !== 'kids');
                 setCategories(filtered);

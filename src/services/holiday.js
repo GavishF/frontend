@@ -1,12 +1,13 @@
 import client from './client';
+import { getItem, setItem } from '../utils/safeStorage';
 
 export const getHolidayStatus = async () => {
   try {
     const response = await client.get('/api/holiday/status');
     return response;
   } catch (error) {
-    console.log('Could not fetch from API, using localStorage fallback');
-    const stored = localStorage.getItem('holidayMode');
+    console.log('Could not fetch from API, using storage fallback');
+    const stored = getItem('holidayMode');
     if (stored) {
       return { data: JSON.parse(stored) };
     }
@@ -17,7 +18,7 @@ export const getHolidayStatus = async () => {
 export const setHolidaySettings = async (settings) => {
   try {
     const response = await client.post('/api/holiday/toggle', settings);
-    localStorage.setItem('holidayMode', JSON.stringify(response.data.mode || settings));
+    setItem('holidayMode', JSON.stringify(response.data.mode || settings));
     return response;
   } catch (error) {
     throw new Error('Failed to update holiday settings');

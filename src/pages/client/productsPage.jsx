@@ -181,7 +181,7 @@ export default function ProductsPage() {
 	}, [query, category]);
 
 	useEffect(()=>{
-		axios.get(import.meta.env.VITE_BACKEND_URL + '/api/categories')
+		axios.get(import.meta.env.VITE_BACKEND_URL + '/api/products/categories')
 			.then(r=> setCategories(Array.isArray(r.data) ? r.data : []))
 			.catch(()=> toast.error('Failed to load categories'));
 		const c = searchParams.get('category');

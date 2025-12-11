@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useHoliday } from '../context/HolidayContext';
+import { getItem, setItem } from '../utils/safeStorage';
 import { FaClock } from 'react-icons/fa';
 import './ChristmasCalendar.css';
 
@@ -17,7 +18,7 @@ const ChristmasCalendar = () => {
     const today = new Date();
     const dayOfMonth = today.getDate();
 
-    const storedData = localStorage.getItem('holidayCalendar');
+    const storedData = getItem('holidayCalendar');
     if (storedData) {
       const data = JSON.parse(storedData);
       setCalendarData(data);
@@ -31,7 +32,7 @@ const ChristmasCalendar = () => {
         startDay: dayOfMonth,
         rewards: generateRewards()
       };
-      localStorage.setItem('christmasCalendar', JSON.stringify(newData));
+      setItem('christmasCalendar', JSON.stringify(newData));
       setCalendarData(newData);
     }
   }, [holidayMode]);
@@ -77,7 +78,7 @@ const ChristmasCalendar = () => {
       return;
     }
 
-    const data = JSON.parse(localStorage.getItem('holidayCalendar') || '{}');
+    const data = JSON.parse(getItem('holidayCalendar') || '{}');
     
     // Calculate streak
     let newStreak = data.streak || 0;
@@ -91,7 +92,7 @@ const ChristmasCalendar = () => {
     data.streak = newStreak;
     data.claimedDays = [...(data.claimedDays || []), day];
 
-    localStorage.setItem('holidayCalendar', JSON.stringify(data));
+    setItem('holidayCalendar', JSON.stringify(data));
     setUserStreak(newStreak);
     setClaimedToday(true);
     setOpenDay(day);

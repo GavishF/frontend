@@ -218,7 +218,7 @@ export default function AddProductPage() {
 	useEffect(() => {
 		const token = getItem("token");
 		axios
-			.get(import.meta.env.VITE_BACKEND_URL + "/api/categories")
+			.get(import.meta.env.VITE_BACKEND_URL + "/api/products/categories")
 			.then((r) => setCategories(r.data))
 			.catch(() => {});
 		axios
