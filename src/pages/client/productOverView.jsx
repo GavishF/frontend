@@ -263,11 +263,12 @@ export default function ProductOverViewPage() {
 						</div>
 					)}
 					
-					{/* Size Selection */}
-					<div className="mt-4">
-						<h3 className="text-sm font-semibold text-black mb-3">Size</h3>
-						<div className="flex flex-wrap gap-2">
-							{['UK 6', 'UK 8', 'UK 10', 'UK 12', 'UK 14', 'UK 16'].map(size => (
+				{/* Size Selection */}
+				<div className="mt-4">
+					<h3 className="text-sm font-semibold text-black mb-3">Size</h3>
+					<div className="flex flex-wrap gap-2">
+						{product.sizes && product.sizes.length > 0 ? (
+							product.sizes.map(size => (
 								<button
 									key={size}
 									onClick={() => setSelectedSize(size)}
@@ -279,42 +280,34 @@ export default function ProductOverViewPage() {
 								>
 									{size}
 								</button>
-							))}
-						</div>
+							))
+						) : (
+							<p className="text-sm text-gray-500">No sizes available</p>
+						)}
 					</div>
-					
-					{/* Color Selection */}
-					<div className="mt-4">
-						<h3 className="text-sm font-semibold text-black mb-3">Color</h3>
-						<div className="flex gap-3">
-							<button
-								onClick={() => setSelectedColor('blue')}
-								className={`w-10 h-10 rounded-md border-2 transition ${
-									selectedColor === 'blue' ? 'border-black ring-2 ring-black ring-offset-2' : 'border-gray-300'
-								}`}
-								style={{backgroundColor: '#4169E1'}}
-								title="Blue"
-							/>
-							<button
-								onClick={() => setSelectedColor('black')}
-								className={`w-10 h-10 rounded-md border-2 transition ${
-									selectedColor === 'black' ? 'border-black ring-2 ring-black ring-offset-2' : 'border-gray-300'
-								}`}
-								style={{backgroundColor: '#000000'}}
-								title="Black"
-							/>
-							<button
-								onClick={() => setSelectedColor('white')}
-								className={`w-10 h-10 rounded-md border-2 transition ${
-									selectedColor === 'white' ? 'border-black ring-2 ring-black ring-offset-2' : 'border-gray-300'
-								}`}
-								style={{backgroundColor: '#FFFFFF'}}
-								title="White"
-							/>
-						</div>
+			</div>					{/* Color Selection */}
+				<div className="mt-4">
+					<h3 className="text-sm font-semibold text-black mb-3">Color</h3>
+					<div className="flex gap-3 flex-wrap">
+						{product.colors && product.colors.length > 0 ? (
+							product.colors.map(color => (
+								<button
+									key={color}
+									onClick={() => setSelectedColor(color)}
+									className={`w-10 h-10 rounded-md border-2 transition ${
+										selectedColor === color ? 'border-black ring-2 ring-black ring-offset-2' : 'border-gray-300'
+									}`}
+									style={{
+										backgroundColor: color.startsWith('#') ? color : color.toLowerCase(),
+									}}
+									title={color}
+								/>
+							))
+						) : (
+							<p className="text-sm text-gray-500">No colors available</p>
+						)}
 					</div>
-					
-					<p className="text-sm text-gray-700 leading-relaxed mt-4">
+				</div>					<p className="text-sm text-gray-700 leading-relaxed mt-4">
 						{product.description}
 					</p>
 					
