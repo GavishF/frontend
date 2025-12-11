@@ -201,7 +201,7 @@ export default function ProductOverViewPage() {
 	// render
 	return (
 		<div className="w-full min-h-screen bg-white text-black">
-			{status === "loading" && (christmasMode ? <ChristmasStarLoader /> : <Loader />)}
+			{status === "loading" && (holidayMode ? <ChristmasStarLoader /> : <Loader />)}
 			{status === "success" && (
 				<div className="w-full h-full flex flex-col">
 				{/* Image Section - Full Width */}

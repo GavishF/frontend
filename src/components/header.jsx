@@ -7,7 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { syncCartCount } from "../utils/cart";
 import { isAdminToken } from "../utils/auth";
 import { getItem, removeItem } from "../utils/safeStorage.js";
-import { useChristmas } from "../context/ChristmasContext";
+import { useHoliday } from "../context/HolidayContext";
 import "./header.css";
 
 export default function Header() {
@@ -68,7 +68,7 @@ export default function Header() {
 		return ()=> document.removeEventListener('keydown', onKey)
 	},[])
 
-	const { christmasMode, discount: christmasDiscount } = useChristmas();
+	const { holidayMode, discount: holidayDiscount } = useHoliday();
 
 	const handleSearch = (e) => {
 		e.preventDefault();
@@ -82,19 +82,14 @@ export default function Header() {
 		{ name: "BEST SELLERS", path: "/products?category=bestsellers" },
 		{ name: "WOMEN", path: "/products?category=women" },
 		{ name: "MEN", path: "/products?category=men" },
-		{ name: "KIDS", path: "/products?category=kids" },
-		{ name: "HOME & DECOR", path: "/products?category=home" },
-		{ name: "PERSONAL CARE", path: "/products?category=personal" },
-		{ name: "TRAVEL GEAR", path: "/products?category=travel" },
-		{ name: "MOTHER & BABYCARE", path: "/products?category=baby" },
 		{ name: "GIFT CARDS", path: "/products?category=giftcards" },
 	];
 
 	return (
 		<>
-			{christmasMode && (
+			{holidayMode && (
 				<div className="header-promo">
-					🎄 CHRISTMAS SALE - {christmasDiscount}% OFF ON ALL ITEMS! 🎅
+					🎉 HOLIDAY SALE - {holidayDiscount}% OFF ON ALL ITEMS! 🎊
 				</div>
 			)}
 			
@@ -180,14 +175,14 @@ export default function Header() {
 						>
 							{cat.name}
 						</Link>
-					))}
-					{christmasMode && (
+						))}
+					{holidayMode && (
 						<Link 
-							to="/christmas-offers"
-							className="nav-link christmas-link"
-							title="Christmas Offers & Games"
+							to="/holiday-offers"
+							className="nav-link holiday-link"
+							title="Holiday Offers & Games"
 						>
-							🎄 CHRISTMAS
+							🎉 HOLIDAYS
 						</Link>
 					)}
 					{isAdmin && (
@@ -215,13 +210,13 @@ export default function Header() {
 									{cat.name}
 								</Link>
 							))}
-							{christmasMode && (
+							{holidayMode && (
 								<Link 
-									to="/christmas-offers"
-									className="mobile-cat-link christmas-link"
+									to="/holiday-offers"
+									className="mobile-cat-link holiday-link"
 									onClick={() => setIsOpen(false)}
 								>
-									🎄 CHRISTMAS OFFERS
+									🎉 HOLIDAY OFFERS
 								</Link>
 							)}
 							{isAdmin && (

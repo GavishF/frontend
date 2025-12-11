@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { ChristmasContext } from '../context/ChristmasContext';
+import { HolidayContext } from '../context/HolidayContext';
 import './CountdownBanner.css';
 
 function CountdownBannerContent() {
@@ -82,9 +82,9 @@ function CountdownBannerContent() {
 }
 
 export default function CountdownBanner() {
-  const { christmasMode } = useContext(ChristmasContext);
+  const { holidayMode } = useContext(HolidayContext);
   
-  if (!christmasMode) return null;
+  if (!holidayMode) return null;
   
   return <CountdownBannerContent />;
 }

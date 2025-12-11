@@ -147,8 +147,8 @@ function ProductsLoader({ fadeOut, products }) {
 }
 
 export default function ProductsPage() {
-	const christmasContext = useChristmas();
-	const christmasMode = christmasContext?.christmasMode || false;
+	const holidayContext = useHoliday();
+	const holidayMode = holidayContext?.holidayMode || false;
 	const [products, setProducts] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [fadeLoader, setFadeLoader] = useState(false);
@@ -197,7 +197,7 @@ export default function ProductsPage() {
 
 	return (
 		<div className="w-full min-h-screen flex flex-col bg-white">
-			{loading && (christmasMode ? <ChristmasStarLoader /> : <ProductsLoader fadeOut={fadeLoader} products={products} />)}
+			{loading && (holidayMode ? <ChristmasStarLoader /> : <ProductsLoader fadeOut={fadeLoader} products={products} />)}
 			
 			{/* Header Section */}
 			<div className="w-full bg-gradient-to-br from-white to-gray-50 border-b border-gray-200 sticky top-0 z-30">

@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import { ChristmasContext } from '../context/ChristmasContext';
+import { HolidayContext } from '../context/HolidayContext';
 import './GiftFinder.css';
 
 function GiftFinderContent() {
@@ -170,9 +170,9 @@ function GiftFinderContent() {
 }
 
 export default function GiftFinder() {
-  const { christmasMode } = useContext(ChristmasContext);
+  const { holidayMode } = useContext(HolidayContext);
   
-  if (!christmasMode) return null;
+  if (!holidayMode) return null;
   
   return <GiftFinderContent />;
 }

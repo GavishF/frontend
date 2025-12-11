@@ -88,8 +88,8 @@ function MatrixRainLoader({ fadeOut }) {
 }
 
 export default function AdminPage() {
-    const christmasContext = useChristmas();
-    const christmasMode = christmasContext?.christmasMode || false;
+    const holidayContext = useHoliday();
+    const holidayMode = holidayContext?.holidayMode || false;
     const navigate = useNavigate();
     const [adminValidated, setAdminValidated] = useState(false);
     const [showLoader, setShowLoader] = useState(true);
@@ -127,7 +127,7 @@ export default function AdminPage() {
 
     return (
         <div className="w-full h-screen flex bg-white text-black overflow-hidden">
-            {showLoader && (christmasMode ? <ChristmasStarLoader /> : <MatrixRainLoader fadeOut={fadeLoader} />)}
+            {showLoader && (holidayMode ? <ChristmasStarLoader /> : <MatrixRainLoader fadeOut={fadeLoader} />)}
             {adminValidated ? <>
                 <div className="w-[300px] h-full flex flex-col items-center bg-white text-black shadow-2xl border-r border-gray-300 relative">
                     <span className="text-3xl admin-heading font-extrabold my-6 tracking-wide text-black relative z-10">Admin Panel</span>

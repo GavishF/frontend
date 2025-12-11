@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import toast from 'react-hot-toast';
 import axios from 'axios';
-import { ChristmasContext } from '../context/ChristmasContext';
+import { HolidayContext } from '../context/HolidayContext';
 import './SpinTheWheel.css';
 
 function SpinTheWheelContent() {
@@ -133,9 +133,9 @@ function SpinTheWheelContent() {
 }
 
 export default function SpinTheWheel() {
-  const { christmasMode } = useContext(ChristmasContext);
+  const { holidayMode } = useContext(HolidayContext);
   
-  if (!christmasMode) return null;
+  if (!holidayMode) return null;
   
   return <SpinTheWheelContent />;
 }

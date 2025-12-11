@@ -13,7 +13,7 @@ import GiftFinder from '../../components/GiftFinder';
 import LimitedSpots from '../../components/LimitedSpots';
 import { PiHandSwipeLeftDuotone } from 'react-icons/pi';
 import { getItem as safeGetItem, setItem as safeSetItem, getItem } from '../../utils/safeStorage';
-import { ChristmasContext } from '../../context/ChristmasContext';
+import { HolidayContext } from '../../context/HolidayContext';
 
 const slideImages = ['/slide1.jpg','/slide2.jpg','/slide3.jpg'];
 
@@ -345,7 +345,7 @@ function FeaturedStrip(){
 }
 
 export default function HomeLanding(){
-  const { christmasMode } = useContext(ChristmasContext);
+  const { holidayMode } = useContext(HolidayContext);
   const calendarRef = useRef(null);
   
   useEffect(()=>{ const stop = startSocialProof(15000); return ()=> stop && stop(); }, []);
@@ -360,8 +360,8 @@ export default function HomeLanding(){
       }
     };
     
-    window.addEventListener('christmasgift:close', handleGiftClose);
-    return () => window.removeEventListener('christmasgift:close', handleGiftClose);
+    window.addEventListener('holidaygift:close', handleGiftClose);
+    return () => window.removeEventListener('holidaygift:close', handleGiftClose);
   }, []);
   
   return (
@@ -410,35 +410,35 @@ export default function HomeLanding(){
       {/* Feature cards */}
       <FeaturesCarousel />
 
-      {/* Countdown Timer - Only in Christmas Mode */}
-      {christmasMode && <CountdownBanner />}
+      {/* Countdown Timer - Only in Holiday Mode */}
+      {holidayMode && <CountdownBanner />}
 
       {/* Featured products */}
       <FeaturedStrip />
 
-      {/* Christmas Advent Calendar - Only in Christmas Mode */}
-      {christmasMode && (
+      {/* Holiday Advent Calendar - Only in Holiday Mode */}
+      {holidayMode && (
         <div ref={calendarRef}>
           <ChristmasCalendar />
         </div>
       )}
 
-      {/* Spin the Wheel - Only in Christmas Mode */}
-      {christmasMode && (
+      {/* Spin the Wheel - Only in Holiday Mode */}
+      {holidayMode && (
         <div className="max-w-7xl mx-auto px-4 md:px-6 py-8">
           <SpinTheWheel />
         </div>
       )}
 
-      {/* Gift Finder - Only in Christmas Mode */}
-      {christmasMode && (
+      {/* Gift Finder - Only in Holiday Mode */}
+      {holidayMode && (
         <div className="max-w-7xl mx-auto px-4 md:px-6 py-8">
           <GiftFinder />
         </div>
       )}
 
-      {/* Limited Spots Contest - Only in Christmas Mode */}
-      {christmasMode && (
+      {/* Limited Spots Contest - Only in Holiday Mode */}
+      {holidayMode && (
         <div className="max-w-7xl mx-auto px-4 md:px-6 py-8">
           <LimitedSpots />
         </div>

@@ -28,7 +28,7 @@ export default function ChristmasOffersPage() {
       delay: Math.random() * 0.5,
       duration: 2 + Math.random() * 1,
       size: 8 + Math.random() * 12,
-      emoji: ['🎄', '🎁', '🎅', '⛄', '❄️', '🔔', '✨'][Math.floor(Math.random() * 7)]
+      emoji: ['🎉', '🎁', '🎊', '✨', '⭐', '🎈', '💫'][Math.floor(Math.random() * 7)]
     }));
     setConfetti(newConfetti);
   };
@@ -265,8 +265,8 @@ export default function ChristmasOffersPage() {
                 <h2 className="text-3xl font-bold mb-6">❓ FAQ & Help</h2>
                 <div className="space-y-6">
                   <div>
-                    <h3 className="text-xl font-bold mb-2">🎄 When is Christmas Mode?</h3>
-                    <p>Christmas mode is active from December 1-25, featuring special offers and festive games!</p>
+                    <h3 className="text-xl font-bold mb-2">🎉 When is Holiday Mode?</h3>
+                    <p>Holiday mode is active seasonally from December 1-25, featuring special offers and festive games for everyone!</p>
                   </div>
                   <div>
                     <h3 className="text-xl font-bold mb-2">🎫 Can I use multiple codes?</h3>

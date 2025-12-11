@@ -95,7 +95,7 @@ export default function GlobalLoader(){
 
   if(!visible) return null;
   
-  if(christmasMode) return <ChristmasStarLoader />;
+  if(holidayMode) return <ChristmasStarLoader />;
   
   return (
     <div className={`n-loader-overlay ${active ? 'entering' : 'leaving'}`}>

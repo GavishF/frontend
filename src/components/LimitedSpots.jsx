@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import { ChristmasContext } from '../context/ChristmasContext';
+import { HolidayContext } from '../context/HolidayContext';
 import './LimitedSpots.css';
 
 function LimitedSpotsContent() {
@@ -148,9 +148,9 @@ function LimitedSpotsContent() {
 }
 
 export default function LimitedSpots() {
-  const { christmasMode } = useContext(ChristmasContext);
+  const { holidayMode } = useContext(HolidayContext);
   
-  if (!christmasMode) return null;
+  if (!holidayMode) return null;
   
   return <LimitedSpotsContent />;
 }
