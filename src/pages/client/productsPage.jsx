@@ -189,7 +189,10 @@ export default function ProductsPage() {
 	},[searchParams]);  const filtered = useMemo(()=> {
     if (!Array.isArray(products)) return [];
     if(category==='all') return products;
-    return products.filter(p=> p.category && p.category.toLowerCase() === category.toLowerCase());
+    return products.filter(p=> {
+      if (!p.category || !Array.isArray(p.category)) return false;
+      return p.category.some(cat => cat.toLowerCase() === category.toLowerCase());
+    });
   }, [products, category]);
 
 	return (

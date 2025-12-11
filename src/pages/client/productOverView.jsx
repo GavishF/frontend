@@ -79,8 +79,8 @@ export default function ProductOverViewPage() {
 				}
 			}
 			// related
-			if(res.data?.category){
-				axios.get(import.meta.env.VITE_BACKEND_URL + `/api/products?category=${res.data.category}`)
+			if(res.data?.category && Array.isArray(res.data.category) && res.data.category.length > 0){
+				axios.get(import.meta.env.VITE_BACKEND_URL + `/api/products?category=${res.data.category[0]}`)
 					.then(rr => setRelated(rr.data.filter(p => String(p._id) !== String(res.data._id)).slice(0,6)))
 					.catch(()=>{});
 			}

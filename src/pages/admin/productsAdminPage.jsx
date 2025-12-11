@@ -115,7 +115,9 @@ export default function ProductsAdminPage() {
 									<td className="p-[10px] text-black">{product.name}</td>
 									<td className="p-[10px] text-black">{product.price}</td>
 									<td className="p-[10px] text-black">{product.labelledPrice}</td>
-									<td className="p-[10px] text-black">{product.category}</td>
+									<td className="p-[10px] text-black">
+										{product.category && Array.isArray(product.category) ? product.category.join(', ') : (product.category || 'N/A')}
+									</td>
 									<td className="p-[10px] text-black">{product.stock}</td>
 									<td className="p-[10px] flex flex-row justify-center items-center">
 									<MdDelete

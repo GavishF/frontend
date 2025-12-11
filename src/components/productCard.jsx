@@ -158,11 +158,15 @@ export default function ProductCard({ product }) {
 			<div className="flex flex-col p-4 gap-2">
 				<div className="flex justify-between items-start">
 					<span className="text-neutral-400 text-[11px] tracking-wide">{product._id}</span>
-					{product.category && (
+					{product.category && Array.isArray(product.category) && product.category.length > 0 ? (
+						<span className="text-[10px] px-2 py-1 rounded-md bg-gray-100 border border-gray-300 group-hover:border-red-600 transition-colors text-gray-700">
+							{product.category[0]}
+						</span>
+					) : product.category && typeof product.category === 'string' ? (
 						<span className="text-[10px] px-2 py-1 rounded-md bg-gray-100 border border-gray-300 group-hover:border-red-600 transition-colors text-gray-700">
 							{product.category}
 						</span>
-					)}
+					) : null}
 				</div>
 				<h2 className="text-sm font-semibold leading-snug line-clamp-2">{product.name}</h2>
 
