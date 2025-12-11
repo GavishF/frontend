@@ -19,7 +19,8 @@ export default function ClientWebPage() {
 			<div className="w-full h-[calc(100%-100px)] ">
 				<Routes path="/">
 					<Route path="/" element={<HomeLanding />} />
-					<Route path="/christmas-offers" element={<ChristmasOffersPage />} />
+					<Route path="/holiday-offers" element={<ChristmasOffersPage />} />
+				<Route path="/christmas-offers" element={<ChristmasOffersPage />} />
 					<Route
 						path="/products"
 						element={<ProductsPage/>}

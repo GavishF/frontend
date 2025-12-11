@@ -1,12 +1,12 @@
 import React from 'react';
 import ChristmasStarLoader from './ChristmasStarLoader';
-import { useChristmas } from '../context/ChristmasContext';
+import { useHoliday } from '../context/HolidayContext';
 
 export default function Loader(){
-  const christmasContext = useChristmas();
-  const christmasMode = christmasContext?.christmasMode || false;
+  const holidayContext = useHoliday();
+  const holidayMode = holidayContext?.holidayMode || false;
   
-  if(christmasMode) return <ChristmasStarLoader />;
+  if(holidayMode) return <ChristmasStarLoader />;
   
   // Exclude admin routes: show no normal loader on /admin pages
   if (typeof window !== 'undefined') {

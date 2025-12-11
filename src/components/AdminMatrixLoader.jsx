@@ -1,13 +1,13 @@
 import { useEffect, useRef } from 'react';
 import { MdAdminPanelSettings } from 'react-icons/md';
 import ChristmasStarLoader from './ChristmasStarLoader';
-import { useChristmas } from '../context/ChristmasContext';
+import { useHoliday } from '../context/HolidayContext';
 
 export default function AdminMatrixLoader() {
-  const christmasContext = useChristmas();
-  const christmasMode = christmasContext?.christmasMode || false;
+  const holidayContext = useHoliday();
+  const holidayMode = holidayContext?.holidayMode || false;
   
-  if(christmasMode) return <ChristmasStarLoader />;
+  if(holidayMode) return <ChristmasStarLoader />;
   const canvasRef = useRef(null);
 
   useEffect(() => {

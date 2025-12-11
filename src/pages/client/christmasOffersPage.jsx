@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { ChristmasContext } from '../../context/ChristmasContext';
+import { HolidayContext } from '../../context/HolidayContext';
 import SpinTheWheel from '../../components/SpinTheWheel';
 import GiftFinder from '../../components/GiftFinder';
 import LimitedSpots from '../../components/LimitedSpots';
@@ -10,16 +10,16 @@ import { FaGift, FaFire, FaSnowflake, FaStar, FaWineGlass, FaClock } from 'react
 import './christmasOffersPage.css';
 
 export default function ChristmasOffersPage() {
-  const { christmasMode, discount } = useContext(ChristmasContext);
+  const { holidayMode, discount } = useContext(HolidayContext);
   const [activeTab, setActiveTab] = useState('games');
   const [confetti, setConfetti] = useState([]);
 
   useEffect(() => {
     // Create confetti on mount
-    if (christmasMode) {
+    if (holidayMode) {
       createConfetti();
     }
-  }, [christmasMode]);
+  }, [holidayMode]);
 
   const createConfetti = () => {
     const newConfetti = Array.from({ length: 50 }, () => ({
@@ -33,12 +33,12 @@ export default function ChristmasOffersPage() {
     setConfetti(newConfetti);
   };
 
-  if (!christmasMode) {
+  if (!holidayMode) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
         <div className="text-center">
-          <h1 className="text-4xl font-bold text-red-600 mb-4">🎄 Christmas Mode Disabled</h1>
-          <p className="text-gray-600">Christmas offers will be available soon!</p>
+          <h1 className="text-4xl font-bold text-red-600 mb-4">🎉 Holiday Season Offers</h1>
+          <p className="text-gray-600">Special seasonal offers will be available soon!</p>
         </div>
       </div>
     );
@@ -110,12 +110,12 @@ export default function ChristmasOffersPage() {
         
         <div className="text-center mt-12 px-4">
           <h1 className="text-5xl md:text-6xl font-black mb-4 text-transparent bg-clip-text bg-gradient-to-r from-red-600 via-pink-600 to-red-600 animate-pulse">
-            🎄 CHRISTMAS MAGIC 🎄
+            🎉 HOLIDAY MAGIC 🎉
           </h1>
           <p className="text-2xl md:text-3xl font-bold text-red-600 mb-2">
             Save up to {discount}% OFF on Everything!
           </p>
-          <p className="text-gray-600 text-lg">Limited time festive offers you won't want to miss</p>
+          <p className="text-gray-600 text-lg">Limited time seasonal offers you won't want to miss</p>
         </div>
 
         {/* Offer Cards Grid */}

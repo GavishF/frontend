@@ -1,23 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { useChristmas } from '../context/ChristmasContext';
+import { useHoliday } from '../context/HolidayContext';
 import { FaClock } from 'react-icons/fa';
 import './ChristmasCalendar.css';
 
 const ChristmasCalendar = () => {
-  const { christmasMode } = useChristmas();
+  const { holidayMode } = useHoliday();
   const [calendarData, setCalendarData] = useState(null);
   const [userStreak, setUserStreak] = useState(0);
   const [claimedToday, setClaimedToday] = useState(false);
   const [openDay, setOpenDay] = useState(null);
 
   useEffect(() => {
-    if (!christmasMode) return;
+    if (!holidayMode) return;
 
     // Initialize calendar data
     const today = new Date();
     const dayOfMonth = today.getDate();
 
-    const storedData = localStorage.getItem('christmasCalendar');
+    const storedData = localStorage.getItem('holidayCalendar');
     if (storedData) {
       const data = JSON.parse(storedData);
       setCalendarData(data);
@@ -34,7 +34,7 @@ const ChristmasCalendar = () => {
       localStorage.setItem('christmasCalendar', JSON.stringify(newData));
       setCalendarData(newData);
     }
-  }, [christmasMode]);
+  }, [holidayMode]);
 
   const generateRewards = () => {
     const rewards = [
@@ -77,7 +77,7 @@ const ChristmasCalendar = () => {
       return;
     }
 
-    const data = JSON.parse(localStorage.getItem('christmasCalendar') || '{}');
+    const data = JSON.parse(localStorage.getItem('holidayCalendar') || '{}');
     
     // Calculate streak
     let newStreak = data.streak || 0;
@@ -91,7 +91,7 @@ const ChristmasCalendar = () => {
     data.streak = newStreak;
     data.claimedDays = [...(data.claimedDays || []), day];
 
-    localStorage.setItem('christmasCalendar', JSON.stringify(data));
+    localStorage.setItem('holidayCalendar', JSON.stringify(data));
     setUserStreak(newStreak);
     setClaimedToday(true);
     setOpenDay(day);
@@ -101,7 +101,7 @@ const ChristmasCalendar = () => {
     }, 5000);
   };
 
-  if (!christmasMode || !calendarData) return null;
+  if (!holidayMode || !calendarData) return null;
 
   const today = new Date().getDate();
   const startDay = calendarData.startDay || 1;

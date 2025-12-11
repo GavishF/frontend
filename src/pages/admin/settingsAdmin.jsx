@@ -20,9 +20,9 @@ export default function SettingsAdmin(){
   const [promos, setPromos] = useState([]);
   const [broadcastSubj, setBroadcastSubj] = useState('');
   const [broadcastMsg, setBroadcastMsg] = useState('');
-  // Christmas Settings
-  const [christmasEnabled, setChristmasEnabled] = useState(true);
-  const [christmasDiscount, setChristmasDiscount] = useState(25);
+  // Holiday Settings
+  const [holidayEnabled, setHolidayEnabled] = useState(true);
+  const [holidayDiscount, setHolidayDiscount] = useState(25);
   const [snowflakesEnabled, setSnowflakesEnabled] = useState(true);
   const [spinWheelEnabled, setSpinWheelEnabled] = useState(true);
   const [giftFinderEnabled, setGiftFinderEnabled] = useState(true);
@@ -33,7 +33,7 @@ export default function SettingsAdmin(){
   const [surprisePopupEnabled, setSurprisePopupEnabled] = useState(true);
   const [surprisePopupFrequency, setSurprisePopupFrequency] = useState(5);
   const [adventCalendarEnabled, setAdventCalendarEnabled] = useState(true);
-  const [christmasTheme, setChristmasTheme] = useState('red'); // red, gold, silver, multicolor
+  const [holidayTheme, setHolidayTheme] = useState('red'); // red, gold, silver, multicolor
 
   useEffect(()=>{
     listPromos().then(r=> setPromos(r.data)).catch(()=>{});
@@ -45,13 +45,13 @@ export default function SettingsAdmin(){
       if(saved.bgMain) setBgMain(saved.bgMain);
       if(saved.textMain) setTextMain(saved.textMain);
     }catch(_){ }
-    // Load Christmas settings
+    // Load Holiday settings
     try{
-      const christmas = safeGetItem('christmasSettings');
-      if(christmas) {
-        const parsed = JSON.parse(christmas);
-        if(parsed.enabled !== undefined) setChristmasEnabled(parsed.enabled);
-        if(parsed.discount !== undefined) setChristmasDiscount(parsed.discount);
+      const holiday = safeGetItem('holidaySettings');
+      if(holiday) {
+        const parsed = JSON.parse(holiday);
+        if(parsed.enabled !== undefined) setHolidayEnabled(parsed.enabled);
+        if(parsed.discount !== undefined) setHolidayDiscount(parsed.discount);
         if(parsed.snowflakes !== undefined) setSnowflakesEnabled(parsed.snowflakes);
         if(parsed.spinWheel !== undefined) setSpinWheelEnabled(parsed.spinWheel);
         if(parsed.giftFinder !== undefined) setGiftFinderEnabled(parsed.giftFinder);
@@ -62,7 +62,7 @@ export default function SettingsAdmin(){
         if(parsed.popup !== undefined) setSurprisePopupEnabled(parsed.popup);
         if(parsed.popupFreq !== undefined) setSurprisePopupFrequency(parsed.popupFreq);
         if(parsed.advent !== undefined) setAdventCalendarEnabled(parsed.advent);
-        if(parsed.theme !== undefined) setChristmasTheme(parsed.theme);
+        if(parsed.theme !== undefined) setHolidayTheme(parsed.theme);
       }
     }catch(_){ }
   },[]);
@@ -81,12 +81,12 @@ export default function SettingsAdmin(){
     setTimeout(()=> setSaving(false), 600);
   }
 
-  function saveChristmasSettings(){
+  function saveHolidaySettings(){
     setSaving(true);
     try{
-      const christmasSettings = {
-        enabled: christmasEnabled,
-        discount: christmasDiscount,
+      const holidaySettings = {
+        enabled: holidayEnabled,
+        discount: holidayDiscount,
         snowflakes: snowflakesEnabled,
         spinWheel: spinWheelEnabled,
         giftFinder: giftFinderEnabled,
@@ -97,14 +97,14 @@ export default function SettingsAdmin(){
         popup: surprisePopupEnabled,
         popupFreq: surprisePopupFrequency,
         advent: adventCalendarEnabled,
-        theme: christmasTheme
+        theme: holidayTheme
       };
-      safeSetItem('christmasSettings', JSON.stringify(christmasSettings));
-      window.dispatchEvent(new Event('christmasSettingsUpdated'));
-      toast.success('Christmas settings saved');
+      safeSetItem('holidaySettings', JSON.stringify(holidaySettings));
+      window.dispatchEvent(new Event('holidaySettingsUpdated'));
+      toast.success('Holiday settings saved');
     }catch(e){ 
       console.error(e);
-      toast.error('Failed to save Christmas settings'); 
+      toast.error('Failed to save holiday settings'); 
     }
     setTimeout(()=> setSaving(false), 600);
   }
@@ -114,41 +114,41 @@ export default function SettingsAdmin(){
       <h1 className='text-2xl font-semibold mb-6 text-white'>Settings</h1>
       <div className='space-y-8'>
         
-        {/* CHRISTMAS SETTINGS SECTION */}
+        {/* HOLIDAY SETTINGS SECTION */}
         <div className='bg-gradient-to-r from-red-900 via-red-800 to-red-900 p-6 rounded-lg border-2 border-red-600'>
           <h2 className='text-xl font-bold mb-6 text-white flex items-center gap-2'>
-            ❄️ Christmas Mode Settings
+            🎉 Holiday Mode Settings
           </h2>
           
           <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
             
             {/* Master Enable */}
             <div>
-              <label className='text-sm font-semibold text-white block mb-2'>Enable Christmas Mode</label>
+              <label className='text-sm font-semibold text-white block mb-2'>Enable Holiday Mode</label>
               <div className='flex gap-3'>
                 <button 
-                  onClick={() => setChristmasEnabled(true)}
-                  className={`flex-1 py-2 rounded font-semibold transition ${christmasEnabled ? 'bg-green-500 text-white' : 'bg-gray-400 text-gray-700'}`}
+                  onClick={() => setHolidayEnabled(true)}
+                  className={`flex-1 py-2 rounded font-semibold transition ${holidayEnabled ? 'bg-green-500 text-white' : 'bg-gray-400 text-gray-700'}`}
                 >
                   ✓ ON
                 </button>
                 <button 
-                  onClick={() => setChristmasEnabled(false)}
-                  className={`flex-1 py-2 rounded font-semibold transition ${!christmasEnabled ? 'bg-red-500 text-white' : 'bg-gray-400 text-gray-700'}`}
+                  onClick={() => setHolidayEnabled(false)}
+                  className={`flex-1 py-2 rounded font-semibold transition ${!holidayEnabled ? 'bg-red-500 text-white' : 'bg-gray-400 text-gray-700'}`}
                 >
                   ✗ OFF
                 </button>
               </div>
             </div>
 
-            {/* Christmas Discount */}
+            {/* Holiday Discount */}
             <div>
               <PeppermintSlider 
-                value={christmasDiscount}
-                onChange={setChristmasDiscount}
+                value={holidayDiscount}
+                onChange={setHolidayDiscount}
                 min={0}
                 max={100}
-                label="Christmas Discount (%)"
+                label="Holiday Discount (%)"
                 accentColor="#dc2626"
               />
               <p className='text-xs text-red-200 mt-1'>Applied to all products</p>
@@ -173,12 +173,12 @@ export default function SettingsAdmin(){
               </div>
             </div>
 
-            {/* Christmas Theme */}
+            {/* Holiday Theme */}
             <div>
               <label className='text-sm font-semibold text-white block mb-2'>Color Theme</label>
               <select 
-                value={christmasTheme} 
-                onChange={e=> setChristmasTheme(e.target.value)}
+                value={holidayTheme} 
+                onChange={e=> setHolidayTheme(e.target.value)}
                 className='w-full h-10 rounded-md bg-white border-2 border-red-400 outline-none px-3 text-black font-semibold'
               >
                 <option value='red'>🔴 Red & Green</option>
@@ -333,10 +333,10 @@ export default function SettingsAdmin(){
 
           <button 
             disabled={saving} 
-            onClick={saveChristmasSettings} 
+            onClick={saveHolidaySettings} 
             className='mt-6 w-full px-6 py-3 rounded-md hover:opacity-90 disabled:opacity-60 text-sm font-semibold bg-green-600 text-white'
           >
-            {saving ? 'Saving...' : '💾 Save Christmas Settings'}
+            {saving ? 'Saving...' : '💾 Save Holiday Settings'}
           </button>
         </div>
 

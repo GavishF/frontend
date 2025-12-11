@@ -21,7 +21,7 @@ import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { getItem } from "../utils/safeStorage.js";
-import { useChristmas } from '../context/ChristmasContext';
+import { useHoliday } from '../context/HolidayContext';
 
 function MatrixRainLoader({ fadeOut }) {
     const canvasRef = useRef(null);

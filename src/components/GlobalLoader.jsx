@@ -1,12 +1,12 @@
 import { useEffect, useState, useRef } from 'react';
 import Loader from './loader';
 import ChristmasStarLoader from './ChristmasStarLoader';
-import { useChristmas } from '../context/ChristmasContext';
+import { useHoliday } from '../context/HolidayContext';
 import { useLocation } from 'react-router-dom';
 
 export default function GlobalLoader(){
-  const christmasContext = useChristmas();
-  const christmasMode = christmasContext?.christmasMode || false;
+  const holidayContext = useHoliday();
+  const holidayMode = holidayContext?.holidayMode || false;
   const location = useLocation();
   const [visible, setVisible] = useState(true); // currently mounted & fading
   const [active, setActive] = useState(true);   // animation phase

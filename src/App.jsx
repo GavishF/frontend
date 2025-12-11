@@ -14,12 +14,12 @@ import { init3DTyping } from "./utils/typing3d";
 import Snowflakes from "./components/Snowflakes";
 import ChristmasGiftModal from "./components/ChristmasGiftModal";
 import SurprisePopup from "./components/SurprisePopup";
-import { useChristmas } from "./context/ChristmasContext";
+import { useHoliday } from "./context/HolidayContext";
 
 const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 function AppContent() {
-	const { christmasMode } = useChristmas();
+	const { holidayMode } = useHoliday();
 
 	useEffect(() => {
 		const cleanup = init3DTyping();
@@ -28,7 +28,7 @@ function AppContent() {
 
 	return (
 		<GoogleOAuthProvider clientId={clientId}>
-			{christmasMode && <Snowflakes />}
+			{holidayMode && <Snowflakes />}
 			<ChristmasGiftModal />
 			<SurprisePopup />
 			<div className="w-full h-screen flex justify-center items-center text-secondary overflow-hidden transition-all duration-500 bg-primary">

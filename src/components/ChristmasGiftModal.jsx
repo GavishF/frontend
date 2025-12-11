@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useChristmas } from '../context/ChristmasContext';
+import { useHoliday } from '../context/HolidayContext';
 import './ChristmasGiftModal.css';
 
 const ChristmasGiftModal = () => {
@@ -8,17 +8,17 @@ const ChristmasGiftModal = () => {
   const [autoOpening, setAutoOpening] = useState(false);
   const canvasRef = useRef(null);
   const presentRef = useRef(null);
-  const { christmasMode, discount } = useChristmas();
+  const { holidayMode, discount } = useHoliday();
 
   useEffect(() => {
-    if (!christmasMode) return;
+    if (!holidayMode) return;
 
-    const hasSeenGift = sessionStorage.getItem('christmasGiftSeen');
+    const hasSeenGift = sessionStorage.getItem('holidayGiftSeen');
     if (!hasSeenGift) {
       setIsOpen(true);
-      sessionStorage.setItem('christmasGiftSeen', 'true');
+      sessionStorage.setItem('holidayGiftSeen', 'true');
     }
-  }, [christmasMode]);
+  }, [holidayMode]);
 
   // Auto-open after 9 seconds
   useEffect(() => {
@@ -107,10 +107,10 @@ const ChristmasGiftModal = () => {
   const handleClose = () => {
     setIsOpen(false);
     // Dispatch event to trigger calendar scroll
-    window.dispatchEvent(new CustomEvent('christmasgift:close'));
+    window.dispatchEvent(new CustomEvent('holidaygift:close'));
   };
 
-  if (!isOpen || !christmasMode) return null;
+  if (!isOpen || !holidayMode) return null;
 
   return (
     <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[10000] pointer-events-auto overflow-hidden backdrop-blur-sm">

@@ -4,7 +4,7 @@ import { addToWishlist, removeFromWishlist, isInWishlist } from '../utils/wishli
 import { playCardPackAnimation, playCartJourneyAnimation, playWishlistRemoveAnimation } from '../utils/cardAnimations';
 import toast from 'react-hot-toast';
 import { useState, useEffect, useRef } from 'react';
-import { useChristmas } from '../context/ChristmasContext';
+import { useHoliday } from '../context/HolidayContext';
 
 function Stars({ value, size = 12 }) {
 	const stars = [];
@@ -24,7 +24,7 @@ export default function ProductCard({ product }) {
 	const cardRef = useRef(null);
 	const navigate = useNavigate();
 	const productId = product._id || product.productId;
-	const { christmasMode, discount: christmasDiscount } = useChristmas();
+	const { holidayMode, discount: holidayDiscount } = useHoliday();
 	
 	useEffect(() => {
 		setInWishlist(isInWishlist(productId));
@@ -124,9 +124,9 @@ export default function ProductCard({ product }) {
 			onClick={handleCardClick}
 			className={`group w-[260px] h-[360px] flex flex-col shrink-0 rounded-2xl overflow-hidden border transition relative hover-lift cursor-pointer bg-white border-gray-200 hover:border-red-600 hover:shadow-xl`}
 		>
-			{(discount || christmasMode) && (
+			{(discount || holidayMode) && (
 				<span className="absolute top-3 left-3 text-white text-xs font-semibold px-2 py-1 rounded-full shadow z-10 bg-red-600">
-					{christmasMode && discount ? `${christmasDiscount + (product.labelledPrice - product.price) / product.labelledPrice * 100}% OFF` : discount ? 'Sale' : christmasMode ? `${christmasDiscount}% OFF` : ''}
+					{holidayMode && discount ? `${holidayDiscount + (product.labelledPrice - product.price) / product.labelledPrice * 100}% OFF` : discount ? 'Sale' : holidayMode ? `${holidayDiscount}% OFF` : ''}
 				</span>
 			)}
 			

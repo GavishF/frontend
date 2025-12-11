@@ -7,7 +7,7 @@ import ChristmasStarLoader from "../../components/ChristmasStarLoader";
 import ProductCard from "../../components/productCard";
 import ProductSkeleton from "../../components/productSkeleton";
 import Footer from "../../components/Footer";
-import { useChristmas } from "../../context/ChristmasContext";
+import { useHoliday } from "../../context/HolidayContext";
 import { FiShoppingBag } from "react-icons/fi";
 
 function ProductsLoader({ fadeOut, products }) {

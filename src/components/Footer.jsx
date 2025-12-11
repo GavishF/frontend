@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom';
 import { FiMail, FiPhone, FiMapPin, FiGlobe } from 'react-icons/fi';
-import { useChristmas } from '../context/ChristmasContext';
+import { useHoliday } from '../context/HolidayContext';
 
 export default function Footer() {
-  const { christmasMode } = useChristmas();
+  const { holidayMode, discount } = useHoliday();
   
   return (
     <footer className="bg-black text-white py-12 md:py-16 border-t border-gray-800 transition">
