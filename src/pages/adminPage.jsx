@@ -5,15 +5,6 @@ import { IoPeople } from "react-icons/io5";
 import { IoSettings } from "react-icons/io5";
 import { MdOutlineMail, MdAdminPanelSettings } from 'react-icons/md';
 import { BiCategory } from 'react-icons/bi';
-import ProductsAdminPage from "./admin/productsAdminPage";
-import AddProductPage from "./admin/addProductAdminPage";
-import UpdateProductPage from "./admin/updateProduct";
-import ContactsAdmin from './admin/contactsAdmin';
-import CategoriesAdmin from './admin/categoriesAdmin';
-import OrdersPageAdmin from "./admin/ordersPageAdmin";
-import UsersAdmin from './admin/usersAdmin';
-import SettingsAdmin from './admin/settingsAdmin';
-import ChristmasStarLoader from '../components/ChristmasStarLoader';
 import DashboardAdmin from './admin/dashboardAdmin';
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
@@ -125,7 +116,7 @@ export default function AdminPage() {
 
     return (
         <div className="w-full h-screen flex bg-white text-black overflow-hidden">
-            {showLoader && (holidayMode ? <ChristmasStarLoader /> : <MatrixRainLoader fadeOut={fadeLoader} />)}
+            {showLoader && <MatrixRainLoader fadeOut={fadeLoader} />}
             {adminValidated ? <>
                 <div className="w-[300px] h-full flex flex-col items-center bg-white text-black shadow-2xl border-r border-gray-300 relative">
                     <span className="text-3xl admin-heading font-extrabold my-6 tracking-wide text-black relative z-10">Admin Panel</span>

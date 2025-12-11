@@ -2,7 +2,6 @@ import axios from "axios";
 import { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Loader from "../../components/loader";
-import ChristmasStarLoader from "../../components/ChristmasStarLoader";
 import ImageSlider from "../../components/imageSlider";
 import { addToCart, getCart } from "../../utils/cart";
 import { playCartJourneyAnimation, playStarSmash, playStarRain } from "../../utils/cardAnimations";
@@ -201,7 +200,7 @@ export default function ProductOverViewPage() {
 	// render
 	return (
 		<div className="w-full min-h-screen bg-white text-black">
-			{status === "loading" && (holidayMode ? <ChristmasStarLoader /> : <Loader />)}
+			{status === "loading" && <Loader />}
 			{status === "success" && (
 				<div className="w-full h-full flex flex-col">
 				{/* Image Section - Full Width */}

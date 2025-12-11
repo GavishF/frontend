@@ -3,7 +3,6 @@ import { useEffect, useState, useMemo, useRef } from "react";
 import { useSearchParams } from 'react-router-dom';
 import toast from "react-hot-toast";
 import Loader from "../../components/loader";
-import ChristmasStarLoader from "../../components/ChristmasStarLoader";
 import ProductCard from "../../components/productCard";
 import ProductSkeleton from "../../components/productSkeleton";
 import Footer from "../../components/Footer";
@@ -195,7 +194,7 @@ export default function ProductsPage() {
 
 	return (
 		<div className="w-full min-h-screen flex flex-col bg-white">
-			{loading && (holidayMode ? <ChristmasStarLoader /> : <ProductsLoader fadeOut={fadeLoader} products={products} />)}
+			{loading && <ProductsLoader fadeOut={fadeLoader} products={products} />}
 			
 			{/* Header Section */}
 			<div className="w-full bg-gradient-to-br from-white to-gray-50 border-b border-gray-200 sticky top-0 z-30">
