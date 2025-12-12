@@ -101,11 +101,12 @@
 	min-width: clamp(200px, 40vw, 400px);
 	margin: 0 auto;
 	background: #f9fafb;
-	border: 1px solid #e5e7eb;
+	border: 2px solid #e5e7eb;
 	border-radius: clamp(16px, 3vw, 24px);
-	padding: 2px;
+	padding: 4px 8px;
 	transition: all 0.3s ease;
 	width: auto;
+	height: auto;
 }
 
 .search-container:focus-within {
@@ -125,9 +126,12 @@
 	background: none;
 	border: none;
 	outline: none;
-	padding: 10px 16px;
-	font-size: 14px;
+	padding: 14px 20px;
+	font-size: 15px;
 	color: #1f2937;
+	min-height: 44px;
+	display: flex;
+	align-items: center;
 }
 
 .search-input::placeholder {
@@ -139,11 +143,12 @@
 	border: none;
 	cursor: pointer;
 	color: #6b7280;
-	padding: 10px 16px;
+	padding: 14px 20px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	transition: color 0.2s ease;
+	min-height: 44px;
 }
 
 .search-btn:hover {
@@ -362,15 +367,23 @@
 /* Mobile Menu */
 .mobile-menu {
 	display: block;
-	position: absolute;
-	top: 100%;
+	position: fixed;
+	top: 0;
 	left: 0;
 	right: 0;
-	background: white;
-	border-top: 1px solid #f0f0f0;
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.5);
 	z-index: 50;
-	animation: slideDown 0.3s ease;
+	animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
 }
 
 @keyframes slideDown {
@@ -393,8 +406,26 @@
 .mobile-categories {
 	display: flex;
 	flex-direction: column;
-	max-height: calc(100vh - 150px);
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 80%;
+	max-width: 300px;
+	height: 100vh;
+	background: white;
+	z-index: 51;
+	animation: slideInLeft 0.3s ease;
 	overflow-y: auto;
+	padding-top: 60px;
+}
+
+@keyframes slideInLeft {
+	from {
+		transform: translateX(-100%);
+	}
+	to {
+		transform: translateX(0);
+	}
 }
 
 .mobile-cat-link {

@@ -258,27 +258,39 @@ export default function ProductsPage() {
 			</div>
 
 			{/* Info Section */}
-			<section className="w-full bg-gray-50 border-t border-gray-200 mt-12">
+			<section className="w-full bg-white border-t border-gray-200 mt-12">
 				<div className="max-w-7xl mx-auto px-4 md:px-6 py-12">
-					<h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8">Why Choose Nikola</h3>
+					<h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-12 text-center">Why Choose Nikola</h3>
 					<div className="grid md:grid-cols-3 gap-6 mb-12">
 						<div 
 							onClick={() => setGlowingCard(glowingCard === 'curated' ? null : 'curated')}
-							className={`p-6 bg-white rounded-lg border-2 cursor-pointer transition-all duration-300 ${glowingCard === 'curated' ? 'border-red-600 shadow-lg' : 'border-gray-200 hover:border-gray-300'}`}>
-							<h4 className="font-bold text-lg mb-2 text-gray-900">Curated Selection</h4>
-							<p className="text-gray-600">Hand-picked items for quality, style, and value that elevate your everyday.</p>
+							className={`relative p-8 rounded-xl cursor-pointer transition-all duration-300 group overflow-hidden ${glowingCard === 'curated' ? 'bg-white border-2 border-red-600 shadow-xl' : 'bg-white border-2 border-gray-200 hover:border-red-400'}`}>
+							<div className={`absolute inset-0 bg-gradient-to-br from-red-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300`}></div>
+							<div className="relative z-10">
+								<div className="text-4xl mb-4">✨</div>
+								<h4 className="font-bold text-lg mb-3 text-gray-900">Quality First</h4>
+								<p className="text-gray-600 leading-relaxed">We source and craft products with uncompromising attention to detail.</p>
+							</div>
 						</div>
 						<div 
 							onClick={() => setGlowingCard(glowingCard === 'returns' ? null : 'returns')}
-							className={`p-6 bg-white rounded-lg border-2 cursor-pointer transition-all duration-300 ${glowingCard === 'returns' ? 'border-red-600 shadow-lg' : 'border-gray-200 hover:border-gray-300'}`}>
-							<h4 className="font-bold text-lg mb-2 text-gray-900">30-Day Returns</h4>
-							<p className="text-gray-600">Hassle-free returns and exchanges within 30 days for your peace of mind.</p>
+							className={`relative p-8 rounded-xl cursor-pointer transition-all duration-300 group overflow-hidden ${glowingCard === 'returns' ? 'bg-white border-2 border-red-600 shadow-xl' : 'bg-white border-2 border-gray-200 hover:border-red-400'}`}>
+							<div className={`absolute inset-0 bg-gradient-to-br from-red-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300`}></div>
+							<div className="relative z-10">
+								<div className="text-4xl mb-4">🎨</div>
+								<h4 className="font-bold text-lg mb-3 text-gray-900">Modern Design</h4>
+								<p className="text-gray-600 leading-relaxed">Aesthetic, functional, and timeless pieces for everyday use.</p>
+							</div>
 						</div>
 						<div 
 							onClick={() => setGlowingCard(glowingCard === 'sustainable' ? null : 'sustainable')}
-							className={`p-6 bg-white rounded-lg border-2 cursor-pointer transition-all duration-300 ${glowingCard === 'sustainable' ? 'border-red-600 shadow-lg' : 'border-gray-200 hover:border-gray-300'}`}>
-							<h4 className="font-bold text-lg mb-2 text-gray-900">Sustainable</h4>
-							<p className="text-gray-600">Mindful materials and responsible production for a better tomorrow.</p>
+							className={`relative p-8 rounded-xl cursor-pointer transition-all duration-300 group overflow-hidden ${glowingCard === 'sustainable' ? 'bg-white border-2 border-red-600 shadow-xl' : 'bg-white border-2 border-gray-200 hover:border-red-400'}`}>
+							<div className={`absolute inset-0 bg-gradient-to-br from-red-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300`}></div>
+							<div className="relative z-10">
+								<div className="text-4xl mb-4">🛡️</div>
+								<h4 className="font-bold text-lg mb-3 text-gray-900">Secure Experience</h4>
+								<p className="text-gray-600 leading-relaxed">Protected accounts, encrypted access, and reliable order tracking.</p>
+							</div>
 						</div>
 					</div>
 					
