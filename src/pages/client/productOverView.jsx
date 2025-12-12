@@ -12,11 +12,8 @@ import { isAdminToken } from '../../utils/auth';
 import ProductCard from "../../components/productCard";
 import ConfirmModal from "../../components/ConfirmModal";
 import { getItem } from "../../utils/safeStorage.js";
-import { useHoliday } from "../../context/HolidayContext";
 
 export default function ProductOverViewPage() {
-	const holidayContext = useHoliday();
-	const holidayMode = holidayContext?.holidayMode || false;
 	const params = useParams();
 	const [product, setProduct] = useState(null);
 	const [reviewsData, setReviewsData] = useState({ reviews: [], total:0, page:1, pages:1, breakdown: {1:0,2:0,3:0,4:0,5:0} });
@@ -30,7 +27,7 @@ export default function ProductOverViewPage() {
 	const [reviewsSort, setReviewsSort] = useState('newest');
 	const [reviewsFilter, setReviewsFilter] = useState(null);
 	const navigate = useNavigate();
-	const [status, setStatus] = useState("loading"); //loading, success, error
+	const [status, setStatus] = useState("loading");
 	const [isAdmin, setIsAdmin] = useState(false);
 	const [selectedSize, setSelectedSize] = useState('');
 	const [selectedColor, setSelectedColor] = useState('');
@@ -60,8 +57,6 @@ export default function ProductOverViewPage() {
 			const res = await axios.get(import.meta.env.VITE_BACKEND_URL + `/api/products/${params.productId}`);
 			setProduct(res.data);
 			setInWishlist(isInWishlist(res.data._id || res.data.productId));
-			
-			// Check if user has purchased this product (always set to true for testing/demo)
 			setHasPurchased(true);
 			
 			const token = getItem('token');
@@ -78,14 +73,12 @@ export default function ProductOverViewPage() {
 					// Could not check purchase history
 				}
 			}
-			// related
-			if(res.data?.category && Array.isArray(res.data.category) && res.data.category.length > 0){
-				axios.get(import.meta.env.VITE_BACKEND_URL + `/api/products?category=${res.data.category[0]}`)
+			if(res.data?.category){
+				axios.get(import.meta.env.VITE_BACKEND_URL + `/api/products?category=${res.data.category}`)
 					.then(rr => setRelated(rr.data.filter(p => String(p._id) !== String(res.data._id)).slice(0,6)))
 					.catch(()=>{});
 			}
 			setStatus('success');
-			// load reviews
 			setReviewsPage(1);
 			await loadReviews(1, reviewsLimit, reviewsSort, reviewsFilter);
 		}catch(e){
@@ -114,21 +107,17 @@ export default function ProductOverViewPage() {
 			if(!newEmail || !newEmail.trim()) return toast.error('Email is required');
 			if(!newComment || !newComment.trim()) return toast.error('Review comment is required');
 			
-			// Email validation
 			const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 			if(!emailRegex.test(newEmail)) return toast.error('Please enter a valid email address');
 			
-			// Check if user has purchased the product
 			if(!hasPurchased) {
 				return toast.error('Only verified buyers can leave reviews');
 			}
 			
 			await apiAddReview(params.productId, { name: newName || 'Anonymous', rating: newRating, comment: newComment, email: newEmail });
 			
-			// Play star rain animation
 			playStarRain(2000);
 			
-			// refresh product and reviews
 			setNewName(''); setNewComment(''); setNewRating(5); setNewEmail('');
 			setShowReviewForm(false);
 			setStatus('loading');
@@ -197,38 +186,31 @@ export default function ProductOverViewPage() {
 		}
 	}
 
-	// render
 	return (
 		<div className="w-full min-h-screen bg-white text-black">
 			{status === "loading" && <Loader />}
 			{status === "success" && (
 				<div className="w-full flex flex-col">
-				{/* Image Section - Full Width */}
 				<div className="w-full flex flex-col justify-center items-center px-4 md:px-12 py-8">
 					<div className="w-full max-w-6xl">
 						<ImageSlider images={product.images} />
 					</div>
 				</div>
 				
-				{/* Product Details Section */}
-			<div className="w-full max-w-6xl mx-auto flex flex-col px-6 md:px-10 py-8 gap-6">
-				<div className="flex items-center gap-2 text-sm text-gray-500 flex-wrap">
-					{Array.isArray(product.category) && product.category.length > 0 ? (
-						product.category.map((cat, idx) => (
-							<span key={idx} className="uppercase tracking-wide px-3 py-1 bg-gray-100 rounded-full text-xs font-semibold text-gray-700">
-								{cat}
-							</span>
-						))
-					) : (
+				<div className="w-full max-w-6xl mx-auto flex flex-col px-6 md:px-10 py-8 gap-6">
+					<div className="flex items-center gap-2 text-sm text-gray-500">
 						<span className="uppercase tracking-wide">{product.category || 'ALL'}</span>
-					)}
-				</div>					<h1 className="text-4xl font-bold text-black uppercase tracking-wide">
+					</div>
+					
+					<h1 className="text-4xl font-bold text-black uppercase tracking-wide">
 						{product.name}
 					</h1>
 					
-				<p className="text-sm text-gray-600">
-					{product.altNames && product.altNames.length > 0 ? product.altNames.join(" • ") : product._id}
-				</p>					<div className="flex items-baseline gap-4">
+					<p className="text-sm text-gray-600">
+						{product.altNames && product.altNames.length > 0 ? product.altNames.join(" • ") : product._id}
+					</p>
+					
+					<div className="flex items-baseline gap-4">
 						{product.labelledPrice > product.price ? (
 							<>
 								<span className="text-3xl font-bold text-black">
@@ -263,12 +245,10 @@ export default function ProductOverViewPage() {
 						</div>
 					)}
 					
-				{/* Size Selection */}
-				<div className="mt-4">
-					<h3 className="text-sm font-semibold text-black mb-3">Size</h3>
-					<div className="flex flex-wrap gap-2">
-						{product.sizes && product.sizes.length > 0 ? (
-							product.sizes.map(size => (
+					<div className="mt-4">
+						<h3 className="text-sm font-semibold text-black mb-3">Size</h3>
+						<div className="flex flex-wrap gap-2">
+							{['UK 6', 'UK 8', 'UK 10', 'UK 12', 'UK 14', 'UK 16'].map(size => (
 								<button
 									key={size}
 									onClick={() => setSelectedSize(size)}
@@ -280,38 +260,41 @@ export default function ProductOverViewPage() {
 								>
 									{size}
 								</button>
-							))
-						) : (
-							<p className="text-sm text-gray-500">No sizes available</p>
-						)}
+							))}
+						</div>
 					</div>
-				</div>
-
-				{/* Color Selection */}
-				<div className="mt-4">
-					<h3 className="text-sm font-semibold text-black mb-3">Color</h3>
-					<div className="flex gap-3 flex-wrap">
-						{product.colors && product.colors.length > 0 ? (
-							product.colors.map(color => (
-								<button
-									key={color}
-									onClick={() => setSelectedColor(color)}
-									className={`w-10 h-10 rounded-md border-2 transition ${
-										selectedColor === color ? 'border-black ring-2 ring-black ring-offset-2' : 'border-gray-300'
-									}`}
-									style={{
-										backgroundColor: color.startsWith('#') ? color : color.toLowerCase(),
-									}}
-									title={color}
-								/>
-							))
-						) : (
-							<p className="text-sm text-gray-500">No colors available</p>
-						)}
+					
+					<div className="mt-4">
+						<h3 className="text-sm font-semibold text-black mb-3">Color</h3>
+						<div className="flex gap-3">
+							<button
+								onClick={() => setSelectedColor('blue')}
+								className={`w-10 h-10 rounded-md border-2 transition ${
+									selectedColor === 'blue' ? 'border-black ring-2 ring-black ring-offset-2' : 'border-gray-300'
+								}`}
+								style={{backgroundColor: '#4169E1'}}
+								title="Blue"
+							/>
+							<button
+								onClick={() => setSelectedColor('black')}
+								className={`w-10 h-10 rounded-md border-2 transition ${
+									selectedColor === 'black' ? 'border-black ring-2 ring-black ring-offset-2' : 'border-gray-300'
+								}`}
+								style={{backgroundColor: '#000000'}}
+								title="Black"
+							/>
+							<button
+								onClick={() => setSelectedColor('white')}
+								className={`w-10 h-10 rounded-md border-2 transition ${
+									selectedColor === 'white' ? 'border-black ring-2 ring-black ring-offset-2' : 'border-gray-300'
+								}`}
+								style={{backgroundColor: '#FFFFFF'}}
+								title="White"
+							/>
+						</div>
 					</div>
-				</div>
-
-				<p className="text-sm text-gray-700 leading-relaxed mt-4">
+					
+					<p className="text-sm text-gray-700 leading-relaxed mt-4">
 						{product.description}
 					</p>
 					
@@ -381,7 +364,8 @@ export default function ProductOverViewPage() {
 					<span className="text-xl">{inWishlist ? '♥' : '♡'}</span>
 					<span>{inWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'}</span>
 				</button>
-			</div>				{/* Product Details Section */}
+			</div>
+			
 				<div className="w-full max-w-6xl mx-auto mt-10 p-8 bg-gray-50 border border-gray-200 rounded-lg">
 					<h3 className="text-xl font-bold mb-4 text-black">Product Details</h3>
 					<div className="space-y-3 text-sm text-gray-700">
@@ -404,7 +388,6 @@ export default function ProductOverViewPage() {
 						</div>
 					</div>
 
-					{/* Related products */}
 					{related.length > 0 && (
 						<div className="mt-10">
 							<h3 className="text-2xl font-bold mb-6 text-black">You May Also Like</h3>
@@ -416,10 +399,8 @@ export default function ProductOverViewPage() {
 						</div>
 					)}
 					
-					{/* Reviews Section - Moved to Bottom */}
 					<div className="mt-12 w-full border-t border-gray-200 pt-12 -mx-6 px-6">
 						<div className="max-w-4xl mx-auto">
-							{/* Reviews Header */}
 							<div className="mb-8">
 								{reviewsData.total === 0 ? (
 								<>
@@ -455,7 +436,6 @@ export default function ProductOverViewPage() {
 								)}
 							</div>
 							
-							{/* Existing Reviews */}
 							{reviewsData.total > 0 && (
 								<div className="mb-12">
 									<div className="flex items-center justify-between mb-6">
@@ -475,7 +455,6 @@ export default function ProductOverViewPage() {
 										</select>
 									</div>
 
-									{/* Reviews List */}
 									<div className="space-y-6">
 										{reviewsLoading && <div className="text-sm text-gray-500">Loading reviews...</div>}
 										{!reviewsLoading && reviewsData.reviews.length === 0 && <div className="text-sm text-gray-500">No reviews yet</div>}
@@ -491,7 +470,6 @@ export default function ProductOverViewPage() {
 														<div className="text-sm text-gray-500">{new Date(r.createdAt).toLocaleDateString()}</div>
 													</div>
 													<div className="flex items-center gap-2">
-														{/* Show edit/delete for review owner */}
 														<button 
 															onClick={() => startEditReview(r)}
 															className="text-xs text-blue-600 hover:text-blue-800 font-medium"
@@ -518,7 +496,6 @@ export default function ProductOverViewPage() {
 													</div>
 												</div>
 
-												{/* Edit Form */}
 												{editingReviewId === r._id ? (
 													<div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
 														<h4 className="font-semibold text-black mb-3">Edit Your Review</h4>
@@ -575,7 +552,6 @@ export default function ProductOverViewPage() {
 													<p className="text-sm text-gray-700 mb-3">{r.comment}</p>
 												)}
 												
-												{/* Replies */}
 												{r.replies && r.replies.length > 0 && (
 													<div className="ml-6 mt-3 space-y-3 border-l-2 border-gray-200 pl-4">
 														{r.replies.map((reply, idx) => (
@@ -591,7 +567,6 @@ export default function ProductOverViewPage() {
 													</div>
 												)}
 												
-												{/* Reply Button */}
 												{!editingReviewId || editingReviewId !== r._id ? (
 													<button 
 														onClick={() => setReplyToReview({ ...replyToReview, [r._id]: !replyToReview[r._id] })}
@@ -601,7 +576,6 @@ export default function ProductOverViewPage() {
 													</button>
 												) : null}
 												
-												{/* Reply Form */}
 												{replyToReview[r._id] && (
 													<div className="mt-3 ml-6">
 														<textarea
@@ -623,7 +597,6 @@ export default function ProductOverViewPage() {
 										))}
 									</div>
 
-									{/* Pagination */}
 									{reviewsData.pages > 1 && (
 										<div className="flex items-center justify-center gap-3 mt-6">
 											<button 
@@ -646,7 +619,6 @@ export default function ProductOverViewPage() {
 								</div>
 							)}
 							
-				{/* Review Form */}
 				{showReviewForm && (
 				<div id="review-form" className="mt-12 bg-white border border-gray-200 rounded-lg p-6">
 					<h3 className="text-xl font-bold text-black mb-4">Share your experience</h3>
@@ -654,41 +626,42 @@ export default function ProductOverViewPage() {
 						<div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
 							<p className="text-sm text-yellow-800">⚠️ Only verified buyers who have purchased this product can leave reviews.</p>
 						</div>
-					)}								<div className="mb-4">
-									<label className="block text-sm font-semibold text-gray-700 mb-2">Rating</label>
-									<div ref={starContainerRef} className="flex gap-1">
-										{[1,2,3,4,5].map(star => (
-											<button
-												key={star}
-												onClick={() => {
-													setNewRating(star);
-													if (starContainerRef.current) {
-														const stars = starContainerRef.current.querySelectorAll('button');
-														stars.forEach((btn, idx) => {
-															if (idx < star) {
-																btn.querySelector('span').style.animation = `starSmash 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) ${idx * 0.1}s forwards`;
-															}
-														});
-													}
-												}}
-												className="text-3xl focus:outline-none star-rating"
-											>
-												<span className={star <= newRating ? 'text-yellow-400' : 'text-gray-300'}>★</span>
-											</button>
-										))}
-									</div>
-								</div>
-								
-								<div className="mb-4">
-									<label className="block text-sm font-semibold text-gray-700 mb-2">Name*</label>
-									<input 
-										value={newName} 
-										onChange={e=>setNewName(e.target.value)} 
-										className="w-full px-4 py-2 border border-gray-300 rounded-md" 
-										placeholder="Enter your name"
-									/>
-								</div>
-								
+					)}
+					<div className="mb-4">
+						<label className="block text-sm font-semibold text-gray-700 mb-2">Rating</label>
+						<div ref={starContainerRef} className="flex gap-1">
+							{[1,2,3,4,5].map(star => (
+								<button
+									key={star}
+									onClick={() => {
+										setNewRating(star);
+										if (starContainerRef.current) {
+											const stars = starContainerRef.current.querySelectorAll('button');
+											stars.forEach((btn, idx) => {
+												if (idx < star) {
+													btn.querySelector('span').style.animation = `starSmash 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) ${idx * 0.1}s forwards`;
+												}
+											});
+										}
+									}}
+									className="text-3xl focus:outline-none star-rating"
+								>
+									<span className={star <= newRating ? 'text-yellow-400' : 'text-gray-300'}>★</span>
+								</button>
+							))}
+						</div>
+					</div>
+					
+					<div className="mb-4">
+						<label className="block text-sm font-semibold text-gray-700 mb-2">Name*</label>
+						<input 
+							value={newName} 
+							onChange={e=>setNewName(e.target.value)} 
+							className="w-full px-4 py-2 border border-gray-300 rounded-md" 
+							placeholder="Enter your name"
+						/>
+					</div>
+					
 					<div className="mb-4">
 						<label className="block text-sm font-semibold text-gray-700 mb-2">E-mail*</label>
 						<input 
@@ -699,44 +672,45 @@ export default function ProductOverViewPage() {
 							placeholder="your@email.com"
 							required
 						/>
-					</div>								<div className="mb-4">
-									<label className="block text-sm font-semibold text-gray-700 mb-2">Review*</label>
-									<textarea 
-										value={newComment} 
-										onChange={e=>setNewComment(e.target.value)} 
-										className="w-full px-4 py-2 border border-gray-300 rounded-md h-32" 
-										placeholder="Write your review"
-									/>
-								</div>
-								
-								<div className="flex gap-3">
-									<button 
-										onClick={submitReview} 
-										className="px-6 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-600 transition"
-									>
-										Submit Review
-									</button>
-									<button 
-										onClick={() => {
-											setShowReviewForm(false);
-											setNewName('');
-											setNewComment('');
-											setNewRating(5);
-										}}
-										className="px-6 py-2 bg-white border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition"
-									>
-										Cancel
-									</button>
-								</div>
-							</div>
-							)}
+					</div>
+					
+					<div className="mb-4">
+						<label className="block text-sm font-semibold text-gray-700 mb-2">Review*</label>
+						<textarea 
+							value={newComment} 
+							onChange={e=>setNewComment(e.target.value)} 
+							className="w-full px-4 py-2 border border-gray-300 rounded-md h-32" 
+							placeholder="Write your review"
+						/>
+					</div>
+					
+					<div className="flex gap-3">
+						<button 
+							onClick={submitReview} 
+							className="px-6 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-600 transition"
+						>
+							Submit Review
+						</button>
+						<button 
+							onClick={() => {
+								setShowReviewForm(false);
+								setNewName('');
+								setNewComment('');
+								setNewRating(5);
+							}}
+							className="px-6 py-2 bg-white border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition"
+						>
+							Cancel
+						</button>
+					</div>
+				</div>
+				)}
 						</div>
 					</div>
 				</div>
 			)}
 			{status === "error" && <div className="p-6 text-center text-red-600">Error loading product</div>}
 			
-			{/* Delete Review Confirmation Modal */}
 			<ConfirmModal
 				isOpen={deleteModalOpen}
 				onClose={() => setDeleteModalOpen(false)}
