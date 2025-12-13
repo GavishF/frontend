@@ -17,7 +17,6 @@ export default function Header() {
 	const [cartCount, setCartCount] = useState(0);
 	const [wishlistCount, setWishlistCount] = useState(0);
 	const [isAdmin, setIsAdmin] = useState(false);
-	const [searchQuery, setSearchQuery] = useState("");
 
 	// Initialize state from storage
 	useEffect(() => {
@@ -70,13 +69,6 @@ export default function Header() {
 
 	const { holidayMode, discount: holidayDiscount } = useHoliday();
 
-	const handleSearch = (e) => {
-		e.preventDefault();
-		if(searchQuery.trim()) {
-			navigate(`/products?search=${encodeURIComponent(searchQuery)}`);
-		}
-	};
-
 	const categories = [
 		{ name: "NEW ARRIVALS", path: "/products?category=new" },
 		{ name: "BEST SELLERS", path: "/products?category=bestsellers" },
@@ -108,18 +100,29 @@ export default function Header() {
 						</Link>
 					</div>
 
-					<form onSubmit={handleSearch} className="search-container">
-						<input 
-							type="text"
-							placeholder="Type and hit enter to search..."
-							value={searchQuery}
-							onChange={(e) => setSearchQuery(e.target.value)}
-							className="search-input"
-						/>
-						<button type="submit" className="search-btn">
-							<FiSearch size={20} />
-						</button>
-					</form>
+					{/* New Search Bar */}
+					<div className="flex-1 flex justify-center items-center">
+						<form
+							onSubmit={e => {
+								e.preventDefault();
+								const value = e.target.elements.search.value.trim();
+								if (value) navigate(`/products?search=${encodeURIComponent(value)}`);
+							}}
+							className="w-full max-w-xl flex items-center bg-white border-2 border-red-500 rounded-full px-4 py-2 shadow-sm"
+							role="search"
+						>
+							<input
+								type="text"
+								name="search"
+								placeholder="Search products..."
+								className="flex-1 bg-transparent outline-none border-none text-lg px-2 py-1 rounded-full"
+								style={{ minWidth: 0 }}
+							/>
+							<button type="submit" className="p-2 text-red-500 hover:text-red-700 focus:outline-none">
+								<FiSearch size={22} />
+							</button>
+						</form>
+					</div>
 
 					<div className="header-right">
 						<div className="currency-badge">LKR</div>
