@@ -14,6 +14,7 @@ import OrdersPageAdmin from "./admin/ordersPageAdmin";
 import UsersAdmin from './admin/usersAdmin';
 import SettingsAdmin from './admin/settingsAdmin';
 import DashboardAdmin from './admin/dashboardAdmin';
+import GiftCardAdmin from './admin/giftCardAdmin';
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -147,8 +148,11 @@ export default function AdminPage() {
                         <Link className="flex flex-row h-[60px] w-full border-t border-gray-300 px-6 items-center text-md gap-4 text-black hover:bg-red-600 hover:text-white hover:border-l-4 hover:border-l-red-500 transition-all" to="/admin/categories">
                             <BiCategory className="text-red-400 text-xl"/> <span className="font-medium">Categories</span>
                         </Link>
-                        <Link className="flex flex-row h-[60px] w-full border-t border-b border-gray-300 px-6 items-center text-md gap-4 text-black hover:bg-red-600 hover:text-white hover:border-l-4 hover:border-l-red-500 transition-all" to="/admin/contacts">
+                        <Link className="flex flex-row h-[60px] w-full border-t border-gray-300 px-6 items-center text-md gap-4 text-black hover:bg-red-600 hover:text-white hover:border-l-4 hover:border-l-red-500 transition-all" to="/admin/contacts">
                             <MdOutlineMail className="text-red-400 text-xl"/> <span className="font-medium">Contacts</span>
+                        </Link>
+                        <Link className="flex flex-row h-[60px] w-full border-t border-b border-gray-300 px-6 items-center text-md gap-4 text-black hover:bg-red-600 hover:text-white hover:border-l-4 hover:border-l-red-500 transition-all" to="/admin/giftcards">
+                            <FaBoxArchive className="text-red-400 text-xl"/> <span className="font-medium">Gift Cards</span>
                         </Link>
                     </nav>
                 </div>
@@ -163,6 +167,7 @@ export default function AdminPage() {
                         <Route path="/categories" element={<CategoriesAdmin />} />
                         <Route path="/users" element={<UsersAdmin />} />
                         <Route path="/settings" element={<SettingsAdmin />} />
+                        <Route path="/giftcards" element={<GiftCardAdmin />} />
                     </Routes>
                 </div>
             </> : null}
